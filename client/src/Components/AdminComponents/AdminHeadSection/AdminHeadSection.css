@@ -1,0 +1,44 @@
+.adminHeadSection .mainHead{
+    background-color: rgba(230, 229, 229, 0.38);
+}
+
+.adminHeadSection .left,.adminHeadSection .right{
+    border-radius: 10px;
+    height: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.adminHeadSection .left .totalMovie {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.17), rgba(0, 0, 0, 0)), url('../../../assets/Images/adminMovieCountBG.jpg');
+}
+.adminHeadSection .left .totalUser {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.53)), url('../../../assets/Images/adminUserCountBG.jpg');
+}
+.adminHeadSection .left .bgImage{
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.adminHeadSection .right{
+    display: flex;
+    flex-direction: column;
+}
+.adminHeadSection button{
+    width: 80%;
+    height: 88px;
+    margin: auto;
+    border-radius: 10px;
+    font-weight: bold;
+}
+.adminHeadSection .totalMovie ,.adminHeadSection .totalUser{
+    height: 180px;
+}
