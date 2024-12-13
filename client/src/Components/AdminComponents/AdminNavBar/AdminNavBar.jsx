@@ -1,4 +1,5 @@
 import logo from "../../../assets/Images/siteLogo.png"
+import settings from "../../../assets/Images/settings.png"
 function AdminNavBar() {
     return (
         <div className="adminNavBar mb-5">
@@ -16,26 +17,21 @@ function AdminNavBar() {
                         <i className="fas fa-bars text-white"></i>
                     </button>
 
-                    <div className="collapse navbar-collapse" id="navbarSupportedContent">
-
+                    <div className="collapse navbar-collapse ms-4" id="navbarSupportedContent">
+                        <img style={{width:"30px",height:"30px"}} src={settings} alt="settings"/>
                         <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                             <li className="nav-item">
-                                <a className="nav-link text-white" href="/dashboard">Dashboard</a>
+                                <a className="nav-link text-white" href="/">Dashboard</a>
                             </li>
-                            <li className="nav-item">
+                            <li className="nav-item ms-2">
                                 <a className="nav-link text-white" href="/team">Movie Section</a>
                             </li>
-                            <li className="nav-item">
+                            <li className="nav-item ms-2">
                                 <a className="nav-link text-white" href="/projects">User Section</a>
                             </li>
                         </ul>
                     </div>
                     <div className="d-flex align-items-center">
-                        <a className="text-reset me-3 text-white" href="/cart">
-                            <i className="fas fa-shopping-cart"></i>
-                        </a>
-
-
                         <a className="navbar-brand mt-2 mt-lg-0" href="/">
                             <img
                                 src={logo}
