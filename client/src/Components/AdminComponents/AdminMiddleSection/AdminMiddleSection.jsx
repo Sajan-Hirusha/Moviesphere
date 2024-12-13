@@ -3,7 +3,6 @@ import './AdminMiddleSection.css'
 function AdminMiddleSection() {
     return(
         <div className="adminMiddleSection">
-
             <table className="table">
                 <thead>
                 <tr>

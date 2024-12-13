@@ -1,44 +1,60 @@
-.adminHeadSection .mainHead{
+.adminHeadSection .mainHead {
     background-color: rgba(230, 229, 229, 0.38);
+    margin-bottom: 70px;
+    padding: 20px 10px 20px 40px;
 }
 
-.adminHeadSection .left,.adminHeadSection .right{
+.adminHeadSection h4 {
+   color: black;
+    margin-left: 40px;
+}
+
+.adminHeadSection .left, .adminHeadSection .right {
     border-radius: 10px;
     height: 220px;
     display: flex;
     align-items: center;
     justify-content: center;
+
 }
+
 .adminHeadSection .left .totalMovie {
     background-image: linear-gradient(rgba(0, 0, 0, 0.17), rgba(0, 0, 0, 0)), url('../../../assets/Images/adminMovieCountBG.jpg');
 }
+
 .adminHeadSection .left .totalUser {
     background-image: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.53)), url('../../../assets/Images/adminUserCountBG.jpg');
 }
-.adminHeadSection .left .bgImage{
+
+.adminHeadSection .left .bgImage {
+    width: 100%;
     background-repeat: no-repeat;
-    background-size: 100% 100%;
+    background-size: cover;
     background-position: center;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: start;
     color: white;
     border-radius: 10px;
     font-weight: bold;
-    font-size: 20px;
+    font-size: 28px;
+    padding-left: 30px;
 }
 
-.adminHeadSection .right{
+.adminHeadSection .right {
     display: flex;
     flex-direction: column;
 }
-.adminHeadSection button{
-    width: 80%;
-    height: 88px;
+
+.adminHeadSection button {
+    width: 91%;
+    height: 120px;
     margin: auto;
     border-radius: 10px;
     font-weight: bold;
+    background-color: white;
 }
-.adminHeadSection .totalMovie ,.adminHeadSection .totalUser{
+
+.adminHeadSection .totalMovie, .adminHeadSection .totalUser {
     height: 180px;
 }
