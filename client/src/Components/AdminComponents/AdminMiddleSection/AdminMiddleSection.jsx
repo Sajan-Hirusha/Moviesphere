@@ -1,6 +1,21 @@
+import { useState } from 'react';
 import './AdminMiddleSection.css';
 
 function AdminMiddleSection() {
+    const [showModal, setShowModal] = useState(false);
+
+    const handleDoneClick = () => {
+        setShowModal(true);
+    };
+
+    const confirmDoneAction = () => {
+        setShowModal(false);
+    };
+
+    const handleCloseModal = () => {
+        setShowModal(false); // Close the modal when Cancel is clicked
+    };
+
     return (
         <div className="adminMiddleSection p-5">
             <table className="table align-middle mb-0 bg-white">
@@ -38,13 +53,62 @@ function AdminMiddleSection() {
                     </td>
                     <td>Senior</td>
                     <td>
-                        <button type="button" className="btn btn-link btn-sm btn-rounded">
-                            Done<span className="ps-1" style={{color:"white"}}>&#10004;</span>
+                        <button
+                            type="button"
+                            className="btn btn-link btn-sm btn-rounded"
+                            onClick={handleDoneClick}
+                        >
+                            Done<span className="ps-1" style={{ color: "white" }}>&#10004;</span>
                         </button>
                     </td>
                 </tr>
                 </tbody>
             </table>
+
+            {/* Confirmation Modal */}
+            <div
+                className={`modal fade ${showModal ? 'show' : ''}`}
+                id="confirmDeleteModal"
+                tabIndex="-1"
+                aria-labelledby="confirmDoneLabel"
+                aria-hidden={!showModal}
+                style={{ display: showModal ? 'block' : 'none' , backgroundColor: 'rgba(0, 0, 0, 0.5)',}}
+            >
+                <div className="modal-dialog">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title" id="confirmDoneLabel">Confirm Action</h5>
+                            <button
+                                type="button"
+                                className="btn-close"
+                                data-bs-dismiss="modal"
+                                aria-label="Close"
+                                onClick={handleCloseModal}
+                            ></button>
+                        </div>
+                        <div className="modal-body">
+                            Are you sure you want to mark this item as done?
+                        </div>
+                        <div className="modal-footer">
+                            <button
+                                type="button"
+                                className="btn btn-secondary"
+                                data-bs-dismiss="modal"
+                                onClick={handleCloseModal}
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                type="button"
+                                className="btn btn-primary"
+                                onClick={confirmDoneAction}
+                            >
+                                Done
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 }

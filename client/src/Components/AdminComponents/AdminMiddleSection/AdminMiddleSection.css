@@ -13,3 +13,30 @@
     background-color: #12bc12;
     color: white;
 }
+.adminMiddleSection table button:focus{
+    color: white;
+}
+
+@keyframes slideIn {
+    0% {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.adminMiddleSection .modal.fade {
+    display: none;
+}
+
+.adminMiddleSection .modal.fade.show {
+    display: block;
+    animation: slideIn 0.3s ease-out;
+}
+
+.adminMiddleSection .modal-backdrop.fade {
+    background-color: rgba(0, 0, 0, 0.7);
+}

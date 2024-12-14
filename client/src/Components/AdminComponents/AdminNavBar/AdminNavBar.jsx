@@ -1,5 +1,6 @@
 import logo from "../../../assets/Images/siteLogo.png"
 import settings from "../../../assets/Images/settings.png"
+import {Link} from "react-router-dom";
 function AdminNavBar() {
     return (
         <div className="adminNavBar mb-5">
@@ -32,14 +33,14 @@ function AdminNavBar() {
                         </ul>
                     </div>
                     <div className="d-flex align-items-center">
-                        <a className="navbar-brand mt-2 mt-lg-0" href="/">
+                        <Link className="navbar-brand mt-2 mt-lg-0" to="/admin">
                             <img
                                 src={logo}
                                 alt="Logo"
                                 loading="lazy"
                                 style={{width: "110px", height: "40px"}}
                             />
-                        </a>
+                        </Link>
                     </div>
                 </div>
             </nav>
