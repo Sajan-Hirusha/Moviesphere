@@ -8,6 +8,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+
 }
 .adminHeadSection .left .totalMovie {
     background-image: linear-gradient(rgba(0, 0, 0, 0.17), rgba(0, 0, 0, 0)), url('../../../assets/Images/adminMovieCountBG.jpg');

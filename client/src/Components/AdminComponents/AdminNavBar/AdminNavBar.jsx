@@ -21,7 +21,7 @@ function AdminNavBar() {
                         <img style={{width:"30px",height:"30px"}} src={settings} alt="settings"/>
                         <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                             <li className="nav-item">
-                                <a className="nav-link text-white" href="/">Dashboard</a>
+                                <a className="nav-link text-white" href="/admin">Dashboard</a>
                             </li>
                             <li className="nav-item ms-2">
                                 <a className="nav-link text-white" href="/team">Movie Section</a>

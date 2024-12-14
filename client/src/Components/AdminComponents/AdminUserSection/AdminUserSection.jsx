@@ -1,10 +1,10 @@
 import './UserSection.css'
 
-function UserSection() {
+function AdminUserSection() {
     return(
         <div className="UserSection">
 
         </div>
     )
 }
-export default UserSection;
+export default AdminUserSection;
