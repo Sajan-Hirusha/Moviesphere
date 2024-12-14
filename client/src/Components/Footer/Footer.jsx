@@ -74,7 +74,7 @@ function Footer() {
                 {/* Copyright Section */}
                 <div className="text-center p-4" style={{ backgroundColor: "rgba(255, 255, 255, 0.1)" }}>
                     © 2024 Copyright:
-                    <a className="text-reset fw-bold text-white" href="https://mdbootstrap.com/">Site.LK</a>
+                    <a className="text-reset fw-bold text-white" href="https://mdbootstrap.com/"> UWU</a>
                 </div>
             </footer>
         </div>
