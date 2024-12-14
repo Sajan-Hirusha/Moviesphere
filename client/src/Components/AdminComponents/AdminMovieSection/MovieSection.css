@@ -75,3 +75,44 @@
 .adminMovieSection .totalMovie{
     height: 180px;
 }
+
+.adminMovieSection .imageEnlargeModal .modal-content {
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.adminMovieSection .imageEnlargeModal .modal-header {
+    border-bottom: 1px solid #dee2e6;
+    padding-bottom: 8px;
+}
+
+.adminMovieSection .imageEnlargeModal .modal-title {
+    font-family: 'Arial', sans-serif;
+    font-weight: 600;
+    font-size: 1.25rem;
+    color: #343a40;
+}
+
+.adminMovieSection .imageEnlargeModal .modal-body {
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    max-height: 400px;
+}
+
+.adminMovieSection .imageEnlargeModal .img-fluid {
+    max-height: 400px;
+    width: auto;
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+}
+
+.adminMovieSection .imageEnlargeModal .modal-footer {
+    justify-content: center;
+    padding-top: 10px;
+}
+.adminMovieSection  .enlargeImage:hover{
+    cursor: pointer !important;
+}
