@@ -1,3 +1,15 @@
 .adminMiddleSection{
     margin-top: 40px;
 }
+.adminMiddleSection table th{
+    font-weight: bold;
+}
+.adminMiddleSection table button{
+    background-color: green;
+    border-radius: 13px !important;
+    color: white;
+}
+.adminMiddleSection table button:hover{
+    background-color: #12bc12;
+    color: white;
+}

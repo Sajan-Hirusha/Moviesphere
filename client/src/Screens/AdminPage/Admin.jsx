@@ -2,14 +2,14 @@ import AdminHeadSection from "../../Components/AdminComponents/AdminHeadSection/
 import AdminMiddleSection from "../../Components/AdminComponents/AdminMiddleSection/AdminMiddleSection.jsx";
 import Footer from "../../Components/Footer/Footer.jsx";
 import AdminNavBar from "../../Components/AdminComponents/AdminNavBar/AdminNavBar.jsx";
-
+import './Admin.css'
 
 function admin() {
     return (
         <div className="admin">
             <AdminNavBar/>
             <AdminHeadSection/>
-            {/*<AdminMiddleSection/>*/}
+            <AdminMiddleSection/>
             <Footer/>
         </div>
     )
