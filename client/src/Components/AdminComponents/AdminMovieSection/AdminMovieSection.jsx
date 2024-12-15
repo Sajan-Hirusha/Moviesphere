@@ -5,6 +5,7 @@ import editIcon from '../../../assets/Images/editIcon.png';
 import AdminNavBar from "../AdminNavBar/AdminNavBar.jsx";
 import Footer from "../../Footer/Footer.jsx";
 import {useRef, useState} from "react";
+import axios from "axios";
 
 function AdminMovieSection(props) {
     const movieModalRef = useRef(null);
@@ -32,6 +33,54 @@ function AdminMovieSection(props) {
     const confirmDeleteMovie = () => {
         console.log("Movie deleted:", movieToDelete);
         setMovieToDelete(null);
+    };
+
+    //api part
+    const [inputs, setInputs] = useState({});
+    const [loading, setLoading] = useState(false);
+
+    const handleChange = (e) => {
+        const name = e.target.name;
+        const value = e.target.type === "file" ? e.target.files[0] : e.target.value.trim();
+        setInputs((prevValues) => ({ ...prevValues, [name]: value }));
+    };
+
+    const updateDatabase = async () => {
+        // setLoading(true);
+
+        // FormData object to handle text and file inputs
+        const formData = new FormData();
+        for (const key in inputs) {
+            formData.append(key, inputs[key]);
+        }
+
+        try {
+            console.log(formData);
+            const response = await axios.post("http://127.0.0.1:8000/api/movies/", formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            });
+            if (response.data.success) {
+                alert(response.data.message);
+                console.log(response.data.data);
+            }
+        } catch (error) {
+            setLoading(false);
+            console.error("Error adding product:", error);
+            alert("Failed to add product. Please try again.");
+        }
+    };
+
+    const handleFormSubmit = (event) => {
+        event.preventDefault();
+        const form = document.querySelector(".needs-validation");
+
+        if (!form.checkValidity()) {
+            form.classList.add("was-validated");
+        } else {
+            updateDatabase();
+        }
     };
     return (
         <div className="adminMovieSection">
@@ -64,7 +113,7 @@ function AdminMovieSection(props) {
                 </div>
             </div>
 
-            {/* Movie Modal */}
+            {/* Add Movie Modal */}
             <div className="addMovieFormModal">
                 <div
                     className="modal fade"
@@ -86,7 +135,11 @@ function AdminMovieSection(props) {
                                 ></button>
                             </div>
                             <div className="modal-body">
-                                <form className="row g-3">
+                                <form
+                                    className="needs-validation row g-3"
+                                    noValidate
+                                    onSubmit={handleFormSubmit}
+                                >
                                     <div className="col-md-6">
                                         <label htmlFor="movieName" className="form-label">Movie Name</label>
                                         <input
@@ -94,9 +147,13 @@ function AdminMovieSection(props) {
                                             className="form-control"
                                             id="movieName"
                                             placeholder="Enter movie name"
+                                            onChange={handleChange}
                                             required
+                                            name="title"
                                         />
+                                        <div className="invalid-feedback">Please enter a valid movie name.</div>
                                     </div>
+
                                     <div className="col-md-6">
                                         <label htmlFor="movieCategory" className="form-label">Movie Category</label>
                                         <input
@@ -104,8 +161,11 @@ function AdminMovieSection(props) {
                                             className="form-control"
                                             id="movieCategory"
                                             placeholder="Enter movie category"
+                                            onChange={handleChange}
                                             required
+                                            name="category"
                                         />
+                                        <div className="invalid-feedback">Please enter a valid movie category.</div>
                                     </div>
                                     <div className="col-12">
                                         <label htmlFor="movieDescription" className="form-label">Movie
@@ -115,10 +175,12 @@ function AdminMovieSection(props) {
                                             id="movieDescription"
                                             rows="3"
                                             placeholder="Enter movie description"
+                                            onChange={handleChange}
                                             required
+                                            name="description"
                                         ></textarea>
+                                        <div className="invalid-feedback">Please provide a description.</div>
                                     </div>
-
                                     {[1, 2, 3].map(num => (
                                         <div className="col-md-4" key={`image${num}`}>
                                             <label htmlFor={`image${num}`} className="form-label">Image {num}</label>
@@ -127,24 +189,31 @@ function AdminMovieSection(props) {
                                                 className="form-control"
                                                 id={`image${num}`}
                                                 accept="image/*"
-                                                required={num === 1}
+                                                onChange={handleChange}
+                                                required
+                                                name={`image${num}`}
                                             />
+                                            <div className="invalid-feedback">
+                                                Please upload a valid image for Image {num}.
+                                            </div>
                                         </div>
                                     ))}
+
+                                    <div className="modal-footer">
+                                        <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
+                                            Close
+                                        </button>
+                                        <button type="submit" className="btn btn-primary">
+                                            Save Movie
+                                        </button>
+                                    </div>
                                 </form>
-                            </div>
-                            <div className="modal-footer">
-                                <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
-                                    Close
-                                </button>
-                                <button type="button" className="btn btn-primary">
-                                    Save Movie
-                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
 
             {/*edit movie*/}
             <div className="editMovieFormModal">
