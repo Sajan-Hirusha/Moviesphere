@@ -9,13 +9,21 @@ import axios from "axios";
 import CircleSpinner from "../../CircleSpinner/CircleSpinner.jsx";
 
 function AdminMovieSection(props) {
-    const urlPattern="http://127.0.0.1:8000"
+    const urlPattern = "http://127.0.0.1:8000"
     const movieModalRef = useRef(null);
     const editMovieModalRef = useRef(null);
     const categoryModalRef = useRef(null);
     const [enlargedImage, setEnlargedImage] = useState(null);
     const [movieToDelete, setMovieToDelete] = useState(null);
     const [categoryList, setCategoryList] = useState([]);
+    const [movies, setMovies] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [hasNextPage, setHasNextPage] = useState(false);
+    const [hasPrevPage, setHasPrevPage] = useState(false);
+    const [inputs, setInputs] = useState({});
+    const [loading, setLoading] = useState(false);
+
+
 
     const handleShowModal = (modalRef, recipient) => {
         const modalElement = modalRef.current;
@@ -49,14 +57,12 @@ function AdminMovieSection(props) {
     };
 
     //api part
-    const [inputs, setInputs] = useState({});
-    const [loading, setLoading] = useState(false);
 
     //get category list
     useEffect(() => {
         axios.get(`${urlPattern}/api/categories`)
             .then(response => {
-                setCategoryList(response.data);
+                setCategoryList(response.data.results);
             })
             .catch(error => {
                 console.log(error.message);
@@ -67,7 +73,7 @@ function AdminMovieSection(props) {
     const handleChange = (e) => {
         const name = e.target.name;
         const value = e.target.type === "file" ? e.target.files[0] : e.target.value.trim();
-        setInputs((prevValues) => ({ ...prevValues, [name]: value }));
+        setInputs((prevValues) => ({...prevValues, [name]: value}));
     };
 
     const updateDatabase = async (url) => {
@@ -101,7 +107,7 @@ function AdminMovieSection(props) {
         }
     };
 
-    const handleFormSubmit = (event,needValidation,url) => {
+    const handleFormSubmit = (event, needValidation, url) => {
         event.preventDefault();
         const form = document.querySelector(needValidation);
 
@@ -112,7 +118,32 @@ function AdminMovieSection(props) {
         }
     };
 
+    //get Movies
+    useEffect(() => {
+        axios.get(`${urlPattern}/api/movies?page=${currentPage}`)
+            .then(response => {
+                const data = response.data;
+                setMovies(data.results);
+                setHasNextPage(data.next !== null);
+                setHasPrevPage(data.previous !== null);
+            })
+            .catch(error => {
+                console.log("Error loading movies:", error.message);
+            });
+    }, [currentPage]);
 
+    // Handle pagination
+    const handleNext = () => {
+        if (hasNextPage) {
+            setCurrentPage((prevPage) => prevPage + 1);
+        }
+    };
+
+    const handlePrev = () => {
+        if (hasPrevPage) {
+            setCurrentPage((prevPage) => prevPage - 1);
+        }
+    };
 
     return (
         <div className="adminMovieSection">
@@ -171,7 +202,7 @@ function AdminMovieSection(props) {
                                 <form
                                     className="needs-validation1 row g-3"
                                     noValidate
-                                    onSubmit={(event) => handleFormSubmit(event, ".needs-validation1","/api/movies/")}
+                                    onSubmit={(event) => handleFormSubmit(event, ".needs-validation1", "/api/movies/")}
                                 >
                                     <div className="col-md-6">
                                         <label htmlFor="movieName" className="form-label">Movie Name</label>
@@ -190,7 +221,7 @@ function AdminMovieSection(props) {
                                     <div className="col-md-6">
                                         <label htmlFor="categoryList" className="form-label">Category</label>
                                         <select className="form-select feildDisabled" id="categoryList" required
-                                                name="category" onChange={handleChange} >
+                                                name="category" onChange={handleChange}>
                                             <option value="" disabled> select Category</option>
                                             {Array.isArray(categoryList) ? (categoryList.map((category, index) => (
                                                 <option key={index}
@@ -274,7 +305,12 @@ function AdminMovieSection(props) {
                                 ></button>
                             </div>
                             <div className="modal-body">
-                                <form className="row g-3">
+                                <form
+                                    className="needs-validation3 row g-3"
+                                    noValidate
+                                    id="editMovieForm"
+                                    onSubmit={(event) => handleFormSubmit(event, ".needs-validation3", "/api/movies/")}
+                                >
                                     <div className="col-md-6">
                                         <label htmlFor="movieName" className="form-label">Movie Name</label>
                                         <input
@@ -283,7 +319,9 @@ function AdminMovieSection(props) {
                                             id="movieName"
                                             placeholder="Enter movie name"
                                             required
+                                            onChange={handleChange}
                                         />
+                                        <div className="invalid-feedback">Please enter the movie name.</div>
                                     </div>
                                     <div className="col-md-6">
                                         <label htmlFor="movieCategory" className="form-label">Movie Category</label>
@@ -293,7 +331,9 @@ function AdminMovieSection(props) {
                                             id="movieCategory"
                                             placeholder="Enter movie category"
                                             required
+                                            onChange={handleChange}
                                         />
+                                        <div className="invalid-feedback">Please enter the movie category.</div>
                                     </div>
                                     <div className="col-12">
                                         <label htmlFor="movieDescription" className="form-label">Movie
@@ -304,9 +344,10 @@ function AdminMovieSection(props) {
                                             rows="3"
                                             placeholder="Enter movie description"
                                             required
+                                            onChange={handleChange}
                                         ></textarea>
+                                        <div className="invalid-feedback">Please enter a movie description.</div>
                                     </div>
-
                                     {[1, 2, 3].map(num => (
                                         <div className="col-md-4" key={`image${num}`}>
                                             <label htmlFor={`image${num}`} className="form-label">Image {num}</label>
@@ -315,24 +356,34 @@ function AdminMovieSection(props) {
                                                 className="form-control"
                                                 id={`image${num}`}
                                                 accept="image/*"
-                                                required={num === 1}
+                                                onChange={handleChange}
+                                                required
+                                                name={`image${num}`}
                                             />
+                                            <div className="invalid-feedback">
+                                                Please upload a valid image for Image {num}.
+                                            </div>
                                         </div>
                                     ))}
+                                    <div className="modal-footer">
+                                        <button
+                                            type="button"
+                                            className="btn btn-secondary"
+                                            data-bs-dismiss="modal"
+                                        >
+                                            Close
+                                        </button>
+                                        <button type="submit" className="btn btn-primary">
+                                            Save changes
+                                        </button>
+                                    </div>
                                 </form>
-                            </div>
-                            <div className="modal-footer">
-                                <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
-                                    Close
-                                </button>
-                                <button type="button" className="btn btn-primary">
-                                    Save changes
-                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
 
             {/* Category Modal */}
             <div className="addCategoryModal">
@@ -359,7 +410,7 @@ function AdminMovieSection(props) {
                                 <form
                                     className="row g-3 needs-validation2"
                                     noValidate
-                                    onSubmit={(event) => handleFormSubmit(event, ".needs-validation2","/api/categories/")}
+                                    onSubmit={(event) => handleFormSubmit(event, ".needs-validation2", "/api/categories/")}
                                 >
                                     <div className="col-12">
                                         <label htmlFor="categoryName" className="form-label">Category Name</label>
@@ -446,46 +497,68 @@ function AdminMovieSection(props) {
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>
-                        <div className="d-flex align-items-center">
-                            <img
-                                src="https://mdbootstrap.com/img/new/avatars/8.jpg"
-                                alt="Movie Thumbnail"
-                                style={{width: '60px', height: '25px'}}
-                                onClick={() => handleImageClick("https://mdbootstrap.com/img/new/avatars/8.jpg")}
-                                data-bs-toggle="modal"
-                                data-bs-target="#imageEnlargeModal"
-                                className="enlargeImage"
-                            />
-                            <div className="ms-3">
-                                <p className="fw-bold mb-1">Suffragette</p>
-                                <p className="text-muted mb-0">2015</p>
+                {movies.map((movie) => (
+                    <tr key={movie.id}>
+                        <td>
+                            <div className="d-flex align-items-center">
+                                <img
+                                    src={movie.image1 || "https://via.placeholder.com/60"}
+                                    alt="Movie Thumbnail"
+                                    style={{width: "60px", height: "25px"}}
+                                    onClick={() => handleImageClick(movie.image1)}
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#imageEnlargeModal"
+                                    className="enlargeImage"
+                                />
+                                <div className="ms-3">
+                                    <p className="fw-bold mb-1">{movie.title}</p>
+                                    <p className="text-muted mb-0">{movie.year}</p>
+                                </div>
                             </div>
-                        </div>
-                    </td>
-                    <td>Drama</td>
-                    <td>Lorem ipsum dolor sit amet.</td>
-                    <td>
-                        <button type="button" className="btn btn-link btn-sm btn-rounded"
+                        </td>
+                        <td>{movie.category}</td>
+                        <td>{movie.description}</td>
+                        <td>
+                            <button
+                                type="button"
+                                className="btn btn-link btn-sm btn-rounded"
                                 data-bs-toggle="modal"
                                 data-bs-target="#editMovieFormModal"
                                 onClick={() => handleShowModal(editMovieModalRef, "Edit Movie Details")}
-                        >
-                            <img src={editIcon} alt="editIcon" style={{width: "25px", height: "25px"}}/>
-                        </button>
-                        <button
-                            className="btn btn-link text-danger"
-                            onClick={() => handleDeleteMovie(1)}
-                            data-bs-toggle="modal"
-                            data-bs-target="#confirmDeleteModal"
-                        >
-                            <img src={deleteIcon} alt="deleteIcon" style={{width: "25px", height: "25px"}}/>
-                        </button>
-                    </td>
-                </tr>
+                            >
+                                <img src={editIcon} alt="editIcon" style={{width: "25px", height: "25px"}}/>
+                            </button>
+                            <button
+                                className="btn btn-link text-danger"
+                                onClick={() => handleDeleteMovie(movie.id)}
+                                data-bs-toggle="modal"
+                                data-bs-target="#confirmDeleteModal"
+                            >
+                                <img src={deleteIcon} alt="deleteIcon" style={{width: "25px", height: "25px"}}/>
+                            </button>
+                        </td>
+                    </tr>
+                ))}
                 </tbody>
             </table>
+
+            {/* Pagination Controls */}
+            <div className="d-flex justify-content-center mt-4 mb-4">
+                <button
+                    className="btn btn-secondary me-2"
+                    disabled={!hasPrevPage}
+                    onClick={handlePrev}
+                >
+                    Previous
+                </button>
+                <button
+                    className="btn btn-primary"
+                    disabled={!hasNextPage}
+                    onClick={handleNext}
+                >
+                    Next
+                </button>
+            </div>
 
             {/* Confirmation Modal */}
             <div

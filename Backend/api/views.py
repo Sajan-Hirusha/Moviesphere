@@ -1,8 +1,11 @@
 from rest_framework import viewsets, status
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from api.models import Movie, Category
 from api.serializers import MovieSerializer, CategorySerializer
 
+class MoviePagination(PageNumberPagination):
+    page_size = 5
 
 class MovieViewSet(viewsets.ModelViewSet):
     queryset = Movie.objects.all()
