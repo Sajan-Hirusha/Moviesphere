@@ -4,23 +4,36 @@ import deleteIcon from '../../../assets/Images/deleteIcon.png';
 import editIcon from '../../../assets/Images/editIcon.png';
 import AdminNavBar from "../AdminNavBar/AdminNavBar.jsx";
 import Footer from "../../Footer/Footer.jsx";
-import {useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import axios from "axios";
+import CircleSpinner from "../../CircleSpinner/CircleSpinner.jsx";
 
 function AdminMovieSection(props) {
+    const urlPattern="http://127.0.0.1:8000"
     const movieModalRef = useRef(null);
     const editMovieModalRef = useRef(null);
     const categoryModalRef = useRef(null);
     const [enlargedImage, setEnlargedImage] = useState(null);
     const [movieToDelete, setMovieToDelete] = useState(null);
+    const [categoryList, setCategoryList] = useState([]);
 
     const handleShowModal = (modalRef, recipient) => {
         const modalElement = modalRef.current;
         if (modalElement) {
             const modalTitle = modalElement.querySelector('.modal-title');
-            const modalBodyInput = modalElement.querySelector('.modal-body input');
             modalTitle.textContent = `${recipient}`;
-            if (modalBodyInput) modalBodyInput.value = recipient;
+        }
+    };
+
+    const closeModal = () => {
+        const modalElement = movieModalRef.current;
+        if (modalElement) {
+            modalElement.classList.remove('show');
+            modalElement.style.display = 'none';
+            const backdrop = document.querySelector('.modal-backdrop');
+            if (backdrop) {
+                backdrop.remove();
+            }
         }
     };
 
@@ -39,14 +52,26 @@ function AdminMovieSection(props) {
     const [inputs, setInputs] = useState({});
     const [loading, setLoading] = useState(false);
 
+    //get category list
+    useEffect(() => {
+        axios.get(`${urlPattern}/api/categories`)
+            .then(response => {
+                setCategoryList(response.data);
+            })
+            .catch(error => {
+                console.log(error.message);
+            });
+    }, []);
+
+
     const handleChange = (e) => {
         const name = e.target.name;
         const value = e.target.type === "file" ? e.target.files[0] : e.target.value.trim();
         setInputs((prevValues) => ({ ...prevValues, [name]: value }));
     };
 
-    const updateDatabase = async () => {
-        // setLoading(true);
+    const updateDatabase = async (url) => {
+        setLoading(true);
 
         // FormData object to handle text and file inputs
         const formData = new FormData();
@@ -55,15 +80,19 @@ function AdminMovieSection(props) {
         }
 
         try {
-            console.log(formData);
-            const response = await axios.post("http://127.0.0.1:8000/api/movies/", formData, {
+            for (let pair of formData.entries()) {
+                console.log(pair[0] + ': ' + pair[1]);
+            }
+
+            const response = await axios.post(`${urlPattern}${url}`, formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },
             });
+            setLoading(false);
             if (response.data.success) {
+                closeModal();
                 alert(response.data.message);
-                console.log(response.data.data);
             }
         } catch (error) {
             setLoading(false);
@@ -72,18 +101,22 @@ function AdminMovieSection(props) {
         }
     };
 
-    const handleFormSubmit = (event) => {
+    const handleFormSubmit = (event,needValidation,url) => {
         event.preventDefault();
-        const form = document.querySelector(".needs-validation");
+        const form = document.querySelector(needValidation);
 
         if (!form.checkValidity()) {
             form.classList.add("was-validated");
         } else {
-            updateDatabase();
+            updateDatabase(url);
         }
     };
+
+
+
     return (
         <div className="adminMovieSection">
+            {loading && <CircleSpinner/>}
             <AdminNavBar/>
             <div className="row movieSection gap-4">
                 <div className="left col-7">
@@ -136,9 +169,9 @@ function AdminMovieSection(props) {
                             </div>
                             <div className="modal-body">
                                 <form
-                                    className="needs-validation row g-3"
+                                    className="needs-validation1 row g-3"
                                     noValidate
-                                    onSubmit={handleFormSubmit}
+                                    onSubmit={(event) => handleFormSubmit(event, ".needs-validation1","/api/movies/")}
                                 >
                                     <div className="col-md-6">
                                         <label htmlFor="movieName" className="form-label">Movie Name</label>
@@ -155,17 +188,21 @@ function AdminMovieSection(props) {
                                     </div>
 
                                     <div className="col-md-6">
-                                        <label htmlFor="movieCategory" className="form-label">Movie Category</label>
-                                        <input
-                                            type="text"
-                                            className="form-control"
-                                            id="movieCategory"
-                                            placeholder="Enter movie category"
-                                            onChange={handleChange}
-                                            required
-                                            name="category"
-                                        />
-                                        <div className="invalid-feedback">Please enter a valid movie category.</div>
+                                        <label htmlFor="categoryList" className="form-label">Category</label>
+                                        <select className="form-select feildDisabled" id="categoryList" required
+                                                name="category" onChange={handleChange} >
+                                            <option value="" disabled> select Category</option>
+                                            {Array.isArray(categoryList) ? (categoryList.map((category, index) => (
+                                                <option key={index}
+                                                        value={category.name}>{category.name}</option>
+                                            ))) : ""}
+                                        </select>
+                                        <div className="valid-feedback">
+                                            Looks good!
+                                        </div>
+                                        <div className="invalid-feedback">
+                                            Please select a valid Category.
+                                        </div>
                                     </div>
                                     <div className="col-12">
                                         <label htmlFor="movieDescription" className="form-label">Movie
@@ -296,6 +333,7 @@ function AdminMovieSection(props) {
                     </div>
                 </div>
             </div>
+
             {/* Category Modal */}
             <div className="addCategoryModal">
                 <div
@@ -318,7 +356,11 @@ function AdminMovieSection(props) {
                                 ></button>
                             </div>
                             <div className="modal-body">
-                                <form className="row g-3">
+                                <form
+                                    className="row g-3 needs-validation2"
+                                    noValidate
+                                    onSubmit={(event) => handleFormSubmit(event, ".needs-validation2","/api/categories/")}
+                                >
                                     <div className="col-12">
                                         <label htmlFor="categoryName" className="form-label">Category Name</label>
                                         <input
@@ -327,22 +369,28 @@ function AdminMovieSection(props) {
                                             id="categoryName"
                                             placeholder="Enter category name"
                                             required
+                                            name="name"
+                                            onChange={handleChange}
                                         />
+                                        <div className="invalid-feedback">
+                                            Please enter a category name.
+                                        </div>
+                                    </div>
+                                    <div className="modal-footer">
+                                        <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
+                                            Close
+                                        </button>
+                                        <button type="submit" className="btn btn-primary">
+                                            Save changes
+                                        </button>
                                     </div>
                                 </form>
-                            </div>
-                            <div className="modal-footer">
-                                <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
-                                    Close
-                                </button>
-                                <button type="button" className="btn btn-primary">
-                                    Save changes
-                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
 
             {/* Image Enlargement Modal */}
             <div className="imageEnlargeModal">
