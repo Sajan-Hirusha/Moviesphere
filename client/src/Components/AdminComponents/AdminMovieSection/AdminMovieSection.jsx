@@ -23,8 +23,7 @@ function AdminMovieSection(props) {
     const [inputs, setInputs] = useState({});
     const [loading, setLoading] = useState(false);
 
-
-
+    
     const handleShowModal = (modalRef, recipient) => {
         const modalElement = modalRef.current;
         if (modalElement) {
