@@ -7,13 +7,14 @@ import Footer from "../../Footer/Footer.jsx";
 import {useEffect, useRef, useState} from "react";
 import axios from "axios";
 import CircleSpinner from "../../CircleSpinner/CircleSpinner.jsx";
+import log from "eslint-plugin-react/lib/util/log.js";
 
 function AdminMovieSection(props) {
     const urlPattern = "http://127.0.0.1:8000"
     const movieModalRef = useRef(null);
     const editMovieModalRef = useRef(null);
     const categoryModalRef = useRef(null);
-    const [enlargedImage, setEnlargedImage] = useState(null);
+    const [enlargedImage, setEnlargedImage] = useState([]);
     const [movieToDelete, setMovieToDelete] = useState(null);
     const [categoryList, setCategoryList] = useState([]);
     const [movies, setMovies] = useState([]);
@@ -23,7 +24,7 @@ function AdminMovieSection(props) {
     const [inputs, setInputs] = useState({});
     const [loading, setLoading] = useState(false);
 
-    
+
     const handleShowModal = (modalRef, recipient) => {
         const modalElement = modalRef.current;
         if (modalElement) {
@@ -44,8 +45,8 @@ function AdminMovieSection(props) {
         }
     };
 
-    const handleImageClick = (imageUrl) => {
-        setEnlargedImage(imageUrl);
+    const handleImageClick = (imageUrl1,imageUrl2,imageUrl3) => {
+        setEnlargedImage([imageUrl1,imageUrl2,imageUrl3]);
     };
     const handleDeleteMovie = (movieId) => {
         setMovieToDelete(movieId);
@@ -56,7 +57,6 @@ function AdminMovieSection(props) {
     };
 
     //api part
-
     //get category list
     useEffect(() => {
         axios.get(`${urlPattern}/api/categories`)
@@ -462,17 +462,45 @@ function AdminMovieSection(props) {
                                     aria-label="Close"
                                 ></button>
                             </div>
-                            <div className="modal-body d-flex justify-content-center">
-                                {enlargedImage &&
-                                    <img src={enlargedImage} alt="Enlarged" className="img-fluid rounded-3 shadow-lg"/>}
+                            <div className="modal-body">
+                                {/* Carousel */}
+                                <div id="carouselExample" className="carousel slide" data-bs-ride="carousel">
+                                    <div className="carousel-inner">
+                                        {/* Image 1 */}
+                                        <div className="carousel-item active">
+                                            <img src={enlargedImage[0]}
+                                                 className="d-block w-100 img-fluid rounded-3 shadow-lg" alt="Image 1"/>
+                                        </div>
+                                        {/* Image 2 */}
+                                        <div className="carousel-item">
+                                            <img src={enlargedImage[1]}
+                                                 className="d-block w-100 img-fluid rounded-3 shadow-lg" alt="Image 2"/>
+                                        </div>
+                                        {/* Image 3 */}
+                                        <div className="carousel-item">
+                                            <img src={enlargedImage[2]}
+                                                 className="d-block w-100 img-fluid rounded-3 shadow-lg" alt="Image 3"/>
+                                        </div>
+                                    </div>
+                                    {/* Previous and Next Arrows */}
+                                    <button className="carousel-control-prev" type="button"
+                                            data-bs-target="#carouselExample" data-bs-slide="prev">
+                                        <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+                                        <span className="visually-hidden">Previous</span>
+                                    </button>
+                                    <button className="carousel-control-next" type="button"
+                                            data-bs-target="#carouselExample" data-bs-slide="next">
+                                        <span className="carousel-control-next-icon" aria-hidden="true"></span>
+                                        <span className="visually-hidden">Next</span>
+                                    </button>
+                                </div>
                             </div>
-                            <div className="modal-footer border-0">
-                            </div>
+                            <div className="modal-footer border-0"></div>
                         </div>
                     </div>
                 </div>
-
             </div>
+
 
             {/* Search Field */}
             <div className="input-group searchMovie mt-4">
@@ -489,6 +517,7 @@ function AdminMovieSection(props) {
             <table className="table align-middle mb-5 bg-white">
                 <thead className="bg-light">
                 <tr>
+                    <th>Movie Id</th>
                     <th>Title</th>
                     <th>Category</th>
                     <th>Description</th>
@@ -498,13 +527,14 @@ function AdminMovieSection(props) {
                 <tbody>
                 {movies.map((movie) => (
                     <tr key={movie.id}>
+                        <td>{movie.id}</td>
                         <td>
                             <div className="d-flex align-items-center">
                                 <img
                                     src={movie.image1 || "https://via.placeholder.com/60"}
                                     alt="Movie Thumbnail"
                                     style={{width: "60px", height: "25px"}}
-                                    onClick={() => handleImageClick(movie.image1)}
+                                    onClick={() => handleImageClick(movie.image1, movie.image2, movie.image3)}
                                     data-bs-toggle="modal"
                                     data-bs-target="#imageEnlargeModal"
                                     className="enlargeImage"

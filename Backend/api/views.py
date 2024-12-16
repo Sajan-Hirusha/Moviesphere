@@ -5,7 +5,7 @@ from api.models import Movie, Category
 from api.serializers import MovieSerializer, CategorySerializer
 
 class MoviePagination(PageNumberPagination):
-    page_size = 5
+    page_size = 10
 
 class MovieViewSet(viewsets.ModelViewSet):
     queryset = Movie.objects.all()
