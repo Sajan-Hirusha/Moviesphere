@@ -3,13 +3,12 @@ import uuid
 from django.db import models
 from django.utils.deconstruct import deconstructible
 
-# Custom function to generate unique filenames
 @deconstructible
 class UniqueImageName:
     def __call__(self, instance, filename):
-        ext = filename.split('.')[-1]  # Get file extension
-        new_filename = f"{uuid.uuid4().hex}.{ext}"  # Generate unique filename using UUID
-        return os.path.join('uploads/images', new_filename)  # Save it under 'uploads/images' folder
+        ext = filename.split('.')[-1]
+        new_filename = f"{uuid.uuid4().hex}.{ext}"
+        return os.path.join('uploads/images', new_filename)
 
 class Movie(models.Model):
     image1 = models.ImageField(upload_to=UniqueImageName(), null=True, blank=True)
@@ -23,7 +22,6 @@ class Movie(models.Model):
         return self.title
 
     def save(self, *args, **kwargs):
-        # If needed, you can further customize the save method here
         super().save(*args, **kwargs)
 
 class Category(models.Model):

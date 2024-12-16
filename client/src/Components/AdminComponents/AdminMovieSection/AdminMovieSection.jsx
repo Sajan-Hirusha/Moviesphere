@@ -7,7 +7,6 @@ import Footer from "../../Footer/Footer.jsx";
 import {useEffect, useRef, useState} from "react";
 import axios from "axios";
 import CircleSpinner from "../../CircleSpinner/CircleSpinner.jsx";
-import log from "eslint-plugin-react/lib/util/log.js";
 
 function AdminMovieSection(props) {
     const urlPattern = "http://127.0.0.1:8000"
@@ -18,6 +17,7 @@ function AdminMovieSection(props) {
     const [movieToDelete, setMovieToDelete] = useState(null);
     const [categoryList, setCategoryList] = useState([]);
     const [movies, setMovies] = useState([]);
+    const [movie, setMovie] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const [hasNextPage, setHasNextPage] = useState(false);
     const [hasPrevPage, setHasPrevPage] = useState(false);
@@ -26,6 +26,15 @@ function AdminMovieSection(props) {
 
 
     const handleShowModal = (modalRef, recipient) => {
+        const modalElement = modalRef.current;
+        if (modalElement) {
+            const modalTitle = modalElement.querySelector('.modal-title');
+            modalTitle.textContent = `${recipient}`;
+        }
+    };
+    const handleShowEditModal = (modalRef, recipient,id) => {
+        const selectedMovie = movies.find((movie) => movie.id === id);
+        setMovie(selectedMovie);
         const modalElement = modalRef.current;
         if (modalElement) {
             const modalTitle = modalElement.querySelector('.modal-title');
@@ -51,8 +60,15 @@ function AdminMovieSection(props) {
     const handleDeleteMovie = (movieId) => {
         setMovieToDelete(movieId);
     };
-    const confirmDeleteMovie = () => {
-        console.log("Movie deleted:", movieToDelete);
+    const confirmDeleteMovie = async () => {
+                try {
+                    await axios.delete(`${urlPattern}/api/movies/${movieToDelete}/`);
+                    alert("Movie deleted successfully!");
+                    window.location.href = "/admin/movies";
+                } catch (error) {
+                    console.error("Error deleting Movie:", error);
+                    alert("Failed to delete the Movie. Please try again.");
+                }
         setMovieToDelete(null);
     };
 
@@ -108,12 +124,16 @@ function AdminMovieSection(props) {
 
     const handleFormSubmit = (event, needValidation, url) => {
         event.preventDefault();
-        const form = document.querySelector(needValidation);
-
-        if (!form.checkValidity()) {
-            form.classList.add("was-validated");
+        if (inputs.category === "default" || !inputs.category) {
+            alert("Please select a valid category!");
         } else {
-            updateDatabase(url);
+            const form = document.querySelector(needValidation);
+
+            if (!form.checkValidity()) {
+                form.classList.add("was-validated");
+            } else {
+                updateDatabase(url);
+            }
         }
     };
 
@@ -220,8 +240,8 @@ function AdminMovieSection(props) {
                                     <div className="col-md-6">
                                         <label htmlFor="categoryList" className="form-label">Category</label>
                                         <select className="form-select feildDisabled" id="categoryList" required
-                                                name="category" onChange={handleChange}>
-                                            <option value="" disabled> select Category</option>
+                                                value={inputs.category || ""}  name="category" onChange={handleChange}>
+                                            <option  value="default" > select Category</option>
                                             {Array.isArray(categoryList) ? (categoryList.map((category, index) => (
                                                 <option key={index}
                                                         value={category.name}>{category.name}</option>
@@ -319,21 +339,33 @@ function AdminMovieSection(props) {
                                             placeholder="Enter movie name"
                                             required
                                             onChange={handleChange}
+                                            value={movie && movie.title ? movie.title : ""}
+
                                         />
                                         <div className="invalid-feedback">Please enter the movie name.</div>
                                     </div>
                                     <div className="col-md-6">
-                                        <label htmlFor="movieCategory" className="form-label">Movie Category</label>
-                                        <input
-                                            type="text"
-                                            className="form-control"
-                                            id="movieCategory"
-                                            placeholder="Enter movie category"
+                                        <label htmlFor="categoryList" className="form-label">Category</label>
+                                        <select
+                                            className="form-select feildDisabled"
+                                            id="categoryList"
                                             required
+                                            value={movie?.category || "default"} // Use optional chaining and a default fallback
+                                            name="category"
                                             onChange={handleChange}
-                                        />
-                                        <div className="invalid-feedback">Please enter the movie category.</div>
+                                        >
+                                            <option value="default">Select Category</option>
+                                            {Array.isArray(categoryList) &&
+                                                categoryList.map((category, index) => (
+                                                    <option key={index} value={category.name}>
+                                                        {category.name}
+                                                    </option>
+                                                ))}
+                                        </select>
+                                        <div className="valid-feedback">Looks good!</div>
+                                        <div className="invalid-feedback">Please select a valid Category.</div>
                                     </div>
+
                                     <div className="col-12">
                                         <label htmlFor="movieDescription" className="form-label">Movie
                                             Description</label>
@@ -344,6 +376,7 @@ function AdminMovieSection(props) {
                                             placeholder="Enter movie description"
                                             required
                                             onChange={handleChange}
+                                            value={movie && movie.description || ""}
                                         ></textarea>
                                         <div className="invalid-feedback">Please enter a movie description.</div>
                                     </div>
@@ -553,7 +586,7 @@ function AdminMovieSection(props) {
                                 className="btn btn-link btn-sm btn-rounded"
                                 data-bs-toggle="modal"
                                 data-bs-target="#editMovieFormModal"
-                                onClick={() => handleShowModal(editMovieModalRef, "Edit Movie Details")}
+                                onClick={() => handleShowEditModal(editMovieModalRef, "Edit Movie Details",movie.id)}
                             >
                                 <img src={editIcon} alt="editIcon" style={{width: "25px", height: "25px"}}/>
                             </button>
