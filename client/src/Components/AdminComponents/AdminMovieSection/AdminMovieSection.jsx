@@ -1,5 +1,6 @@
 import './MovieSection.css';
 import plusMark from '../../../assets/Images/plus.png';
+import minusMark from '../../../assets/Images/minusMark.png';
 import deleteIcon from '../../../assets/Images/deleteIcon.png';
 import editIcon from '../../../assets/Images/editIcon.png';
 import AdminNavBar from "../AdminNavBar/AdminNavBar.jsx";
@@ -7,12 +8,14 @@ import Footer from "../../Footer/Footer.jsx";
 import {useEffect, useRef, useState} from "react";
 import axios from "axios";
 import CircleSpinner from "../../CircleSpinner/CircleSpinner.jsx";
+import CategoryModel from "./CategoryModel/CategoryModel.jsx";
 
 function AdminMovieSection(props) {
     const urlPattern = "http://127.0.0.1:8000"
     const movieModalRef = useRef(null);
     const editMovieModalRef = useRef(null);
-    const categoryModalRef = useRef(null);
+    const categoryAddModalRef = useRef(null);
+    const categoryRemoveModalRef = useRef(null);
     const [enlargedImage, setEnlargedImage] = useState([]);
     const [movieId, setMovieId] = useState(null);
     const [categoryList, setCategoryList] = useState([]);
@@ -158,7 +161,7 @@ function AdminMovieSection(props) {
         }
     };
 
-    const handleCategoryFormSubmit = (event, needValidation, url, method) => {
+    const handleAddCategoryFormSubmit = (event, needValidation, url, method) => {
         event.preventDefault();
         const form = document.querySelector(needValidation);
         if (!form.checkValidity()) {
@@ -166,7 +169,14 @@ function AdminMovieSection(props) {
         }
         updateDatabase(url, method);
     }
-
+    const handleRemoveCategoryFormSubmit = (event, needValidation, url, method) => {
+        event.preventDefault();
+        const form = document.querySelector(needValidation);
+        if (!form.checkValidity()) {
+            form.classList.add("was-validated");
+        }
+        updateDatabase(url, method);
+    }
     const handleEditFormSubmit = (event, url, method) => {
         console.log(inputs)
         event.preventDefault();
@@ -222,13 +232,22 @@ function AdminMovieSection(props) {
                         <img className="ms-5" src={plusMark} alt="plusSign"/>
                     </button>
                     <button
-                        className="movieAddButton"
+                        className="categoryButtons"
                         data-bs-toggle="modal"
                         data-bs-target="#addCategoryModal"
-                        onClick={() => handleShowModal(categoryModalRef, "Add Category")}
+                        onClick={() => handleShowModal(categoryAddModalRef, "Add Category")}
                     >
                         Add Category
-                        <img className="ms-5" src={plusMark} alt="plusSign"/>
+                        <img className="ms-5 signButtons" src={plusMark} alt="plusSign"/>
+                    </button>
+                    <button
+                        className="movieAddButton categoryButtons"
+                        data-bs-toggle="modal"
+                        data-bs-target="#removeCategoryModal"
+                        onClick={() => handleShowModal(categoryRemoveModalRef, "Remove Category")}
+                    >
+                        Remove Category
+                        <img className="ms-5 signButtons" src={minusMark} alt="plusSign"/>
                     </button>
                 </div>
             </div>
@@ -462,61 +481,57 @@ function AdminMovieSection(props) {
 
 
             {/* Category Modal */}
-            <div className="addCategoryModal">
-                <div
-                    className="modal fade"
-                    id="addCategoryModal"
-                    tabIndex="-1"
-                    aria-labelledby="addCategoryLabel"
-                    aria-hidden="true"
-                    ref={categoryModalRef}
-                >
-                    <div className="modal-dialog modal-md">
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <h1 className="modal-title fs-5" id="addCategoryLabel">Add Category</h1>
-                                <button
-                                    type="button"
-                                    className="btn-close"
-                                    data-bs-dismiss="modal"
-                                    aria-label="Close"
-                                ></button>
-                            </div>
-                            <div className="modal-body">
-                                <form
-                                    className="row g-3 needs-validation2"
-                                    noValidate
-                                    onSubmit={(event) => handleCategoryFormSubmit(event, ".needs-validation2", "/api/categories/","post")}
-                                >
-                                    <div className="col-12">
-                                        <label htmlFor="categoryName" className="form-label">Category Name</label>
-                                        <input
-                                            type="text"
-                                            className="form-control"
-                                            id="categoryName"
-                                            placeholder="Enter category name"
-                                            required
-                                            name="name"
-                                            onChange={handleChange}
-                                        />
-                                        <div className="invalid-feedback">
-                                            Please enter a category name.
-                                        </div>
-                                    </div>
-                                    <div className="modal-footer">
-                                        <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
-                                            Close
-                                        </button>
-                                        <button type="submit" className="btn btn-primary">
-                                            Save changes
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <CategoryModel method="post" handleChange={handleChange}
+                           handleCategoryFormSubmit={handleAddCategoryFormSubmit}
+                           buttonClass="primary" categoryModalRef={categoryAddModalRef} modelTitle={"Add Category"}
+                           id="addCategoryModal" url="/api/categories/"
+                           formBody={
+                               <div className="col-12">
+                                   <label htmlFor="categoryName" className="form-label">Category Name</label>
+                                   <input
+                                       type="text"
+                                       className="form-control"
+                                       id="categoryName"
+                                       placeholder="Enter category name"
+                                       required
+                                       name="name"
+                                       onChange={handleChange}
+                                   />
+                                   <div className="invalid-feedback">
+                                       Please enter a category name.
+                                   </div>
+                               </div>
+                           }/>
+            <CategoryModel method="delete" handleChange={handleChange}
+                           handleCategoryFormSubmit={handleRemoveCategoryFormSubmit}
+                           buttonClass="danger" categoryModalRef={categoryRemoveModalRef} modelTitle={"Remove Category"}
+                           id="removeCategoryModal" url={`/api/categories/delete-category/${encodeURIComponent(
+                               inputs.category)}/`}
+                           formBody={
+                               <div className="col-12">
+                                   <label htmlFor="categoryList" className="form-label">Category</label>
+                                   <select
+                                       className="form-select feildDisabled"
+                                       id="categoryList"
+                                       required
+                                       name="category"
+                                       value={inputs.category !== undefined ? inputs.category : movie?.category || "default"}
+                                       onChange={handleChange}
+                                   >
+                                       <option value="default">Select Category</option>
+                                       {Array.isArray(categoryList) &&
+                                           categoryList.map((category, index) => (
+                                               <option key={index} value={category.name}>
+                                                   {category.name}
+                                               </option>
+                                           ))}
+                                   </select>
+                                   <div className="invalid-feedback">
+                                       Please enter a category name.
+                                   </div>
+                               </div>
+
+                           }/>
 
 
             {/* Image Enlargement Modal */}

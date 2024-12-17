@@ -71,7 +71,18 @@
     font-weight: bold;
     background-color: white;
 }
-
+.adminMovieSection .categoryButtons {
+    width: 73%;
+    height: 45px;
+    margin: auto;
+    border-radius: 10px;
+    font-weight: bold;
+    background-color: white;
+}
+.adminMovieSection .signButtons{
+    width: 25px;
+    height: 25px;
+}
 .adminMovieSection .totalMovie{
     height: 180px;
 }

@@ -37,17 +37,11 @@ class MovieViewSet(viewsets.ModelViewSet):
             status=status.HTTP_200_OK
         )
 
-    def perform_update(self, serializer):
-        """Method to save the updated data"""
-        serializer.save()
-
     @action(detail=False, methods=['get'], url_path='search/(?P<identifier>.+)')
     def search_movie(self, request, identifier=None):
         if identifier.isdigit():
-            # Search by ID if the identifier is a digit
             queryset = self.queryset.filter(id=identifier)
         else:
-            # Search by title (case-insensitive exact match) if the identifier is not a digit
             queryset = self.queryset.filter(title__iexact=identifier)
 
         if not queryset.exists():
@@ -71,4 +65,26 @@ class CategoryViewSet(viewsets.ModelViewSet):
             status=status.HTTP_201_CREATED
         )
 
+    @action(detail=False, methods=['delete'], url_path='delete-category/(?P<name>[^/]+)')
+    def delete_by_name(self, request, name=None):
+
+        if not name:
+            return Response(
+                {"success": False, "message": "Category name is required."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        try:
+
+            category = Category.objects.get(name=name)
+            category.delete()
+            return Response(
+                {"success": True, "message": f"Category '{name}' deleted successfully."},
+                status=status.HTTP_200_OK
+            )
+        except Category.DoesNotExist:
+            return Response(
+                {"success": False, "message": f"Category '{name}' does not exist."},
+                status=status.HTTP_404_NOT_FOUND
+            )
 
