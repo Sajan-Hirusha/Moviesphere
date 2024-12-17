@@ -50,6 +50,13 @@ class MovieViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(queryset, many=True)
         return Response({"data": serializer.data}, status=status.HTTP_200_OK)
 
+    @action(detail=False, methods=['get'], url_path='count')
+    def get_movie_count(self, request):
+        total_movies = Movie.objects.count()  # Get total count of movies
+        return Response(
+            {"success": True, "total_movies": total_movies},
+            status=status.HTTP_200_OK
+        )
 
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()

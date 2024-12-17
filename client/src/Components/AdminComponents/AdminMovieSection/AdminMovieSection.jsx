@@ -10,7 +10,7 @@ import axios from "axios";
 import CircleSpinner from "../../CircleSpinner/CircleSpinner.jsx";
 import CategoryModel from "./CategoryModel/CategoryModel.jsx";
 
-function AdminMovieSection(props) {
+function AdminMovieSection() {
     const urlPattern = "http://127.0.0.1:8000"
     const movieModalRef = useRef(null);
     const editMovieModalRef = useRef(null);
@@ -27,7 +27,7 @@ function AdminMovieSection(props) {
     const [hasPrevPage, setHasPrevPage] = useState(false);
     const [inputs, setInputs] = useState({});
     const [loading, setLoading] = useState(false);
-
+    const [movieCount, setMovieCount] = useState(0);
 
     const handleShowModal = (modalRef, recipient) => {
         const modalElement = modalRef.current;
@@ -36,6 +36,7 @@ function AdminMovieSection(props) {
             modalTitle.textContent = `${recipient}`;
         }
     };
+
     const handleShowEditModal = (modalRef, recipient, id) => {
         const selectedMovie = movies.find((movie) => movie.id === id);
         setMovie(selectedMovie);
@@ -61,9 +62,41 @@ function AdminMovieSection(props) {
     const handleImageClick = (imageUrl1, imageUrl2, imageUrl3) => {
         setEnlargedImage([imageUrl1, imageUrl2, imageUrl3]);
     };
+
     const handleDeleteMovie = (movieId) => {
         setMovieId(movieId);
     };
+
+    const handleChange = (e) => {
+        const name = e.target.name;
+        const value = e.target.type === "file" ? e.target.files[0] : e.target.value.trim();
+        setInputs((prevValues) => ({...prevValues, [name]: value}));
+    };
+
+    const handleFormSubmit = (event, needValidation, url, method) => {
+        event.preventDefault();
+        if (inputs.category === "default" || !inputs.category) {
+            alert("Please select a valid category!");
+        } else {
+            const form = document.querySelector(needValidation);
+
+            if (!form.checkValidity()) {
+                form.classList.add("was-validated");
+            } else {
+                updateDatabase(url, method);
+            }
+        }
+    };
+
+    const handleAddCategoryFormSubmit = (event, needValidation, url, method) => {
+        event.preventDefault();
+        const form = document.querySelector(needValidation);
+        if (!form.checkValidity()) {
+            form.classList.add("was-validated");
+        }
+        updateDatabase(url, method);
+    }
+
 
     //delete movie
     const confirmDeleteMovie = async () => {
@@ -76,6 +109,35 @@ function AdminMovieSection(props) {
             alert("Failed to delete the Movie. Please try again.");
         }
         setMovieId(null);
+    };
+
+    // Handle pagination
+    const handleNext = () => {
+        if (hasNextPage) {
+            setCurrentPage((prevPage) => prevPage + 1);
+        }
+    };
+
+    const handlePrev = () => {
+        if (hasPrevPage) {
+            setCurrentPage((prevPage) => prevPage - 1);
+        }
+    };
+
+    const handleRemoveCategoryFormSubmit = (event, needValidation, url, method) => {
+        event.preventDefault();
+        const form = document.querySelector(needValidation);
+        if (!form.checkValidity()) {
+            form.classList.add("was-validated");
+        }
+        updateDatabase(url, method);
+    }
+
+    const handleEditFormSubmit = (event, url, method) => {
+        console.log(inputs)
+        event.preventDefault();
+        updateDatabase(url, method);
+
     };
 
     //search movie
@@ -92,9 +154,10 @@ function AdminMovieSection(props) {
             });
     };
 
-    //api part
-    //get category list
+
+    //get category List
     useEffect(() => {
+        fetchMovieCount();
         axios.get(`${urlPattern}/api/categories`)
             .then(response => {
                 setCategoryList(response.data.results);
@@ -104,17 +167,10 @@ function AdminMovieSection(props) {
             });
     }, []);
 
-
-    const handleChange = (e) => {
-        const name = e.target.name;
-        const value = e.target.type === "file" ? e.target.files[0] : e.target.value.trim();
-        setInputs((prevValues) => ({...prevValues, [name]: value}));
-    };
-
+    //update Database
     const updateDatabase = async (url, method) => {
         setLoading(true);
 
-        // FormData object to handle text and file inputs
         const formData = new FormData();
         for (const key in inputs) {
             formData.append(key, inputs[key]);
@@ -146,45 +202,7 @@ function AdminMovieSection(props) {
         }
     };
 
-    const handleFormSubmit = (event, needValidation, url, method) => {
-        event.preventDefault();
-        if (inputs.category === "default" || !inputs.category) {
-            alert("Please select a valid category!");
-        } else {
-            const form = document.querySelector(needValidation);
-
-            if (!form.checkValidity()) {
-                form.classList.add("was-validated");
-            } else {
-                updateDatabase(url, method);
-            }
-        }
-    };
-
-    const handleAddCategoryFormSubmit = (event, needValidation, url, method) => {
-        event.preventDefault();
-        const form = document.querySelector(needValidation);
-        if (!form.checkValidity()) {
-            form.classList.add("was-validated");
-        }
-        updateDatabase(url, method);
-    }
-    const handleRemoveCategoryFormSubmit = (event, needValidation, url, method) => {
-        event.preventDefault();
-        const form = document.querySelector(needValidation);
-        if (!form.checkValidity()) {
-            form.classList.add("was-validated");
-        }
-        updateDatabase(url, method);
-    }
-    const handleEditFormSubmit = (event, url, method) => {
-        console.log(inputs)
-        event.preventDefault();
-        updateDatabase(url, method);
-
-    };
-
-//get Movies
+    //get Movies
     useEffect(() => {
         axios.get(`${urlPattern}/api/movies?page=${currentPage}`)
             .then(response => {
@@ -198,16 +216,14 @@ function AdminMovieSection(props) {
             });
     }, [currentPage]);
 
-// Handle pagination
-    const handleNext = () => {
-        if (hasNextPage) {
-            setCurrentPage((prevPage) => prevPage + 1);
-        }
-    };
-
-    const handlePrev = () => {
-        if (hasPrevPage) {
-            setCurrentPage((prevPage) => prevPage - 1);
+    const fetchMovieCount = async () => {
+        try {
+            const response = await axios.get(`${urlPattern}/api/movies/count/`);
+            setMovieCount(response.data.total_movies);
+        } catch (error) {
+            console.error('Error fetching movie count:', error.response?.data || error.message);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -218,7 +234,7 @@ function AdminMovieSection(props) {
             <div className="row movieSection gap-4">
                 <div className="left col-7">
                     <div className="totalMovie bgImage">
-                        <p>Total Movies {props.movies}</p>
+                        <p>Total Movies = {movieCount}</p>
                     </div>
                 </div>
                 <div className="right col-4">
