@@ -14,9 +14,10 @@ function AdminMovieSection(props) {
     const editMovieModalRef = useRef(null);
     const categoryModalRef = useRef(null);
     const [enlargedImage, setEnlargedImage] = useState([]);
-    const [movieToDelete, setMovieToDelete] = useState(null);
+    const [movieId, setMovieId] = useState(null);
     const [categoryList, setCategoryList] = useState([]);
     const [movies, setMovies] = useState([]);
+    const [searchMovies, setSearchMovies] = useState([]);
     const [movie, setMovie] = useState({});
     const [currentPage, setCurrentPage] = useState(1);
     const [hasNextPage, setHasNextPage] = useState(false);
@@ -58,18 +59,34 @@ function AdminMovieSection(props) {
         setEnlargedImage([imageUrl1, imageUrl2, imageUrl3]);
     };
     const handleDeleteMovie = (movieId) => {
-        setMovieToDelete(movieId);
+        setMovieId(movieId);
     };
+
+    //delete movie
     const confirmDeleteMovie = async () => {
         try {
-            await axios.delete(`${urlPattern}/api/movies/${movieToDelete}/`);
+            await axios.delete(`${urlPattern}/api/movies/${movieId}/`);
             alert("Movie deleted successfully!");
             window.location.href = "/admin/movies";
         } catch (error) {
             console.error("Error deleting Movie:", error);
             alert("Failed to delete the Movie. Please try again.");
         }
-        setMovieToDelete(null);
+        setMovieId(null);
+    };
+
+    //search movie
+    const searchMovie = async (movieName) => {
+        axios.get(`${urlPattern}/api/movies/search/${movieName}/`)
+            .then(response => {
+                const movieData = response.data.data[0];
+                setSearchMovies(Array.isArray(movieData) ? movieData : [movieData]);
+                console.log(searchMovies);
+            })
+            .catch(error => {
+                alert("No Movies Found")
+                console.log(error.message);
+            });
     };
 
     //api part
@@ -140,6 +157,15 @@ function AdminMovieSection(props) {
             }
         }
     };
+
+    const handleCategoryFormSubmit = (event, needValidation, url, method) => {
+        event.preventDefault();
+        const form = document.querySelector(needValidation);
+        if (!form.checkValidity()) {
+            form.classList.add("was-validated");
+        }
+        updateDatabase(url, method);
+    }
 
     const handleEditFormSubmit = (event, url, method) => {
         console.log(inputs)
@@ -356,7 +382,7 @@ function AdminMovieSection(props) {
                                                 }))
                                             }
                                             name="title"
-                                            value={inputs.title !== undefined ? inputs.title :  movie.title || ""}
+                                            value={inputs.title !== undefined ? inputs.title : movie?.title || ""}
 
                                         />
                                         <div className="invalid-feedback">Please enter the movie name.</div>
@@ -368,7 +394,7 @@ function AdminMovieSection(props) {
                                             id="categoryList"
                                             required
                                             name="category"
-                                            value={inputs.category !== undefined ? inputs.category :  movie.category || "default"}
+                                            value={inputs.category !== undefined ? inputs.category : movie?.category || "default"}
                                             onChange={handleChange}
                                         >
                                             <option value="default">Select Category</option>
@@ -394,7 +420,7 @@ function AdminMovieSection(props) {
                                             required
                                             onChange={handleChange}
                                             name="description"
-                                            value={inputs.description !== undefined ? inputs.description :  movie.description || ""}
+                                            value={inputs.description !== undefined ? inputs.description : movie?.description || ""}
                                         ></textarea>
                                         <div className="invalid-feedback">Please enter a movie description.</div>
                                     </div>
@@ -460,7 +486,7 @@ function AdminMovieSection(props) {
                                 <form
                                     className="row g-3 needs-validation2"
                                     noValidate
-                                    onSubmit={(event) => handleFormSubmit(event, ".needs-validation2", "/api/categories/")}
+                                    onSubmit={(event) => handleCategoryFormSubmit(event, ".needs-validation2", "/api/categories/","post")}
                                 >
                                     <div className="col-12">
                                         <label htmlFor="categoryName" className="form-label">Category Name</label>
@@ -556,10 +582,15 @@ function AdminMovieSection(props) {
             {/* Search Field */}
             <div className="input-group searchMovie mt-4">
                 <div className="form-outline">
-                    <input id="search-focus" type="search" className="form-control"/>
+                    <input id="search-focus" type="search" className="form-control"
+                           name="searchMovie"
+                           onChange={handleChange}
+                    />
                     <label className="form-label" htmlFor="search-focus">Search</label>
                 </div>
-                <button type="button" className="btn btn-primary">
+                <button type="button" className="btn btn-primary"
+                        onClick={() => searchMovie(inputs.searchMovie)}
+                >
                     <i className="fas fa-search"></i>
                 </button>
             </div>
@@ -576,49 +607,101 @@ function AdminMovieSection(props) {
                 </tr>
                 </thead>
                 <tbody>
-                {movies.map((movie) => (
-                    <tr key={movie.id}>
-                        <td>{movie.id}</td>
-                        <td>
-                            <div className="d-flex align-items-center">
-                                <img
-                                    src={movie.image1 || "https://via.placeholder.com/60"}
-                                    alt="Movie Thumbnail"
-                                    style={{width: "60px", height: "25px"}}
-                                    onClick={() => handleImageClick(movie.image1, movie.image2, movie.image3)}
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#imageEnlargeModal"
-                                    className="enlargeImage"
-                                />
-                                <div className="ms-3">
-                                    <p className="fw-bold mb-1">{movie.title}</p>
-                                    <p className="text-muted mb-0">{movie.year}</p>
-                                </div>
-                            </div>
-                        </td>
-                        <td>{movie.category}</td>
-                        <td>{movie.description}</td>
-                        <td>
-                            <button
-                                type="button"
-                                className="btn btn-link btn-sm btn-rounded"
-                                data-bs-toggle="modal"
-                                data-bs-target="#editMovieFormModal"
-                                onClick={() => handleShowEditModal(editMovieModalRef, "Edit Movie Details", movie.id)}
-                            >
-                                <img src={editIcon} alt="editIcon" style={{width: "25px", height: "25px"}}/>
-                            </button>
-                            <button
-                                className="btn btn-link text-danger"
-                                onClick={() => handleDeleteMovie(movie.id)}
-                                data-bs-toggle="modal"
-                                data-bs-target="#confirmDeleteModal"
-                            >
-                                <img src={deleteIcon} alt="deleteIcon" style={{width: "25px", height: "25px"}}/>
-                            </button>
-                        </td>
-                    </tr>
-                ))}
+                {(
+                    Array.isArray(searchMovies) && searchMovies.length > 0 ? (
+                        searchMovies.map((movie) => (
+                            <tr key={movie.id}>
+                                <td>{movie.id}</td>
+                                <td>
+                                    <div className="d-flex align-items-center">
+                                        <img
+                                            src={movie.image1 || "https://via.placeholder.com/60"}
+                                            alt="Movie Thumbnail"
+                                            style={{width: "60px", height: "25px"}}
+                                            onClick={() => handleImageClick(movie.image1, movie.image2, movie.image3)}
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#imageEnlargeModal"
+                                            className="enlargeImage"
+                                        />
+                                        <div className="ms-3">
+                                            <p className="fw-bold mb-1">{movie.title}</p>
+                                            <p className="text-muted mb-0">{movie.year}</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>{movie.category}</td>
+                                <td>{movie.description}</td>
+                                <td>
+                                    <button
+                                        type="button"
+                                        className="btn btn-link btn-sm btn-rounded"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#editMovieFormModal"
+                                        onClick={() => handleShowEditModal(editMovieModalRef, "Edit Movie Details", movie.id)}
+                                    >
+                                        <img src={editIcon} alt="editIcon" style={{width: "25px", height: "25px"}}/>
+                                    </button>
+                                    <button
+                                        className="btn btn-link text-danger"
+                                        onClick={() => handleDeleteMovie(movie.id)}
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#confirmDeleteModal"
+                                    >
+                                        <img src={deleteIcon} alt="deleteIcon" style={{width: "25px", height: "25px"}}/>
+                                    </button>
+                                </td>
+                            </tr>
+                        ))
+                    ) : (Array.isArray(movies) && movies.length > 0) ? (
+                        movies.map((movie) => (
+                            <tr key={movie.id}>
+                                <td>{movie.id}</td>
+                                <td>
+                                    <div className="d-flex align-items-center">
+                                        <img
+                                            src={movie.image1 || "https://via.placeholder.com/60"}
+                                            alt="Movie Thumbnail"
+                                            style={{width: "60px", height: "25px"}}
+                                            onClick={() => handleImageClick(movie.image1, movie.image2, movie.image3)}
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#imageEnlargeModal"
+                                            className="enlargeImage"
+                                        />
+                                        <div className="ms-3">
+                                            <p className="fw-bold mb-1">{movie.title}</p>
+                                            <p className="text-muted mb-0">{movie.year}</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>{movie.category}</td>
+                                <td>{movie.description}</td>
+                                <td>
+                                    <button
+                                        type="button"
+                                        className="btn btn-link btn-sm btn-rounded"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#editMovieFormModal"
+                                        onClick={() => handleShowEditModal(editMovieModalRef, "Edit Movie Details", movie.id)}
+                                    >
+                                        <img src={editIcon} alt="editIcon" style={{width: "25px", height: "25px"}}/>
+                                    </button>
+                                    <button
+                                        className="btn btn-link text-danger"
+                                        onClick={() => handleDeleteMovie(movie.id)}
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#confirmDeleteModal"
+                                    >
+                                        <img src={deleteIcon} alt="deleteIcon" style={{width: "25px", height: "25px"}}/>
+                                    </button>
+                                </td>
+                            </tr>
+                        ))
+                    ) : (
+                        <tr>
+                            <td colSpan="5">No movies found.</td>
+                        </tr>
+                    )
+                )}
                 </tbody>
             </table>
 
