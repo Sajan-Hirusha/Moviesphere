@@ -10,6 +10,7 @@ class MoviePagination(PageNumberPagination):
 class MovieViewSet(viewsets.ModelViewSet):
     queryset = Movie.objects.all()
     serializer_class = MovieSerializer
+    pagination_class = MoviePagination
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -20,6 +21,23 @@ class MovieViewSet(viewsets.ModelViewSet):
             {"success": True, "message": "Movie Saved successfully!", "data": serializer.data},
             status=status.HTTP_201_CREATED
         )
+
+    def partial_update(self, request, *args, **kwargs):
+
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+
+        self.perform_update(serializer)
+
+        return Response(
+            {"success": True, "message": "Movie updated successfully!", "data": serializer.data},
+            status=status.HTTP_200_OK
+        )
+
+    def perform_update(self, serializer):
+        """Method to save the updated data"""
+        serializer.save()
 
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
@@ -34,3 +52,5 @@ class CategoryViewSet(viewsets.ModelViewSet):
             {"success": True, "message": "Category created successfully!", "data": serializer.data},
             status=status.HTTP_201_CREATED
         )
+
+

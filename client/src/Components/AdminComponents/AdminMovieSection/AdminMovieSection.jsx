@@ -17,7 +17,7 @@ function AdminMovieSection(props) {
     const [movieToDelete, setMovieToDelete] = useState(null);
     const [categoryList, setCategoryList] = useState([]);
     const [movies, setMovies] = useState([]);
-    const [movie, setMovie] = useState(null);
+    const [movie, setMovie] = useState({});
     const [currentPage, setCurrentPage] = useState(1);
     const [hasNextPage, setHasNextPage] = useState(false);
     const [hasPrevPage, setHasPrevPage] = useState(false);
@@ -32,7 +32,7 @@ function AdminMovieSection(props) {
             modalTitle.textContent = `${recipient}`;
         }
     };
-    const handleShowEditModal = (modalRef, recipient,id) => {
+    const handleShowEditModal = (modalRef, recipient, id) => {
         const selectedMovie = movies.find((movie) => movie.id === id);
         setMovie(selectedMovie);
         const modalElement = modalRef.current;
@@ -54,21 +54,21 @@ function AdminMovieSection(props) {
         }
     };
 
-    const handleImageClick = (imageUrl1,imageUrl2,imageUrl3) => {
-        setEnlargedImage([imageUrl1,imageUrl2,imageUrl3]);
+    const handleImageClick = (imageUrl1, imageUrl2, imageUrl3) => {
+        setEnlargedImage([imageUrl1, imageUrl2, imageUrl3]);
     };
     const handleDeleteMovie = (movieId) => {
         setMovieToDelete(movieId);
     };
     const confirmDeleteMovie = async () => {
-                try {
-                    await axios.delete(`${urlPattern}/api/movies/${movieToDelete}/`);
-                    alert("Movie deleted successfully!");
-                    window.location.href = "/admin/movies";
-                } catch (error) {
-                    console.error("Error deleting Movie:", error);
-                    alert("Failed to delete the Movie. Please try again.");
-                }
+        try {
+            await axios.delete(`${urlPattern}/api/movies/${movieToDelete}/`);
+            alert("Movie deleted successfully!");
+            window.location.href = "/admin/movies";
+        } catch (error) {
+            console.error("Error deleting Movie:", error);
+            alert("Failed to delete the Movie. Please try again.");
+        }
         setMovieToDelete(null);
     };
 
@@ -91,7 +91,7 @@ function AdminMovieSection(props) {
         setInputs((prevValues) => ({...prevValues, [name]: value}));
     };
 
-    const updateDatabase = async (url) => {
+    const updateDatabase = async (url, method) => {
         setLoading(true);
 
         // FormData object to handle text and file inputs
@@ -105,8 +105,11 @@ function AdminMovieSection(props) {
                 console.log(pair[0] + ': ' + pair[1]);
             }
 
-            const response = await axios.post(`${urlPattern}${url}`, formData, {
-                headers: {
+            const response = await axios({
+                method: method,
+                url: `${urlPattern}${url}`,
+                data: method === 'GET' || method === 'DELETE' ? null : formData,
+                headers: method === 'GET' || method === 'DELETE' ? {} : {
                     "Content-Type": "multipart/form-data",
                 },
             });
@@ -114,6 +117,7 @@ function AdminMovieSection(props) {
             if (response.data.success) {
                 closeModal();
                 alert(response.data.message);
+                window.location.reload();
             }
         } catch (error) {
             setLoading(false);
@@ -122,7 +126,7 @@ function AdminMovieSection(props) {
         }
     };
 
-    const handleFormSubmit = (event, needValidation, url) => {
+    const handleFormSubmit = (event, needValidation, url, method) => {
         event.preventDefault();
         if (inputs.category === "default" || !inputs.category) {
             alert("Please select a valid category!");
@@ -132,12 +136,19 @@ function AdminMovieSection(props) {
             if (!form.checkValidity()) {
                 form.classList.add("was-validated");
             } else {
-                updateDatabase(url);
+                updateDatabase(url, method);
             }
         }
     };
 
-    //get Movies
+    const handleEditFormSubmit = (event, url, method) => {
+        console.log(inputs)
+        event.preventDefault();
+        updateDatabase(url, method);
+
+    };
+
+//get Movies
     useEffect(() => {
         axios.get(`${urlPattern}/api/movies?page=${currentPage}`)
             .then(response => {
@@ -151,7 +162,7 @@ function AdminMovieSection(props) {
             });
     }, [currentPage]);
 
-    // Handle pagination
+// Handle pagination
     const handleNext = () => {
         if (hasNextPage) {
             setCurrentPage((prevPage) => prevPage + 1);
@@ -221,7 +232,7 @@ function AdminMovieSection(props) {
                                 <form
                                     className="needs-validation1 row g-3"
                                     noValidate
-                                    onSubmit={(event) => handleFormSubmit(event, ".needs-validation1", "/api/movies/")}
+                                    onSubmit={(event) => handleFormSubmit(event, ".needs-validation1", "/api/movies/", "post")}
                                 >
                                     <div className="col-md-6">
                                         <label htmlFor="movieName" className="form-label">Movie Name</label>
@@ -240,8 +251,8 @@ function AdminMovieSection(props) {
                                     <div className="col-md-6">
                                         <label htmlFor="categoryList" className="form-label">Category</label>
                                         <select className="form-select feildDisabled" id="categoryList" required
-                                                value={inputs.category || ""}  name="category" onChange={handleChange}>
-                                            <option  value="default" > select Category</option>
+                                                value={inputs.category || ""} name="category" onChange={handleChange}>
+                                            <option value="default"> select Category</option>
                                             {Array.isArray(categoryList) ? (categoryList.map((category, index) => (
                                                 <option key={index}
                                                         value={category.name}>{category.name}</option>
@@ -328,7 +339,7 @@ function AdminMovieSection(props) {
                                     className="needs-validation3 row g-3"
                                     noValidate
                                     id="editMovieForm"
-                                    onSubmit={(event) => handleFormSubmit(event, ".needs-validation3", "/api/movies/")}
+                                    onSubmit={(event) => handleEditFormSubmit(event, `/api/movies/${movie.id}/`, "patch")}
                                 >
                                     <div className="col-md-6">
                                         <label htmlFor="movieName" className="form-label">Movie Name</label>
@@ -338,8 +349,14 @@ function AdminMovieSection(props) {
                                             id="movieName"
                                             placeholder="Enter movie name"
                                             required
-                                            onChange={handleChange}
-                                            value={movie && movie.title ? movie.title : ""}
+                                            onChange={(e) =>
+                                                setInputs((prevState) => ({
+                                                    ...prevState,
+                                                    title: e.target.value, // Update inputs.title with user input
+                                                }))
+                                            }
+                                            name="title"
+                                            value={inputs.title !== undefined ? inputs.title :  movie.title || ""}
 
                                         />
                                         <div className="invalid-feedback">Please enter the movie name.</div>
@@ -350,8 +367,8 @@ function AdminMovieSection(props) {
                                             className="form-select feildDisabled"
                                             id="categoryList"
                                             required
-                                            value={movie?.category || "default"} // Use optional chaining and a default fallback
                                             name="category"
+                                            value={inputs.category !== undefined ? inputs.category :  movie.category || "default"}
                                             onChange={handleChange}
                                         >
                                             <option value="default">Select Category</option>
@@ -376,7 +393,8 @@ function AdminMovieSection(props) {
                                             placeholder="Enter movie description"
                                             required
                                             onChange={handleChange}
-                                            value={movie && movie.description || ""}
+                                            name="description"
+                                            value={inputs.description !== undefined ? inputs.description :  movie.description || ""}
                                         ></textarea>
                                         <div className="invalid-feedback">Please enter a movie description.</div>
                                     </div>
@@ -586,7 +604,7 @@ function AdminMovieSection(props) {
                                 className="btn btn-link btn-sm btn-rounded"
                                 data-bs-toggle="modal"
                                 data-bs-target="#editMovieFormModal"
-                                onClick={() => handleShowEditModal(editMovieModalRef, "Edit Movie Details",movie.id)}
+                                onClick={() => handleShowEditModal(editMovieModalRef, "Edit Movie Details", movie.id)}
                             >
                                 <img src={editIcon} alt="editIcon" style={{width: "25px", height: "25px"}}/>
                             </button>
