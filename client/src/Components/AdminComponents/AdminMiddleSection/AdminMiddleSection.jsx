@@ -11,13 +11,22 @@ function AdminMiddleSection() {
     const [inquiries, setInquiries] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [searchInqueries, setSearchInqueries] = useState([]);
+    const [inquiryId, setInquiryId] = useState(null);
 
-    const handleDoneClick = () => {
-        setShowModal(true);
+    const handleDoneClick = (id) => {
+        setInquiryId(id);
     };
 
-    const confirmDoneAction = () => {
-        setShowModal(false);
+    const confirmDoneAction = async () => {
+        try {
+            await axios.delete(`${urlPattern}/api/contacts/${inquiryId}/`);
+            alert("Inquiry Marked successfully!");
+            window.location.reload();
+        } catch (error) {
+            console.error("Error deleting Inquiry:", error);
+            alert("Failed to Mark the Inquiry. Please try again.");
+        }
+        setInquiryId(null);
     };
 
     const handleCloseModal = () => {
@@ -108,7 +117,9 @@ function AdminMiddleSection() {
                                     <button
                                         type="button"
                                         className="btn btn-link btn-sm btn-rounded"
-                                        onClick={handleDoneClick}
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#confirmDoneModal"
+                                        onClick={() => handleDoneClick(inquiry.id)}
                                     >
                                         Done<span className="ps-1" style={{color: "white"}}>&#10004;</span>
                                     </button>
@@ -145,7 +156,7 @@ function AdminMiddleSection() {
             {/* Confirmation Modal */}
             <div
                 className={`modal fade ${showModal ? 'show' : ''}`}
-                id="confirmDeleteModal"
+                id="confirmDoneModal"
                 tabIndex="-1"
                 aria-labelledby="confirmDoneLabel"
                 aria-hidden={!showModal}
