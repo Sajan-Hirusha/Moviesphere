@@ -22,9 +22,9 @@ function AdminMiddleSection() {
                 <thead className="bg-light">
                 <tr>
                     <th>Name</th>
-                    <th>Title</th>
-                    <th>Status</th>
-                    <th>Position</th>
+                    <th>Email</th>
+                    <th>Inquiry</th>
+                    <th>Contact Number</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
