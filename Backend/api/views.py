@@ -1,9 +1,10 @@
 from rest_framework import viewsets, status
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
-from api.models import Movie, Category
-from api.serializers import MovieSerializer, CategorySerializer
+from api.models import Movie, Category,User
+from api.serializers import MovieSerializer, CategorySerializer,UserSerializer
 from rest_framework.decorators import action
+from django.contrib.auth.hashers import make_password
 
 class MoviePagination(PageNumberPagination):
     page_size = 10
@@ -26,7 +27,6 @@ class MovieViewSet(viewsets.ModelViewSet):
     def partial_update(self, request, *args, **kwargs):
 
         instance = self.get_object()
-
         serializer = self.get_serializer(instance, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
 
@@ -95,3 +95,67 @@ class CategoryViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_404_NOT_FOUND
             )
 
+
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+    def create(self, request, *args, **kwargs):
+        data = request.data
+
+        if 'password' in data:
+            data['password'] = make_password(data['password'])
+
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+
+        return Response(
+            {"success": True, "message": "User created successfully!", "data": serializer.data},
+            status=status.HTTP_201_CREATED
+        )
+
+    @action(detail=False, methods=['delete'], url_path='delete-user/(?P<email>[^/]+)')
+    def delete_by_email(self, request, email=None):
+        """Delete a user by their email address."""
+        if not email:
+            return Response(
+                {"success": False, "message": "Email is required."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        try:
+            user = User.objects.get(email=email)
+            user.delete()
+            return Response(
+                {"success": True, "message": f"User with email '{email}' deleted successfully."},
+                status=status.HTTP_200_OK
+            )
+        except User.DoesNotExist:
+            return Response(
+                {"success": False, "message": f"User with email '{email}' does not exist."},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+    def partial_update(self, request, *args, **kwargs):
+        try:
+            instance = self.get_object()
+            data = request.data.copy()
+
+            # Check if the password needs updating and hash it
+            if 'password' in data:
+                data['password'] = make_password(data['password'])
+
+            serializer = self.get_serializer(instance, data=data, partial=True)
+            serializer.is_valid(raise_exception=True)
+            self.perform_update(serializer)
+
+            return Response(
+                {"success": True, "message": "User updated successfully!", "data": serializer.data},
+                status=status.HTTP_200_OK
+            )
+        except User.DoesNotExist:
+            return Response(
+                {"success": False, "message": "User not found."},
+                status=status.HTTP_404_NOT_FOUND
+            )

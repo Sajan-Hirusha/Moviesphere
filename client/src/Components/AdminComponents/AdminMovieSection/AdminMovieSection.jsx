@@ -9,9 +9,10 @@ import {useEffect, useRef, useState} from "react";
 import axios from "axios";
 import CircleSpinner from "../../CircleSpinner/CircleSpinner.jsx";
 import CategoryModel from "./CategoryModel/CategoryModel.jsx";
+import {urlPattern1} from '../../../../env.jsx'
 
 function AdminMovieSection() {
-    const urlPattern = "http://127.0.0.1:8000"
+    const urlPattern = urlPattern1
     const movieModalRef = useRef(null);
     const editMovieModalRef = useRef(null);
     const categoryAddModalRef = useRef(null);
@@ -40,6 +41,7 @@ function AdminMovieSection() {
     const handleShowEditModal = (modalRef, recipient, id) => {
         const selectedMovie = movies.find((movie) => movie.id === id);
         setMovie(selectedMovie);
+        console.log(movie.title)
         const modalElement = modalRef.current;
         if (modalElement) {
             const modalTitle = modalElement.querySelector('.modal-title');
@@ -665,7 +667,7 @@ function AdminMovieSection() {
                                 <td>
                                     <button
                                         type="button"
-                                        className="btn btn-link btn-sm btn-rounded"
+                                        className="btn btn-link btn-sm btn-rounded "
                                         data-bs-toggle="modal"
                                         data-bs-target="#editMovieFormModal"
                                         onClick={() => handleShowEditModal(editMovieModalRef, "Edit Movie Details", movie.id)}
@@ -709,7 +711,7 @@ function AdminMovieSection() {
                                 <td>
                                     <button
                                         type="button"
-                                        className="btn btn-link btn-sm btn-rounded"
+                                        className="btn btn-link btn-sm btn-rounded ps-4"
                                         data-bs-toggle="modal"
                                         data-bs-target="#editMovieFormModal"
                                         onClick={() => handleShowEditModal(editMovieModalRef, "Edit Movie Details", movie.id)}
