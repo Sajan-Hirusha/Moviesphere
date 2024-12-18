@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 import Footer from "../Footer/Footer.jsx";
 import axios from "axios";
 import CircleSpinner from "../CircleSpinner/CircleSpinner.jsx";
@@ -9,6 +9,7 @@ const ContactUs = () => {
     const [inputs, setInputs] = useState({});
     const [loading, setLoading] = useState(false);
     const [validated, setValidated] = useState(false);
+
 
     const handleSubmit = (e,url,method) => {
         e.preventDefault();
@@ -64,6 +65,8 @@ const ContactUs = () => {
             alert("Failed to add Movie. Please try again.");
         }
     };
+
+
     return (
         <div className="bg-dark text-light min-vh-100 ">
             {loading && <CircleSpinner/>}

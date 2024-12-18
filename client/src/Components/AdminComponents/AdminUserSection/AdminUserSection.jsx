@@ -300,6 +300,7 @@ function AdminUserSection() {
             </div>
 
             </div>
+
             {/* User Table */}
             <table className="table align-middle mb-5 bg-white">
                 <thead className="bg-light">

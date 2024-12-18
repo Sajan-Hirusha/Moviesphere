@@ -1,8 +1,16 @@
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 import './AdminMiddleSection.css';
+import {urlPattern1} from "../../../../env.jsx";
+import axios from "axios";
 
 function AdminMiddleSection() {
+    const urlPattern = urlPattern1
+    const [currentPage, setCurrentPage] = useState(1);
+    const [hasNextPage, setHasNextPage] = useState(false);
+    const [hasPrevPage, setHasPrevPage] = useState(false);
+    const [inquiries, setInquiries] = useState([]);
     const [showModal, setShowModal] = useState(false);
+    const [searchInqueries, setSearchInqueries] = useState([]);
 
     const handleDoneClick = () => {
         setShowModal(true);
@@ -13,14 +21,41 @@ function AdminMiddleSection() {
     };
 
     const handleCloseModal = () => {
-        setShowModal(false); // Close the modal when Cancel is clicked
+        setShowModal(false);
     };
 
+
+    useEffect(() => {
+        axios.get(`${urlPattern}/api/contacts?page=${currentPage}`)
+            .then(response => {
+                const data = response.data;
+                setInquiries(data.results);
+                setHasNextPage(data.next !== null);
+                setHasPrevPage(data.previous !== null);
+            })
+            .catch(error => {
+                console.log("Error loading movies:", error.message);
+            });
+    }, [currentPage]);
+
+    const handleNext = () => {
+        if (hasNextPage) {
+            setCurrentPage((prevPage) => prevPage + 1);
+        }
+    };
+
+    const handlePrev = () => {
+        if (hasPrevPage) {
+            setCurrentPage((prevPage) => prevPage - 1);
+        }
+    };
     return (
         <div className="adminMiddleSection p-5">
-            <table className="table align-middle mb-0 bg-white">
+            {/* User Table */}
+            <table className="table align-middle mb-5 bg-white">
                 <thead className="bg-light">
                 <tr>
+                    <th>Id</th>
                     <th>Name</th>
                     <th>Email</th>
                     <th>Inquiry</th>
@@ -29,41 +64,83 @@ function AdminMiddleSection() {
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>
-                        <div className="d-flex align-items-center">
-                            <img
-                                src="https://mdbootstrap.com/img/new/avatars/8.jpg"
-                                alt=""
-                                style={{ width: '45px', height: '45px' }}
-                                className="rounded-circle"
-                            />
-                            <div className="ms-3">
-                                <p className="fw-bold mb-1">John Doe</p>
-                                <p className="text-muted mb-0">john.doe@gmail.com</p>
-                            </div>
-                        </div>
-                    </td>
-                    <td>
-                        <p className="fw-normal mb-1">Software engineer</p>
-                        <p className="text-muted mb-0">IT department</p>
-                    </td>
-                    <td>
-                        <span className="badge badge-success rounded-pill d-inline">Active</span>
-                    </td>
-                    <td>Senior</td>
-                    <td>
-                        <button
-                            type="button"
-                            className="btn btn-link btn-sm btn-rounded"
-                            onClick={handleDoneClick}
-                        >
-                            Done<span className="ps-1" style={{ color: "white" }}>&#10004;</span>
-                        </button>
-                    </td>
-                </tr>
+                {(
+                    Array.isArray(searchInqueries) && searchInqueries.length > 0 ? (
+                        searchInqueries.map((inquiry) => (
+                            <tr key={inquiry.id}>
+                                <td>{inquiry.id}</td>
+                                <td>
+                                    <div className="d-flex align-items-center">
+                                        <div className="ms-3">
+                                            <p className="fw-bold mb-1">{inquiry.name}</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>{inquiry.email}</td>
+                                <td>{inquiry.inquiry}</td>
+                                <td>{inquiry.contact_number}</td>
+                                <td>
+                                    <button
+                                        type="button"
+                                        className="btn btn-link btn-sm btn-rounded"
+                                        onClick={handleDoneClick}
+                                    >
+                                        Done<span className="ps-1" style={{color: "white"}}>&#10004;</span>
+                                    </button>
+                                </td>
+                            </tr>
+                        ))
+                    ) : (Array.isArray(inquiries) && inquiries.length > 0) ? (
+                        inquiries.map((inquiry) => (
+                            <tr key={inquiry.id}>
+                                <td>{inquiry.id}</td>
+                                <td>
+                                    <div className="d-flex align-items-center">
+                                        <div className="ms-3">
+                                            <p className="fw-bold mb-1">{inquiry.name}</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>{inquiry.email}</td>
+                                <td>{inquiry.inquiry}</td>
+                                <td>{inquiry.contact_number}</td>
+                                <td>
+                                    <button
+                                        type="button"
+                                        className="btn btn-link btn-sm btn-rounded"
+                                        onClick={handleDoneClick}
+                                    >
+                                        Done<span className="ps-1" style={{color: "white"}}>&#10004;</span>
+                                    </button>
+                                </td>
+                            </tr>
+                        ))
+                    ) : (
+                        <tr>
+                            <td colSpan="5">No Users found.</td>
+                        </tr>
+                    )
+                )}
                 </tbody>
             </table>
+
+            {/* Pagination Controls */}
+            <div className="d-flex justify-content-center mt-4 mb-4">
+                <button
+                    className="btn btn-secondary me-2"
+                    disabled={!hasPrevPage}
+                    onClick={handlePrev}
+                >
+                    Previous
+                </button>
+                <button
+                    className="btn btn-primary"
+                    disabled={!hasNextPage}
+                    onClick={handleNext}
+                >
+                    Next
+                </button>
+            </div>
 
             {/* Confirmation Modal */}
             <div
@@ -87,7 +164,7 @@ function AdminMiddleSection() {
                             ></button>
                         </div>
                         <div className="modal-body">
-                            Are you sure you want to mark this item as done?
+                            Are you sure you want to mark this inquiry as done?
                         </div>
                         <div className="modal-footer">
                             <button
