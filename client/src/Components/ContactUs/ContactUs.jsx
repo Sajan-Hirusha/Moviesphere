@@ -78,8 +78,9 @@ const ContactUs = () => {
                         <p className="text-center mb-4" style={{color: '#f5c518'}}>
                             We'd love to hear from you. Please fill out the form below:
                         </p>
-                        <form noValidate onSubmit={handleSubmit} className={validated ? "was-validated" : ""}>
-                            {/* Name Field */}
+                        <form noValidate  onSubmit={(event) => handleSubmit(event, "/api/contacts/", "post")}
+                              className={validated ? "was-validated" : ""}>
+
                             <div className="mb-3">
                                 <label htmlFor="formName" className="form-label" style={{color: '#f5c518'}}>
                                     Name
@@ -98,7 +99,6 @@ const ContactUs = () => {
                                 </div>
                             </div>
 
-                            {/* Email Field */}
                             <div className="mb-3">
                                 <label htmlFor="formEmail" className="form-label" style={{color: '#f5c518'}}>
                                     Email
@@ -117,7 +117,6 @@ const ContactUs = () => {
                                 </div>
                             </div>
 
-                            {/* Inquiry Field */}
                             <div className="mb-3">
                                 <label htmlFor="formInquiry" className="form-label" style={{color: '#f5c518'}}>
                                     Inquiry
@@ -136,7 +135,6 @@ const ContactUs = () => {
                                 </div>
                             </div>
 
-                            {/* Contact Number Field */}
                             <div className="mb-3">
                                 <label htmlFor="formContactNumber" className="form-label" style={{color: '#f5c518'}}>
                                     Contact Number
@@ -146,7 +144,7 @@ const ContactUs = () => {
                                     className={`form-control bg-dark text-light border-warning `}
                                     id="formContactNumber"
                                     placeholder="Enter your contact number"
-                                    name="contactNumber"
+                                    name="contact_number"
                                     onChange={handleChange}
                                     required
                                 />

@@ -56,7 +56,6 @@ class Contact(models.Model):
     email = models.EmailField(max_length=150, null=False, blank=False)
     inquiry = models.TextField(null=False, blank=False)
     contact_number = models.CharField(max_length=15, null=False, blank=False)
-    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"Inquiry from {self.name} ({self.email})"
