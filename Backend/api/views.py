@@ -146,7 +146,7 @@ class UserViewSet(viewsets.ModelViewSet):
             status=status.HTTP_200_OK
         )
 
-    @action(detail=False, methods=['get'], url_path='search/(?P<email>.+)')
+    @action(detail=False, methods=['get'], url_path='search-by-email/(?P<email>.+)')
     def search_user_by_email(self, request, email=None):
         queryset = self.queryset.filter(email__iexact=email)
 
@@ -156,7 +156,7 @@ class UserViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(queryset, many=True)
         return Response({"data": serializer.data}, status=status.HTTP_200_OK)
 
-    @action(detail=False, methods=['get'], url_path='search/(?P<name>.+)')
+    @action(detail=False, methods=['get'], url_path='search-by-name/(?P<name>.+)')
     def search_user_by_name(self, request, name=None):
         # Searching by first name or last name (case insensitive)
         queryset = self.queryset.filter(fName__iexact=name) | self.queryset.filter(lName__iexact=name)

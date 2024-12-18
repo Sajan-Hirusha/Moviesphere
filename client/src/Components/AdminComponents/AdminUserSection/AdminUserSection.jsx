@@ -134,8 +134,14 @@ function AdminUserSection() {
         }
     };
 
-    const searchUser = async (userName) => {
-        axios.get(`${urlPattern}/api/users/search/${userName}/`)
+    const searchUser = async (userName,type) => {
+        let urlTypePattern=""
+        if(type==="email"){
+            urlTypePattern="search-by-email"
+        }else if(type==="name"){
+            urlTypePattern="search-by-name"
+        }
+        axios.get(`${urlPattern}/api/users/${urlTypePattern}/${userName}/`)
             .then(response => {
                 const userData = response.data.data[0];
                 setSearchUsers(Array.isArray(userData) ? userData : [userData]);
@@ -272,11 +278,25 @@ function AdminUserSection() {
                     <label className="form-label" htmlFor="search-focus">Search</label>
                 </div>
                 <button type="button" className="btn btn-primary"
-                        onClick={() => searchUser(inputs.searchUser)}
+                        onClick={() => searchUser(inputs.searchUser, "email")}
                 >
                     <i className="fas fa-search"></i>
                 </button>
             </div>
+
+            <div className="input-group searchUser mt-4">
+                <div className="form-outline">
+                    <input id="search-focus" type="search" className="form-control" name="searchUser"
+                           onChange={handleChange}/>
+                    <label className="form-label" htmlFor="search-focus">Search</label>
+                </div>
+                <button type="button" className="btn btn-primary"
+                        onClick={() => searchUser(inputs.searchUser, "name")}
+                >
+                    <i className="fas fa-search"></i>
+                </button>
+            </div>
+
 
             {/* User Table */}
             <table className="table align-middle mb-5 bg-white">
