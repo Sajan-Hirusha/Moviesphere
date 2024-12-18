@@ -134,12 +134,12 @@ function AdminUserSection() {
         }
     };
 
-    const searchUser = async (userName,type) => {
-        let urlTypePattern=""
-        if(type==="email"){
-            urlTypePattern="search-by-email"
-        }else if(type==="name"){
-            urlTypePattern="search-by-name"
+    const searchUser = async (userName, type) => {
+        let urlTypePattern = ""
+        if (type === "email") {
+            urlTypePattern = "search-by-email"
+        } else if (type === "name") {
+            urlTypePattern = "search-by-name"
         }
         axios.get(`${urlPattern}/api/users/${urlTypePattern}/${userName}/`)
             .then(response => {
@@ -272,32 +272,32 @@ function AdminUserSection() {
 
             {/* Search Field */}
             <div className="row">
-            <div className="input-group searchUser mt-4 col-3">
-                <div className="form-outline">
-                    <input id="search-focus" type="search" className="form-control" name="searchUser"
-                           onChange={handleChange}/>
-                    <label className="form-label" htmlFor="search-focus">Search By Email</label>
+                <div className="input-group searchUser mt-4 col-3">
+                    <div className="form-outline">
+                        <input id="search-focus" type="search" className="form-control" name="searchUser"
+                               onChange={handleChange}/>
+                        <label className="form-label" htmlFor="search-focus">Search By Email</label>
+                    </div>
+                    <button type="button" className="btn btn-primary"
+                            onClick={() => searchUser(inputs.searchUser, "email")}
+                    >
+                        <i className="fas fa-search"></i>
+                    </button>
                 </div>
-                <button type="button" className="btn btn-primary"
-                        onClick={() => searchUser(inputs.searchUser, "email")}
-                >
-                    <i className="fas fa-search"></i>
-                </button>
-            </div>
 
 
-            <div className="input-group searchUser mt-4 col-3">
-                <div className="form-outline">
-                    <input id="search-focus" type="search" className="form-control" name="searchUser"
-                           onChange={handleChange}/>
-                    <label className="form-label" htmlFor="search-focus">Search By Name</label>
+                <div className="input-group searchUser mt-4 col-3">
+                    <div className="form-outline">
+                        <input id="search-focus" type="search" className="form-control" name="searchUser"
+                               onChange={handleChange}/>
+                        <label className="form-label" htmlFor="search-focus">Search By Name</label>
+                    </div>
+                    <button type="button" className="btn btn-primary"
+                            onClick={() => searchUser(inputs.searchUser, "name")}
+                    >
+                        <i className="fas fa-search"></i>
+                    </button>
                 </div>
-                <button type="button" className="btn btn-primary"
-                        onClick={() => searchUser(inputs.searchUser, "name")}
-                >
-                    <i className="fas fa-search"></i>
-                </button>
-            </div>
 
             </div>
 

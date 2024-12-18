@@ -40,3 +40,18 @@
 .adminMiddleSection .modal-backdrop.fade {
     background-color: rgba(0, 0, 0, 0.7);
 }
+.adminMiddleSection  .searchInquiry{
+    width: 20%;
+}
+
+.adminMiddleSection  .searchInquiry .form-outline{
+    border: black solid 1px;
+}
+.adminMiddleSection  .searchInquiry .form-outline label{
+    background-color: white;
+    color: gray!important;
+}
+
+.adminMiddleSection  .searchInquiry button{
+    background-color: black;
+}

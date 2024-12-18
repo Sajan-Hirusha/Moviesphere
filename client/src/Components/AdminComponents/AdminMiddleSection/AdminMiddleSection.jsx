@@ -12,9 +12,16 @@ function AdminMiddleSection() {
     const [showModal, setShowModal] = useState(false);
     const [searchInqueries, setSearchInqueries] = useState([]);
     const [inquiryId, setInquiryId] = useState(null);
+    const [inputs, setInputs] = useState({});
 
     const handleDoneClick = (id) => {
         setInquiryId(id);
+    };
+
+    const handleChange = (e) => {
+        const name = e.target.name;
+        const value = e.target.type === "file" ? e.target.files[0] : e.target.value.trim();
+        setInputs((prevValues) => ({...prevValues, [name]: value}));
     };
 
     const confirmDoneAction = async () => {
@@ -58,9 +65,39 @@ function AdminMiddleSection() {
             setCurrentPage((prevPage) => prevPage - 1);
         }
     };
+
+    const searchInquiry = async (userEmail) => {
+
+        axios.get(`${urlPattern}/api/contacts/search-by-email/${userEmail}/`)
+            .then(response => {
+                const userInqueries = response.data.data[0];
+                setSearchInqueries(Array.isArray(userInqueries) ? userInqueries : [userInqueries]);
+                console.log(userInqueries);
+            })
+            .catch(error => {
+                alert("No users Found")
+                console.log(error.message);
+            });
+    };
+
+
     return (
         <div className="adminMiddleSection p-5">
             {/* User Table */}
+            <div className="input-group searchInquiry mt-4 mb-4">
+                <div className="form-outline">
+                    <input id="search-focus" type="search" className="form-control" name="searchUser"
+                           onChange={handleChange}/>
+                    <label className="form-label" htmlFor="search-focus">Search By Email</label>
+                </div>
+                <button type="button" className="btn btn-primary"
+                        onClick={() => searchInquiry(inputs.searchUser)}
+                >
+                    <i className="fas fa-search"></i>
+                </button>
+            </div>
+
+
             <table className="table align-middle mb-5 bg-white">
                 <thead className="bg-light">
                 <tr>
@@ -160,7 +197,7 @@ function AdminMiddleSection() {
                 tabIndex="-1"
                 aria-labelledby="confirmDoneLabel"
                 aria-hidden={!showModal}
-                style={{ display: showModal ? 'block' : 'none' , backgroundColor: 'rgba(0, 0, 0, 0.5)',}}
+                style={{display: showModal ? 'block' : 'none', backgroundColor: 'rgba(0, 0, 0, 0.5)',}}
             >
                 <div className="modal-dialog">
                     <div className="modal-content">
