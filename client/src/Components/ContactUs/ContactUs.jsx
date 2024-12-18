@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import Footer from "../Footer/Footer.jsx";
-import AdminNavBar from "../AdminComponents/AdminNavBar/AdminNavBar.jsx";
 import axios from "axios";
 import CircleSpinner from "../CircleSpinner/CircleSpinner.jsx";
 import {urlPattern1} from "../../../env.jsx";
@@ -67,7 +66,6 @@ const ContactUs = () => {
     };
     return (
         <div className="bg-dark text-light min-vh-100 ">
-            {/*<AdminNavBar/>*/}
             {loading && <CircleSpinner/>}
             <div className="container mb-5">
                 <div className="row justify-content-center">

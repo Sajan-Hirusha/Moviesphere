@@ -158,7 +158,6 @@ class UserViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['get'], url_path='search-by-name/(?P<name>.+)')
     def search_user_by_name(self, request, name=None):
-        # Searching by first name or last name (case insensitive)
         queryset = self.queryset.filter(fName__iexact=name) | self.queryset.filter(lName__iexact=name)
 
         if not queryset.exists():
