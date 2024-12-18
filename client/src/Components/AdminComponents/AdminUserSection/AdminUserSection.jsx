@@ -210,7 +210,7 @@ function AdminUserSection() {
                                             id="fName"
                                             required
                                             name="fName"
-                                            value={inputs.fName || user?.fName || ""}
+                                            value={inputs.fName !== undefined ? inputs.fName : user?.fName || ""}
                                             onChange={handleChange}
                                         />
                                     </div>
@@ -222,7 +222,7 @@ function AdminUserSection() {
                                             id="lName"
                                             required
                                             name="lName"
-                                            value={inputs.lName || user?.lName || ""}
+                                            value={inputs.lName !== undefined ? inputs.lName : user?.lName || ""}
                                             onChange={handleChange}
                                         />
                                     </div>
@@ -234,7 +234,7 @@ function AdminUserSection() {
                                             id="userEmail"
                                             required
                                             name="email"
-                                            value={inputs.email || user?.email || ""}
+                                            value={inputs.email !== undefined ? inputs.email : user?.email || ""}
                                             onChange={handleChange}
                                         />
                                     </div>
@@ -246,7 +246,7 @@ function AdminUserSection() {
                                             id="phoneNumber"
                                             name="phone_number"
                                             required
-                                            value={inputs.phone_number || user?.phone_number || ""}
+                                            value={inputs.phone_number !== undefined ? inputs.phone_number : user?.phone_number || ""}
                                             onChange={handleChange}
                                         />
                                     </div>
@@ -271,11 +271,12 @@ function AdminUserSection() {
 
 
             {/* Search Field */}
-            <div className="input-group searchUser mt-4">
+            <div className="row">
+            <div className="input-group searchUser mt-4 col-3">
                 <div className="form-outline">
                     <input id="search-focus" type="search" className="form-control" name="searchUser"
                            onChange={handleChange}/>
-                    <label className="form-label" htmlFor="search-focus">Search</label>
+                    <label className="form-label" htmlFor="search-focus">Search By Email</label>
                 </div>
                 <button type="button" className="btn btn-primary"
                         onClick={() => searchUser(inputs.searchUser, "email")}
@@ -284,11 +285,12 @@ function AdminUserSection() {
                 </button>
             </div>
 
-            <div className="input-group searchUser mt-4">
+
+            <div className="input-group searchUser mt-4 col-3">
                 <div className="form-outline">
                     <input id="search-focus" type="search" className="form-control" name="searchUser"
                            onChange={handleChange}/>
-                    <label className="form-label" htmlFor="search-focus">Search</label>
+                    <label className="form-label" htmlFor="search-focus">Search By Name</label>
                 </div>
                 <button type="button" className="btn btn-primary"
                         onClick={() => searchUser(inputs.searchUser, "name")}
@@ -297,7 +299,7 @@ function AdminUserSection() {
                 </button>
             </div>
 
-
+            </div>
             {/* User Table */}
             <table className="table align-middle mb-5 bg-white">
                 <thead className="bg-light">
