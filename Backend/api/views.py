@@ -1,8 +1,8 @@
 from rest_framework import viewsets, status
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
-from api.models import Movie, Category,User
-from api.serializers import MovieSerializer, CategorySerializer,UserSerializer
+from api.models import Movie, Category,User,Contact
+from api.serializers import MovieSerializer, CategorySerializer,UserSerializer,ContactSerializer
 from rest_framework.decorators import action
 from django.contrib.auth.hashers import make_password
 
@@ -167,3 +167,46 @@ class UserViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(queryset, many=True)
         return Response({"data": serializer.data}, status=status.HTTP_200_OK)
 
+
+class ContactViewSet(viewsets.ModelViewSet):
+    queryset = Contact.objects.all()
+    serializer_class = ContactSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+
+        return Response(
+            {"success": True, "message": "Your contact inquiry has been submitted successfully!", "data": serializer.data},
+            status=status.HTTP_201_CREATED
+        )
+
+    @action(detail=False, methods=['get'], url_path='count')
+    def get_contact_count(self, request):
+        total_contacts = Contact.objects.count()
+        return Response(
+            {"success": True, "total_contacts": total_contacts},
+            status=status.HTTP_200_OK
+        )
+
+    @action(detail=False, methods=['get'], url_path='search-by-email/(?P<email>.+)')
+    def search_contact_by_email(self, request, email=None):
+        queryset = self.queryset.filter(email__iexact=email)
+
+        if not queryset.exists():
+            return Response({"error": "Contact not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response({"data": serializer.data}, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=['get'], url_path='search-by-name/(?P<name>.+)')
+    def search_contact_by_name(self, request, name=None):
+
+        queryset = self.queryset.filter(first_name__iexact=name) | self.queryset.filter(last_name__iexact=name)
+
+        if not queryset.exists():
+            return Response({"error": "Contact not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response({"data": serializer.data}, status=status.HTTP_200_OK)
