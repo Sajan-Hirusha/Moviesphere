@@ -115,34 +115,12 @@ class UserViewSet(viewsets.ModelViewSet):
             status=status.HTTP_201_CREATED
         )
 
-    @action(detail=False, methods=['delete'], url_path='delete-user/(?P<email>[^/]+)')
-    def delete_by_email(self, request, email=None):
-        """Delete a user by their email address."""
-        if not email:
-            return Response(
-                {"success": False, "message": "Email is required."},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-
-        try:
-            user = User.objects.get(email=email)
-            user.delete()
-            return Response(
-                {"success": True, "message": f"User with email '{email}' deleted successfully."},
-                status=status.HTTP_200_OK
-            )
-        except User.DoesNotExist:
-            return Response(
-                {"success": False, "message": f"User with email '{email}' does not exist."},
-                status=status.HTTP_404_NOT_FOUND
-            )
 
     def partial_update(self, request, *args, **kwargs):
         try:
             instance = self.get_object()
             data = request.data.copy()
 
-            # Check if the password needs updating and hash it
             if 'password' in data:
                 data['password'] = make_password(data['password'])
 
@@ -159,3 +137,33 @@ class UserViewSet(viewsets.ModelViewSet):
                 {"success": False, "message": "User not found."},
                 status=status.HTTP_404_NOT_FOUND
             )
+
+    @action(detail=False, methods=['get'], url_path='count')
+    def get_user_count(self, request):
+        total_users = User.objects.count()
+        return Response(
+            {"success": True, "total_users": total_users},
+            status=status.HTTP_200_OK
+        )
+
+    @action(detail=False, methods=['get'], url_path='search/(?P<email>.+)')
+    def search_user_by_email(self, request, email=None):
+        queryset = self.queryset.filter(email__iexact=email)
+
+        if not queryset.exists():
+            return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response({"data": serializer.data}, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=['get'], url_path='search/(?P<name>.+)')
+    def search_user_by_name(self, request, name=None):
+        # Searching by first name or last name (case insensitive)
+        queryset = self.queryset.filter(fName__iexact=name) | self.queryset.filter(lName__iexact=name)
+
+        if not queryset.exists():
+            return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response({"data": serializer.data}, status=status.HTTP_200_OK)
+

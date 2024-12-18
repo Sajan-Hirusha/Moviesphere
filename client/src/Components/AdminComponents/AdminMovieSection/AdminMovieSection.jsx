@@ -199,8 +199,8 @@ function AdminMovieSection() {
             }
         } catch (error) {
             setLoading(false);
-            console.error("Error adding product:", error);
-            alert("Failed to add product. Please try again.");
+            console.error("Error adding Movie:", error);
+            alert("Failed to add Movie. Please try again.");
         }
     };
 
@@ -415,7 +415,7 @@ function AdminMovieSection() {
                                             onChange={(e) =>
                                                 setInputs((prevState) => ({
                                                     ...prevState,
-                                                    title: e.target.value, // Update inputs.title with user input
+                                                    title: e.target.value,
                                                 }))
                                             }
                                             name="title"

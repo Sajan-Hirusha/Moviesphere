@@ -3,35 +3,158 @@ import deleteIcon from '../../../assets/Images/deleteIcon.png';
 import editIcon from '../../../assets/Images/editIcon.png';
 import AdminNavBar from "../AdminNavBar/AdminNavBar.jsx";
 import Footer from "../../Footer/Footer.jsx";
-import {useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
+import axios from "axios";
+import {urlPattern1} from "../../../../env.jsx";
+import CircleSpinner from "../../CircleSpinner/CircleSpinner.jsx";
 
-function AdminUserSection(props) {
+function AdminUserSection() {
+    const urlPattern = urlPattern1
     const editUserModalRef = useRef(null);
     const [UserToDelete, setUserToDelete] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [hasNextPage, setHasNextPage] = useState(false);
+    const [hasPrevPage, setHasPrevPage] = useState(false);
+    const [users, setUsers] = useState([]);
+    const [searchUsers, setSearchUsers] = useState([]);
+    const [user, setUser] = useState({});
+    const [inputs, setInputs] = useState({});
+    const [loading, setLoading] = useState(false);
+    const [userCount, setUserCount] = useState(0);
 
-    const handleShowModal = (modalRef, recipient) => {
-        const modalElement = modalRef.current;
-        if (modalElement) {
-            const modalTitle = modalElement.querySelector('.modal-title');
-            const modalBodyInput = modalElement.querySelector('.modal-body input');
-            modalTitle.textContent = `${recipient}`;
-            if (modalBodyInput) modalBodyInput.value = recipient;
-        }
+    const handleChange = (e) => {
+        const name = e.target.name;
+        const value = e.target.type === "file" ? e.target.files[0] : e.target.value.trim();
+        setInputs((prevValues) => ({...prevValues, [name]: value}));
     };
+
     const handleDeleteUser = (userId) => {
         setUserToDelete(userId);
     };
-    const confirmDeleteUser = () => {
-        console.log("Movie deleted:", UserToDelete);
+
+    const handleShowEditModal = (modalRef, recipient, id) => {
+        const selectedUser = users.find((user) => user.id === id);
+        setUser(selectedUser);
+        console.log(user.fName)
+        const modalElement = modalRef.current;
+        if (modalElement) {
+            const modalTitle = modalElement.querySelector('.modal-title');
+            modalTitle.textContent = `${recipient}`;
+        }
+    };
+    const confirmDeleteUser = async () => {
+        try {
+            await axios.delete(`${urlPattern}/api/users/${UserToDelete}/`);
+            alert("User deleted successfully!");
+            window.location.reload();
+        } catch (error) {
+            console.error("Error deleting User:", error);
+            alert("Failed to delete the User. Please try again.");
+        }
         setUserToDelete(null);
     };
+
+    useEffect(() => {
+        fetchUserCount();
+        axios.get(`${urlPattern}/api/users?page=${currentPage}`)
+            .then(response => {
+                const data = response.data;
+                setUsers(data.results);
+                setHasNextPage(data.next !== null);
+                setHasPrevPage(data.previous !== null);
+            })
+            .catch(error => {
+                console.log("Error loading users:", error.message);
+            });
+    }, [currentPage]);
+
+    // Handle pagination
+    const handleNext = () => {
+        if (hasNextPage) {
+            setCurrentPage((prevPage) => prevPage + 1);
+        }
+    };
+
+    const handlePrev = () => {
+        if (hasPrevPage) {
+            setCurrentPage((prevPage) => prevPage - 1);
+        }
+    };
+
+    const handleEditFormSubmit = (event, url, method) => {
+        console.log(inputs)
+        console.log("Form is being submitted!");
+        event.preventDefault();
+        updateDatabase(url, method);
+
+    };
+
+    const updateDatabase = async (url, method) => {
+        setLoading(true);
+
+        const formData = new FormData();
+        for (const key in inputs) {
+            formData.append(key, inputs[key]);
+        }
+
+        try {
+            for (let pair of formData.entries()) {
+                console.log(pair[0] + ': ' + pair[1]);
+            }
+
+            const response = await axios({
+                method: method,
+                url: `${urlPattern}${url}`,
+                data: method === 'GET' || method === 'DELETE' ? null : formData,
+                headers: method === 'GET' || method === 'DELETE' ? {} : {
+                    "Content-Type": "multipart/form-data",
+                },
+            });
+            setLoading(false);
+            if (response.data.success) {
+                window.location.reload();
+                alert(response.data.message);
+
+            }
+        } catch (error) {
+            setLoading(false);
+            console.error("Error adding User:", error);
+            alert("Failed to add User. Please try again.");
+        }
+    };
+
+    const fetchUserCount = async () => {
+        try {
+            const response = await axios.get(`${urlPattern}/api/users/count/`);
+            setUserCount(response.data.total_users);
+        } catch (error) {
+            console.error('Error fetching user count:', error.response?.data || error.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const searchUser = async (userName) => {
+        axios.get(`${urlPattern}/api/users/search/${userName}/`)
+            .then(response => {
+                const userData = response.data.data[0];
+                setSearchUsers(Array.isArray(userData) ? userData : [userData]);
+                console.log(searchUsers);
+            })
+            .catch(error => {
+                alert("No users Found")
+                console.log(error.message);
+            });
+    };
+
     return (
         <div className="adminUserSection">
+            {loading && <CircleSpinner/>}
             <AdminNavBar/>
             <div className="row userSection mx-0">
                 <div className="left col-12 mx-auto">
                     <div className="totalUser bgImage">
-                        <p className="ms-5">Total Users {props.users}</p>
+                        <p className="ms-5">Total Users {userCount}</p>
                     </div>
                 </div>
             </div>
@@ -58,60 +181,82 @@ function AdminUserSection(props) {
                                 ></button>
                             </div>
                             <div className="modal-body">
-                                <form className="row g-3">
+                                <form
+                                    className="row g-3"
+                                    onSubmit={(event) => handleEditFormSubmit(event, `/api/users/${user.id}/`, "PATCH")}
+                                >
                                     <div className="col-md-6">
-                                        <label htmlFor="userName" className="form-label">Name</label>
+                                        <label htmlFor="id" className="form-label">Movie Id</label>
                                         <input
                                             type="text"
                                             className="form-control"
-                                            id="userName"
-                                            placeholder="Enter user name"
+                                            id="id"
                                             required
+                                            disabled
+                                            value={user.id !== undefined ? user.id : ""}
                                         />
                                     </div>
                                     <div className="col-md-6">
-                                        <label htmlFor="userEmail" className="form-label">User Email</label>
+                                        <label htmlFor="fName" className="form-label">First Name</label>
                                         <input
                                             type="text"
                                             className="form-control"
-                                            id="userEmail"
-                                            placeholder="Enter user Email"
+                                            id="fName"
                                             required
+                                            name="fName"
+                                            value={inputs.fName || user?.fName || ""}
+                                            onChange={handleChange}
+                                        />
+                                    </div>
+                                    <div className="col-md-6">
+                                        <label htmlFor="lName" className="form-label">Last Name</label>
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            id="lName"
+                                            required
+                                            name="lName"
+                                            value={inputs.lName || user?.lName || ""}
+                                            onChange={handleChange}
+                                        />
+                                    </div>
+                                    <div className="col-md-6">
+                                        <label htmlFor="userEmail" className="form-label">Email</label>
+                                        <input
+                                            type="email"
+                                            className="form-control"
+                                            id="userEmail"
+                                            required
+                                            name="email"
+                                            value={inputs.email || user?.email || ""}
+                                            onChange={handleChange}
                                         />
                                     </div>
                                     <div className="col-12">
-                                        <label htmlFor="movieDescription" className="form-label">Movie
-                                            Description</label>
-                                        <textarea
+                                        <label htmlFor="phoneNumber" className="form-label">Phone Number</label>
+                                        <input
+                                            type="text"
                                             className="form-control"
-                                            id="movieDescription"
-                                            rows="3"
-                                            placeholder="Enter movie description"
+                                            id="phoneNumber"
+                                            name="phone_number"
                                             required
-                                        ></textarea>
+                                            value={inputs.phone_number || user?.phone_number || ""}
+                                            onChange={handleChange}
+                                        />
                                     </div>
-
-                                    {[1, 2, 3].map(num => (
-                                        <div className="col-md-4" key={`image${num}`}>
-                                            <label htmlFor={`image${num}`} className="form-label">Image {num}</label>
-                                            <input
-                                                type="file"
-                                                className="form-control"
-                                                id={`image${num}`}
-                                                accept="image/*"
-                                                required={num === 1}
-                                            />
-                                        </div>
-                                    ))}
+                                    <div className="modal-footer">
+                                        <button
+                                            type="button"
+                                            className="btn btn-secondary"
+                                            data-bs-dismiss="modal"
+                                        >
+                                            Close
+                                        </button>
+                                        <button type="submit" className="btn btn-primary">
+                                            Save changes
+                                        </button>
+                                    </div>
                                 </form>
-                            </div>
-                            <div className="modal-footer">
-                                <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
-                                    Close
-                                </button>
-                                <button type="button" className="btn btn-primary">
-                                    Save changes
-                                </button>
                             </div>
                         </div>
                     </div>
@@ -122,10 +267,13 @@ function AdminUserSection(props) {
             {/* Search Field */}
             <div className="input-group searchUser mt-4">
                 <div className="form-outline">
-                    <input id="search-focus" type="search" className="form-control"/>
+                    <input id="search-focus" type="search" className="form-control" name="searchUser"
+                           onChange={handleChange}/>
                     <label className="form-label" htmlFor="search-focus">Search</label>
                 </div>
-                <button type="button" className="btn btn-primary">
+                <button type="button" className="btn btn-primary"
+                        onClick={() => searchUser(inputs.searchUser)}
+                >
                     <i className="fas fa-search"></i>
                 </button>
             </div>
@@ -134,44 +282,109 @@ function AdminUserSection(props) {
             <table className="table align-middle mb-5 bg-white">
                 <thead className="bg-light">
                 <tr>
-                    <th>Title</th>
-                    <th>Category</th>
-                    <th>Description</th>
+                    <th>User Id</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone Number</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>
-                        <div className="d-flex align-items-center">
-                            <div className="">
-                                <p className="fw-bold mb-1">Suffragette</p>
-                                <p className="text-muted mb-0">2015</p>
-                            </div>
-                        </div>
-                    </td>
-                    <td>Drama</td>
-                    <td>Lorem ipsum dolor sit amet.</td>
-                    <td>
-                        <button type="button" className="btn btn-link btn-sm btn-rounded"
-                                data-bs-toggle="modal"
-                                data-bs-target="#editUserFormModal"
-                                onClick={() => handleShowModal(editUserModalRef, "Edit User Details")}
-                        >
-                            <img src={editIcon} alt="editIcon" style={{width: "25px", height: "25px"}}/>
-                        </button>
-                        <button
-                            className="btn btn-link text-danger"
-                            onClick={() => handleDeleteUser(1)}
-                            data-bs-toggle="modal"
-                            data-bs-target="#confirmDeleteModal"
-                        >
-                            <img src={deleteIcon} alt="deleteIcon" style={{width: "25px", height: "25px"}}/>
-                        </button>
-                    </td>
-                </tr>
+                {(
+                    Array.isArray(searchUsers) && searchUsers.length > 0 ? (
+                        searchUsers.map((user) => (
+                            <tr key={user.id}>
+                                <td>{user.id}</td>
+                                <td>
+                                    <div className="d-flex align-items-center">
+                                        <div className="ms-3">
+                                            <p className="fw-bold mb-1">{user.fName + " " + user.lName}</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>{user.email}</td>
+                                <td>{user.phone_number}</td>
+                                <td>
+                                    <button
+                                        type="button"
+                                        className="btn btn-link btn-sm btn-rounded "
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#editUserFormModal"
+                                        onClick={() => handleShowEditModal(editUserModalRef, "Edit User Details", user.id)}
+                                    >
+                                        <img src={editIcon} alt="editIcon" style={{width: "25px", height: "25px"}}/>
+                                    </button>
+                                    <button
+                                        className="btn btn-link text-danger"
+                                        onClick={() => handleDeleteUser(user.id)}
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#confirmDeleteModal"
+                                    >
+                                        <img src={deleteIcon} alt="deleteIcon" style={{width: "25px", height: "25px"}}/>
+                                    </button>
+                                </td>
+                            </tr>
+                        ))
+                    ) : (Array.isArray(users) && users.length > 0) ? (
+                        users.map((user) => (
+                            <tr key={user.id}>
+                                <td>{user.id}</td>
+                                <td>
+                                    <div className="d-flex align-items-center">
+                                        <div className="ms-3">
+                                            <p className="fw-bold mb-1">{user.fName + " " + user.lName}</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>{user.email}</td>
+                                <td>{user.phone_number}</td>
+                                <td>
+                                    <button
+                                        type="button"
+                                        className="btn btn-link btn-sm btn-rounded ps-4"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#editUserFormModal"
+                                        onClick={() => handleShowEditModal(editUserModalRef, "Edit User Details", user.id)}
+                                    >
+                                        <img src={editIcon} alt="editIcon" style={{width: "25px", height: "25px"}}/>
+                                    </button>
+                                    <button
+                                        className="btn btn-link text-danger"
+                                        onClick={() => handleDeleteUser(user.id)}
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#confirmDeleteModal"
+                                    >
+                                        <img src={deleteIcon} alt="deleteIcon" style={{width: "25px", height: "25px"}}/>
+                                    </button>
+                                </td>
+                            </tr>
+                        ))
+                    ) : (
+                        <tr>
+                            <td colSpan="5">No Users found.</td>
+                        </tr>
+                    )
+                )}
                 </tbody>
             </table>
+
+            {/* Pagination Controls */}
+            <div className="d-flex justify-content-center mt-4 mb-4">
+                <button
+                    className="btn btn-secondary me-2"
+                    disabled={!hasPrevPage}
+                    onClick={handlePrev}
+                >
+                    Previous
+                </button>
+                <button
+                    className="btn btn-primary"
+                    disabled={!hasNextPage}
+                    onClick={handleNext}
+                >
+                    Next
+                </button>
+            </div>
 
             {/* Confirmation Modal */}
             <div
