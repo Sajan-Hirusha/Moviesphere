@@ -36,6 +36,23 @@ class MovieViewSet(viewsets.ModelViewSet):
             {"success": True, "message": "Movie updated successfully!", "data": serializer.data},
             status=status.HTTP_200_OK
         )
+    
+    @action(detail=False, methods=['get'], url_path='get_movies')
+    def get_movies(self, request):
+
+        movies = self.queryset 
+        page = self.paginate_queryset(movies)
+
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        # If no pagination, return all movies
+        serializer = self.get_serializer(movies, many=True)
+        return Response(
+            {"success": True, "data": serializer.data},
+            status=status.HTTP_200_OK
+        )
 
     @action(detail=False, methods=['get'], url_path='search/(?P<identifier>.+)')
     def search_movie(self, request, identifier=None):
@@ -101,7 +118,7 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
 
     def create(self, request, *args, **kwargs):
-        data = request.data
+        data = request.data.copy()
 
         if 'password' in data:
             data['password'] = make_password(data['password'])
