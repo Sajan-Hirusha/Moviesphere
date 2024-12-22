@@ -1,6 +1,7 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Navbar.css";
+import  logo from '../../assets/Images/siteLogo.png'
 
 const Navbar = () => {
   const handleCategoryChange = (event) => {
@@ -22,7 +23,7 @@ const Navbar = () => {
     <nav className="navbar navbar-expand-lg navbar-dark bg-transparent">
       <div className="container-fluid">
         <a className="navbar-brand" href="/">
-          MovieHub
+          <img src={logo} alt="logo" style={{width:"130px",height:"40px"}}/>
         </a>
         <button
           className="navbar-toggler"
