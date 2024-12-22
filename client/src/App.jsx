@@ -12,6 +12,7 @@ function App() {
   return (
       <BrowserRouter>
           <Routes>
+              <Route element={<BaseHome/>} path='/'/> 
               <Route element={<Admin/>} path='/admin'/>
               <Route element={<AdminMovieSection/>} path='/admin/movies'/>
               <Route element={<AdminUserSection/>} path='/admin/users'/>
