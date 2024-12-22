@@ -1,0 +1,57 @@
+.adminMiddleSection{
+    margin-top: 40px;
+}
+.adminMiddleSection table th{
+    font-weight: bold;
+}
+.adminMiddleSection table button{
+    background-color: green;
+    border-radius: 13px !important;
+    color: white;
+}
+.adminMiddleSection table button:hover{
+    background-color: #12bc12;
+    color: white;
+}
+.adminMiddleSection table button:focus{
+    color: white;
+}
+
+@keyframes slideIn {
+    0% {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.adminMiddleSection .modal.fade {
+    display: none;
+}
+
+.adminMiddleSection .modal.fade.show {
+    display: block;
+    animation: slideIn 0.3s ease-out;
+}
+
+.adminMiddleSection .modal-backdrop.fade {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+.adminMiddleSection  .searchInquiry{
+    width: 20%;
+}
+
+.adminMiddleSection  .searchInquiry .form-outline{
+    border: black solid 1px;
+}
+.adminMiddleSection  .searchInquiry .form-outline label{
+    background-color: white;
+    color: gray!important;
+}
+
+.adminMiddleSection  .searchInquiry button{
+    background-color: black;
+}
