@@ -25,3 +25,49 @@
     padding-top: 20%;
   }
   
+  .scroll-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  
+  .carousel-control-prev,
+  .carousel-control-next {
+    position: absolute;
+    top: 50%; /* Vertically centered */
+    transform: translateY(-50%); /* Keeps vertical alignment centered */
+    z-index: 10;
+    background-color: rgba(0, 0, 0, 0.5); /* Optional: Semi-transparent background */
+    border: none;
+    padding: 10px;
+    border-radius: 50%; /* Optional: Circular buttons */
+    cursor: pointer;
+  }
+  
+  /* Adjust horizontal positioning */
+  .carousel-control-prev {
+    left: -50px; /* Move left button further horizontally */
+  }
+  
+  .carousel-control-next {
+    right: -50px; /* Move right button further horizontally */
+  }
+  
+  /* Hide the scrollbar but allow scrolling */
+  .horizontal-scroller {
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding: 10px 0;
+  }
+  
+  .horizontal-scroller::-webkit-scrollbar {
+    display: none; /* Hides the scrollbar */
+  }
+  
+  .genre-card-wrapper {
+    flex: 0 0 auto;
+    margin-right: 10px; /* Add spacing between cards */
+    width: 200px; /* Adjust card width for consistency */
+  }
+  
