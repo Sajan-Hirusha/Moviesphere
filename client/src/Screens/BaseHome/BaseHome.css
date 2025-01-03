@@ -34,26 +34,24 @@
   .carousel-control-prev,
   .carousel-control-next {
     position: absolute;
-    top: 50%; /* Vertically centered */
-    transform: translateY(-50%); /* Keeps vertical alignment centered */
+    top: 50%;
+    transform: translateY(-50%);
     z-index: 10;
     background-color: rgba(0, 0, 0, 0.5); /* Optional: Semi-transparent background */
     border: none;
     padding: 10px;
-    border-radius: 50%; /* Optional: Circular buttons */
+    border-radius: 50%;
     cursor: pointer;
   }
   
-  /* Adjust horizontal positioning */
   .carousel-control-prev {
-    left: -50px; /* Move left button further horizontally */
+    left: -50px;
   }
   
   .carousel-control-next {
-    right: -50px; /* Move right button further horizontally */
+    right: -50px;
   }
   
-  /* Hide the scrollbar but allow scrolling */
   .horizontal-scroller {
     display: flex;
     overflow-x: auto;
@@ -62,12 +60,12 @@
   }
   
   .horizontal-scroller::-webkit-scrollbar {
-    display: none; /* Hides the scrollbar */
+    display: none;
   }
   
   .genre-card-wrapper {
     flex: 0 0 auto;
-    margin-right: 10px; /* Add spacing between cards */
-    width: 200px; /* Adjust card width for consistency */
+    margin-right: 10px;
+    width: 200px;
   }
   
