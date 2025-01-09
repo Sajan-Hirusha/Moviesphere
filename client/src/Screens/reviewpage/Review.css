@@ -1,0 +1,170 @@
+/* General Body Styling */
+* {
+    background: linear-gradient(135deg, #000000, #4f4f4f); /* Gradient from black to a brighter dark gray */
+    color: #e5e5e5; /* Light text */
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+     background-color: #282828;  /* Dark background for the body */
+    color: #e5e5e5; /* Light text */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 100vh;
+}
+
+/* MainFrame Styling */
+.main-frame {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 90%;
+    max-width: 1200px;
+    margin: 20px auto;
+    background-color: #1c1c1c; /* Dark frame */
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Photo and Video Frame Styling */
+.photo-frame,
+.video-frame {
+    flex: 1;
+    margin: 10px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+/* Apply Light Black Gradient */
+.main-container,
+.photo-frame,
+.video-frame {
+    background: linear-gradient(to right, #2c2c2c, #444444); /* Light black gradient */
+}
+
+.photo-frame img,
+.video-frame video {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+/* Hover Effect */
+.photo-frame:hover,
+.video-frame:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+}
+
+/* MovieArticle Styling */
+.main-container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 20px auto;
+    border: 2px solid #ddd;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    background-color: #eaeaea; /* Subtle background color for article container */
+}
+
+.video-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.video-container video {
+    width: 100%;
+    height: auto;
+    border: 2px solid #ddd;
+    border-radius: 12px;
+}
+
+/* Article Styling */
+.articles-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.article {
+    padding: 20px;
+    border: 1px solid #444;
+    border-radius: 12px;
+    background-color: #222;
+    color: #ddd;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.article-title {
+    font-size: 1.6rem;
+    font-weight: bold;
+    color: #222;
+    margin-bottom: 10px;
+}
+
+h3, .article-title {
+    color: #ffcc00; /* Yellow accents */
+}
+
+.article-content {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #555;
+}
+
+/* Card Styling */
+.image-card {
+    flex: 0 0 calc(20% - 8px);
+    box-sizing: border-box;
+    padding: 5px;
+    border-radius: 10px; /* Rounded corners for cards */
+    background-color: #f8f8f8;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden; /* Ensure images inside cards don't overflow */
+}
+
+.image-card img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.image-card h3 {
+    font-size: 1rem;
+    margin-top: 10px;
+    color: #333;
+}
+
+.image-card p {
+    font-size: 0.8rem;
+    color: #666;
+    margin-top: 4px;
+}
+
+/* Hover Effect */
+.image-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive Design for Cards */
+@media (max-width: 768px) {
+    .image-card {
+        flex: 0 0 calc(50% - 10px); /* 2 cards per row */
+    }
+}
+
+@media (max-width: 480px) {
+    .image-card {
+        flex: 0 0 calc(100% - 10px); /* 1 card per row */
+    }
+}

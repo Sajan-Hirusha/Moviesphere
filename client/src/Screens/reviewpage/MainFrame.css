@@ -1,0 +1,88 @@
+body {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 5px;
+    margin: 5% 0;
+    padding: 0; /* Adjusted padding */
+    background-color: #f4f4f4;
+    font-family: Arial, sans-serif;
+    border-radius: 1ch; /* Rounded corners */
+    border: 5px solid #8e8a8a; /* Uniform border */
+  }
+  
+  .main-frame {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 700ch;
+    max-width: 1200px;
+    height: 60vh;
+    border: 3px solid #333;
+    background-color: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+  }
+  
+  .photo-frame,
+  .video-frame {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid #333;
+    border-radius: 5px;
+    overflow: hidden;
+    transition: transform 0.5s ease-in-out;
+  }
+  
+  .photo-frame {
+    flex: 1;
+    margin: 5px;
+    background-color: #eaeaea;
+  }
+  
+  .video-frame {
+    flex: 2;
+    margin: 5px;
+    background-color: #d9d9d9;
+  }
+  
+  .photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  /* Hover effect to add movement */
+  .photo-frame:hover,
+  .video-frame:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+  }
+  
+  /* Media query to show only the video frame and make it smaller on small screens */
+  @media (max-width: 768px) {
+    .photo-frame {
+      display: none; /* Hides the photo frame */
+    }
+  
+    .video-frame {
+      flex: 1; /* Takes the full space */
+      width: 25%; /* Reduces the width to 25% */
+      margin: 0; /* Removes margin for better alignment */
+    }
+  
+    .main-frame {
+      justify-content: center; /* Center-aligns the video frame */
+    }
+  }
+  
