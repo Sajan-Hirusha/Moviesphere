@@ -342,8 +342,8 @@ function AdminMovieSection() {
                                         ></textarea>
                                         <div className="invalid-feedback">Please provide a description.</div>
                                     </div>
-                                    {[1, 2, 3].map(num => (
-                                        <div className="col-md-4" key={`image${num}`}>
+                                    {[1, 2].map(num => (
+                                        <div className="col-md-6" key={`image${num}`}>
                                             <label htmlFor={`image${num}`} className="form-label">Image {num}</label>
                                             <input
                                                 type="file"
@@ -359,7 +359,19 @@ function AdminMovieSection() {
                                             </div>
                                         </div>
                                     ))}
-
+                                    <div className="col-md-12">
+                                        <label htmlFor="movieTrailer" className="form-label">Movie Trailer Link</label>
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            id="movieTrailer"
+                                            placeholder="Enter Trailer Link"
+                                            onChange={handleChange}
+                                            required
+                                            name="movieTrailer"
+                                        />
+                                        <div className="invalid-feedback">Please enter a valid movie Trailer Link.</div>
+                                    </div>
                                     <div className="modal-footer">
                                         <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">
                                             Close
@@ -461,7 +473,7 @@ function AdminMovieSection() {
                                         ></textarea>
                                         <div className="invalid-feedback">Please enter a movie description.</div>
                                     </div>
-                                    {[1, 2, 3].map(num => (
+                                    {[1, 2].map(num => (
                                         <div className="col-md-4" key={`image${num}`}>
                                             <label htmlFor={`image${num}`} className="form-label">Image {num}</label>
                                             <input
@@ -478,6 +490,19 @@ function AdminMovieSection() {
                                             </div>
                                         </div>
                                     ))}
+                                    <div className="col-md-12">
+                                        <label htmlFor="movieTrailer" className="form-label">Movie Trailer Link</label>
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            id="movieTrailer"
+                                            placeholder="Enter Trailer Link"
+                                            onChange={handleChange}
+                                            required
+                                            name="movieTrailer"
+                                        />
+                                        <div className="invalid-feedback">Please enter a valid movie Trailer Link.</div>
+                                    </div>
                                     <div className="modal-footer">
                                         <button
                                             type="button"
