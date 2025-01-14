@@ -3,17 +3,18 @@ import axios from "axios";
 import Navbar from "../../Components/Navbar/Navbar.jsx"
 import HeroSection from "../../Components/HeroSection/HeroSection.jsx";
 import MovieCard from "../../Components/MovieCard/MovieCard.jsx";
-import GenreMovieCard from "../../Components/GenreMovieCard/GenreMovieCard.jsx";
 import MovieSlider from '../../Components/MovieSlider/MovieSlider.jsx';
 import Footer from "../../Components/Footer/Footer.jsx";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useEffect, useState } from "react";
 import { urlPattern1 } from '../../../env.jsx'
+import MultiCardCarousel from "../../Components/MultiCardSlider/MultiCardCarousel.jsx";
 
 const BaseHome = () => {
 
   const [allMovies, setAllMovies] = useState([]);
   const [movies, setMovies] = useState([]);
+  const [popular, setPopular] = useState([]);
   const [genres, setGenres] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -36,23 +37,21 @@ const BaseHome = () => {
     fetchAllMovies();
   }, []);
 
-  // useEffect(() => {
-  //   const fetchActionMovies = async () => {
-  //     try {
+  useEffect(() => {
+    const fetchMostPopular = async () => {
+      try {
 
-  //       const response = await axios.get(`${urlPattern}/api/movies/get_action/`);
-  //       setActionMovies(response.data.results);
-  //       console.log(response.data.results);
+        const response = await axios.get(`${urlPattern}/api/movies/get_popular/`);
+        setPopular(response.data.results);
+        console.log(response.data.results);
 
-  //     } catch (err) {
-  //       console.error("Error fetching movies:", err);
+      } catch (err) {
+        console.error("Error fetching movies:", err);
+      }
+    };
 
-
-  //     }
-  //   };
-
-  //   fetchActionMovies();
-  // }, []);
+    fetchMostPopular();
+  }, []);
 
   // useEffect(() => {
   //   const fetchGenres = async () => {
@@ -112,16 +111,6 @@ const BaseHome = () => {
   console.log(allMovies);
   console.log(movies);
 
-  const scrollLeft = (index) => {
-    const scroller = document.getElementById(`scroller-${index}`);
-    scroller.scrollBy({ left: -300, behavior: "smooth" });
-  };
-
-  const scrollRight = (index) => {
-    const scroller = document.getElementById(`scroller-${index}`);
-    scroller.scrollBy({ left: 300, behavior: "smooth" });
-  };
-
   return (
     <>
       <div className="bg-black text-light">
@@ -129,7 +118,6 @@ const BaseHome = () => {
         <div className="content">
           <HeroSection />
           <div className="container py-5">
-            <h2 className="mb-4">Featured Movies</h2>
             <MovieSlider movies={allMovies} />
           </div>
           <div className="container py-5">
@@ -146,49 +134,25 @@ const BaseHome = () => {
                     />
                   ))}
                 </div>}
+                <h2 className="mb-4">Most Popular</h2>
+            {error ? <div>{error}</div> :
+              loading ? <div>loading</div> :
+                <div className="row">
+                  {popular.map((movie, index) => (
+                    <MovieCard
+                      key={index}
+                      title={movie.title}
+                      image={movie.image1}
+                      description={movie.description}
+                    />
+                  ))}
+                </div>}
           </div>
 
           {loading && <p>Loading movies...</p>}
           {error && <p>{error}</p>}
 
-          <div className="genre-list">
-            {genres.map((genre, index) =>
-              movies[genre.id] && movies[genre.id].length > 0 ? (
-                <div className="container py-5" key={index}>
-                  <h2>{genre.name}</h2>
-                  <div className="scroll-container">
-                    <button className="carousel-control-prev"
-                      type="button"
-                      data-bs-target="#movieSlider"
-                      data-bs-slide="prev" onClick={() => scrollLeft(index)}>
-                      <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-                      <span className="visually-hidden">Previous</span>
-                    </button>
-                    <div className="horizontal-scroller" id={`scroller-${index}`}>
-                      {movies[genre.id].map((movie, idx) => (
-                        <div className="genre-card-wrapper" key={idx}>
-                          <GenreMovieCard
-                            title={movie.title}
-                            image={movie.image1}
-                            description={movie.description}
-                          />
-                        </div>
-                      ))}
-                    </div>
-                    <button className="carousel-control-next"
-                      type="button"
-                      data-bs-target="#movieSlider"
-                      data-bs-slide="next" onClick={() => scrollRight(index)}>
-                      <span className="carousel-control-next-icon" aria-hidden="true"></span>
-                      <span className="visually-hidden">Next</span>
-                    </button>
-                  </div>
-                </div>
-
-              ) : null
-            )}
-          </div>
-
+          <MultiCardCarousel movies={movies} genres={genres} />
 
         </div>
       </div>

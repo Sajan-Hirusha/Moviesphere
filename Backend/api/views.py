@@ -54,30 +54,23 @@ class MovieViewSet(viewsets.ModelViewSet):
            status=status.HTTP_200_OK
         )
     
-    # @action(detail=False, methods=['get'], url_path='get_action')
-    # def get_action(self, request):
-
-    #     action_genre = Genre.objects.filter(name='Action').first()
-
-    #     if not action_genre:
-    #         return Response(
-    #             {"success": False, "message": "Action genre not found."},
-    #             status=status.HTTP_404_NOT_FOUND
-    #         )
+    @action(detail=False, methods=['get'], url_path='get_popular')
+    def get_most_popular_movies(self, request):
+        movies = self.queryset.filter(category="Most Popular")
         
-    #     action_movies = self.queryset.filter(genres__genre=action_genre)
-    #     page = self.paginate_queryset(action_movies)
+        page = self.paginate_queryset(movies)
+        
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+        
+        # If no pagination, return all filtered movies
+        serializer = self.get_serializer(movies, many=True)
+        return Response(
+            {"success": True, "data": serializer.data},
+            status=status.HTTP_200_OK
+        )
 
-    #     if page is not None:
-    #         serializer = self.get_serializer(page, many=True)
-    #         return self.get_paginated_response(serializer.data)
-
-    #     # If no pagination, return all action movies
-    #     serializer = self.get_serializer(action_movies, many=True)
-    #     return Response(
-    #         {"success": True, "data": serializer.data},
-    #         status=status.HTTP_200_OK
-    #     )
 
 class GenrePagination(PageNumberPagination):
     page_size = 10
