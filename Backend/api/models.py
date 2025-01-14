@@ -16,7 +16,7 @@ class UniqueImageName:
 class Movie(models.Model):
     image1 = models.ImageField(upload_to=UniqueImageName(), null=True, blank=True)
     image2 = models.ImageField(upload_to=UniqueImageName(), null=True, blank=True)
-    image3 = models.ImageField(upload_to=UniqueImageName(), null=True, blank=True)
+    movieTrailer = models.CharField(max_length=300, null=False, blank=False)
     title = models.CharField(max_length=150, null=False, blank=False)
     description = models.TextField()
     category = models.CharField(max_length=50, null=True, blank=True)
