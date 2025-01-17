@@ -1,88 +1,65 @@
-body {
-    margin: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 5px;
-    margin: 5% 0;
-    padding: 0; /* Adjusted padding */
-    background-color: #f4f4f4;
-    font-family: Arial, sans-serif;
-    border-radius: 1ch; /* Rounded corners */
-    border: 5px solid #8e8a8a; /* Uniform border */
+/* MainFrame.css */
+
+.main-frame {
+  display: flex;
+  flex-direction: column; /* Stack the items vertically first */
+  align-items: center; /* Center the content horizontally */
+  margin: 20px;
+}
+
+.movie-item {
+  display: flex;
+  flex-direction: row; /* Arrange the images and video in a row */
+  justify-content: space-between; /* Space out the elements */
+  gap: 20px; /* Add some gap between the items */
+  width: 100%; /* Make sure the row takes up the full width */
+  max-width: 1200px; /* Optional: limit the width for larger screens */
+  margin-top: 20px;
+}
+
+.photo-frame,
+.video-frame {
+  flex: 1; /* Allow the photo and video frames to take up equal space */
+  max-width: 30%; /* Optional: limit the width of each frame */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.photo-frame {
+  width: 300px; /* Increased width for the photo container */
+  height: 400px; /* Increased height for the photo container */
+  overflow: hidden; /* Hide any part of the image that exceeds the box */
+  border: 1px solid #ddd; /* Optional: border around the photo box */
+  background-color: #f5f5f5; /* Optional: background color */
+}
+
+.photo {
+  max-width: 100%; /* Set the photo width to 100% of the container */
+  max-height: 100%; /* Set the photo height to 100% of the container */
+  object-fit: contain; /* Ensure the image scales proportionally and fits within the box */
+}
+
+.video-frame {
+  width: 300px; /* Increased width for the video container */
+  height: 400px; /* Increased height for the video container */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.video {
+  width: 100%; /* Make video fill the frame */
+  height: 100%; /* Make video fill the frame */
+}
+
+@media (max-width: 768px) {
+  .movie-item {
+    flex-direction: column; /* Stack the items vertically on small screens */
   }
-  
-  .main-frame {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 700ch;
-    max-width: 1200px;
-    height: 60vh;
-    border: 3px solid #333;
-    background-color: #fff;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    border-radius: 10px;
-    overflow: hidden;
-    position: relative;
-  }
-  
   .photo-frame,
   .video-frame {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 2px solid #333;
-    border-radius: 5px;
-    overflow: hidden;
-    transition: transform 0.5s ease-in-out;
+    max-width: 100%; /* Allow each frame to take up full width on small screens */
+    width: 100%; /* Ensure full width on smaller screens */
   }
-  
-  .photo-frame {
-    flex: 1;
-    margin: 5px;
-    background-color: #eaeaea;
-  }
-  
-  .video-frame {
-    flex: 2;
-    margin: 5px;
-    background-color: #d9d9d9;
-  }
-  
-  .photo {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  
-  .video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  
-  /* Hover effect to add movement */
-  .photo-frame:hover,
-  .video-frame:hover {
-    transform: scale(1.05);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-  }
-  
-  /* Media query to show only the video frame and make it smaller on small screens */
-  @media (max-width: 768px) {
-    .photo-frame {
-      display: none; /* Hides the photo frame */
-    }
-  
-    .video-frame {
-      flex: 1; /* Takes the full space */
-      width: 25%; /* Reduces the width to 25% */
-      margin: 0; /* Removes margin for better alignment */
-    }
-  
-    .main-frame {
-      justify-content: center; /* Center-aligns the video frame */
-    }
-  }
-  
+}
