@@ -28,7 +28,8 @@ const BaseHome = () => {
         setAllMovies(response.data.results);
         setLoading(false);
       } catch (err) {
-        console.error("Error fetching movies:", err);
+        console.error("Error fetching movies:111111111111111", err);
+        console.log("")
         setError("Failed to load movies.");
         setLoading(false);
       }
@@ -46,7 +47,8 @@ const BaseHome = () => {
         console.log(response.data.results);
 
       } catch (err) {
-        console.error("Error fetching movies:", err);
+        console.error("Error fetching movies:222222222222222222", err);
+        console.log("")
       }
     };
 
