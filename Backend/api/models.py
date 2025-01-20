@@ -27,9 +27,22 @@ class Movie(models.Model):
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
 
+class Genre(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+
+    def __str__(self):
+        return self.name
+    
+class MovieGenre(models.Model):
+    movie = models.ForeignKey(Movie, on_delete=models.CASCADE, related_name="genres")
+    genre = models.ForeignKey(Genre, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('movie', 'genre')
+
 class Category(models.Model):
     name = models.CharField(max_length=150, null=False, blank=False)
-
+ 
     def __str__(self):
         return self.name
 

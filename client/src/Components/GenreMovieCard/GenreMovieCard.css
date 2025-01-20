@@ -1,0 +1,91 @@
+.horizontal-scroller {
+    display: flex;
+    overflow-x: auto;
+    gap: 16px;
+    padding-bottom: 10px;
+    scroll-behavior: smooth;
+}
+
+.horizontal-scroller::-webkit-scrollbar {
+    display: none;
+}
+
+.horizontal-scroller {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.genre-card-wrapper {
+    flex: 0 0 auto;
+    width: 250px;
+}
+
+.genre-movie-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
+    text-align: center;
+    background-color: #1a1a1a;
+    color: #fff;
+}
+
+.genre-movie-image {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+}
+
+.genre-movie-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+    padding: 1rem;
+  }
+
+.genre-movie-card h5 {
+    font-size: 1rem;
+    margin: 0.5rem 0;
+}
+
+.scroll-container {
+    position: relative;
+}
+
+.genre-movie-card p {
+    font-size: 0.875rem;
+    color: #ccc;
+    margin: 0;
+  }
+
+.scroll-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: #000;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    z-index: 10;
+    opacity: 0.7;
+}
+
+.scroll-button:hover {
+    opacity: 1;
+}
+
+.scroll-button.left {
+    left: 0;
+}
+
+.scroll-button.right {
+    right: 0;
+}
+

@@ -1,8 +1,8 @@
 from rest_framework import viewsets, status
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
-from api.models import Movie, Category,User,Contact
-from api.serializers import MovieSerializer, CategorySerializer,UserSerializer,ContactSerializer
+from api.models import Movie,Genre,MovieGenre,Category,User,Contact
+from api.serializers import MovieSerializer,GenreSerializer,CategorySerializer,UserSerializer,ContactSerializer
 from rest_framework.decorators import action
 from django.contrib.auth.hashers import make_password
 
@@ -51,8 +51,67 @@ class MovieViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(movies, many=True)
         return Response(
             {"success": True, "data": serializer.data},
+           status=status.HTTP_200_OK
+        )
+    
+    @action(detail=False, methods=['get'], url_path='get_popular')
+    def get_most_popular_movies(self, request):
+        movies = self.queryset.filter(category="Most Popular")
+        
+        page = self.paginate_queryset(movies)
+        
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+        
+        # If no pagination, return all filtered movies
+        serializer = self.get_serializer(movies, many=True)
+        return Response(
+            {"success": True, "data": serializer.data},
             status=status.HTTP_200_OK
         )
+
+
+class GenrePagination(PageNumberPagination):
+    page_size = 10
+
+class GenreViewSet(viewsets.ModelViewSet):
+    queryset = Genre.objects.all()
+    serializer_class = GenreSerializer
+    pagination_class = GenrePagination
+    
+    @action(detail=False, methods=['get'], url_path='get_genres')
+    def get_genres(self, request):
+
+        genres = self.queryset 
+        page = self.paginate_queryset(genres)
+
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        # If no pagination, return all movies
+        serializer = self.get_serializer(genres, many=True)
+        return Response(
+            {"success": True, "data": serializer.data},
+        status=status.HTTP_200_OK
+        )
+
+    @action(detail=False, methods=['get'], url_path='(?P<genre_id>[^/.]+)/grouped-by-genre')
+    def grouped_by_genre(self, request, genre_id):
+        try:
+            genre = Genre.objects.get(id=genre_id)
+        except Genre.DoesNotExist:
+            return Response({"success": False, "message": "Genre not found"}, status=404)
+
+        # Filter movies by the selected genre
+        movies = Movie.objects.filter(genres__genre=genre)
+
+        # Pass the context with the request to the serializer
+        serializer = MovieSerializer(movies, many=True, context={"request": request})
+
+        return Response({"success": True, "data": serializer.data}, status=200)
+
 
     @action(detail=False, methods=['get'], url_path='search/(?P<identifier>.+)')
     def search_movie(self, request, identifier=None):

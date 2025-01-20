@@ -22,7 +22,7 @@ const MovieSlider = ({ movies }) => {
                   src={movie.image1}
                   className="card-img-top"
                   alt={movie.title}
-                  style={{ maxHeight: "400px", objectFit: "cover" }}
+                  style={{ maxHeight: "400px", minHeight: "400px", objectFit: "cover" }}
                 />
                 <div className="card-body text-center">
                   <h5 className="card-title">{movie.title}</h5>
