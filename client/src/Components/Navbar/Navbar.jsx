@@ -1,8 +1,8 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Navbar.css";
-import logo from '../../assets/Images/siteLogo.png';
-import { useNavigate } from 'react-router-dom';
+import logo from "../../assets/Images/siteLogo.png";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const navigate = useNavigate(); // Initialize useNavigate
@@ -17,9 +17,9 @@ const Navbar = () => {
 
   const handleGenresChange = (event) => {
     const selectedGenre = event.target.value;
-    console.log("Navigate to:", selectedGenre);
     if (selectedGenre) {
       navigate(`/genres/${selectedGenre}`); // Navigate to genre page
+      window.location.reload();
     }
   };
 
@@ -36,7 +36,11 @@ const Navbar = () => {
     <nav className="navbar navbar-expand-lg navbar-dark bg-transparent">
       <div className="container-fluid">
         <a className="navbar-brand" href="/">
-          <img src={logo} alt="logo" style={{ width: "130px", height: "40px" }} />
+          <img
+            src={logo}
+            alt="logo"
+            style={{ width: "130px", height: "40px" }}
+          />
         </a>
         <button
           className="navbar-toggler"
@@ -62,7 +66,9 @@ const Navbar = () => {
                 onChange={handleCategoryChange}
                 style={{ width: "200px" }}
               >
-                <option value="" disabled selected>Movies</option>
+                <option value="" disabled selected>
+                  Movies
+                </option>
                 <option value="MostPopular">Most Popular</option>
                 <option value="ComingSoon">Coming Soon</option>
                 <option value="TopRated">Top Rated</option>
@@ -76,16 +82,26 @@ const Navbar = () => {
                 onChange={handleGenresChange}
                 style={{ width: "200px" }}
               >
-                <option value="" disabled selected>Genres</option>
+                <option value="" disabled selected>
+                  Genres
+                </option>
                 <option value="Horror">Horror</option>
                 <option value="Action">Action</option>
                 <option value="Comedy">Comedy</option>
                 <option value="Thriller">Thriller</option>
+                <option value="Science Fiction">Science Fiction</option>
+                <option value="Drama">Drama</option>
+                <option value="Romance">Romance</option>
+                <option value="Animation">Animation</option>
+                <option value="Adventure">Adventure</option>
+                <option value="Fantasy">Fantasy</option>
               </select>
             </li>
 
             <li className="nav-item">
-              <a className="nav-link" href="/about">About</a>
+              <a className="nav-link" href="/about">
+                About
+              </a>
             </li>
             <li className="nav-item">
               <a className="nav-link" href="/Register">Login</a>
