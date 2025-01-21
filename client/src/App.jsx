@@ -6,13 +6,9 @@ import Admin from "./Screens/AdminPage/Admin.jsx";
 import AdminMovieSection from "./Components/AdminComponents/AdminMovieSection/AdminMovieSection.jsx";
 import AdminUserSection from "./Components/AdminComponents/AdminUserSection/AdminUserSection.jsx";
 import ContactUs from "./Components/ContactUs/ContactUs.jsx";
-<<<<<<< HEAD
 import Register from "./Components/Register/Register.jsx"; // Import Register component
-import Login from "./Components/Login/Login.jsx"; // Import Login component
-=======
-import Genres from './Screens/Genres/Genres.jsx';
-
->>>>>>> 7a69a03cc84d3be160eb7f36e211edbebb059987
+import Login from "./Components/Login/Login.jsx";
+import Genres from "./Screens/Genres/Genres.jsx"; // Import Login component
 function App() {
 
   return (
@@ -20,6 +16,8 @@ function App() {
           <Routes>
               <Route element={<BaseHome/>} path='/'/> 
               <Route element={<Admin/>} path='/admin'/>
+              <Route element={<Register/>} path='/Register'/>
+              <Route element={<Login/>} path='/Register'/>
               <Route element={<AdminMovieSection/>} path='/admin/movies'/>
               <Route element={<AdminUserSection/>} path='/admin/users'/>
               <Route element={<ContactUs/>} path='/contactus'/>
