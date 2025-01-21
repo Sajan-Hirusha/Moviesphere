@@ -6,6 +6,7 @@ import Admin from "./Screens/AdminPage/Admin.jsx";
 import AdminMovieSection from "./Components/AdminComponents/AdminMovieSection/AdminMovieSection.jsx";
 import AdminUserSection from "./Components/AdminComponents/AdminUserSection/AdminUserSection.jsx";
 import ContactUs from "./Components/ContactUs/ContactUs.jsx";
+import Genres from './Screens/Genres/Genres.jsx';
 
 function App() {
 
@@ -17,6 +18,10 @@ function App() {
               <Route element={<AdminMovieSection/>} path='/admin/movies'/>
               <Route element={<AdminUserSection/>} path='/admin/users'/>
               <Route element={<ContactUs/>} path='/contactus'/>
+              <Route element={<Genres/>} path='/genres/Horror'/>
+              <Route element={<Genres/>} path='/genres/Action'/>
+              <Route element={<Genres/>} path='/genres/Comedy'/>
+              <Route element={<Genres/>} path='/genres/Thriller'/>
           </Routes>
       </BrowserRouter>
   )
