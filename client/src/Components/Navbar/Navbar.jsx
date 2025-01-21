@@ -1,29 +1,42 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Navbar.css";
-import  logo from '../../assets/Images/siteLogo.png'
+import logo from '../../assets/Images/siteLogo.png';
+import { useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
+  const navigate = useNavigate(); // Initialize useNavigate
+
   const handleCategoryChange = (event) => {
     const selectedCategory = event.target.value;
     console.log("Navigate to:", selectedCategory);
-    // Implement navigation logic for categories here
-    // For example, navigate to `/category/${selectedCategory}`
+    if (selectedCategory) {
+      navigate(`/category/${selectedCategory}`); // Navigate to category page
+    }
+  };
+
+  const handleGenresChange = (event) => {
+    const selectedGenre = event.target.value;
+    console.log("Navigate to:", selectedGenre);
+    if (selectedGenre) {
+      navigate(`/genres/${selectedGenre}`); // Navigate to genre page
+    }
   };
 
   const handleSearch = (event) => {
     event.preventDefault();
     const query = event.target.searchQuery.value;
     console.log("Search query:", query);
-    // Implement search logic here
-    // For example, navigate to `/search?q=${query}`
+    if (query) {
+      navigate(`/search?q=${query}`); // Navigate to search page with query
+    }
   };
 
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-transparent">
       <div className="container-fluid">
         <a className="navbar-brand" href="/">
-          <img src={logo} alt="logo" style={{width:"130px",height:"40px"}}/>
+          <img src={logo} alt="logo" style={{ width: "130px", height: "40px" }} />
         </a>
         <button
           className="navbar-toggler"
@@ -56,6 +69,21 @@ const Navbar = () => {
                 <option value="Trending">Trending</option>
               </select>
             </li>
+
+            <li className="nav-item">
+              <select
+                className="form-select bg-dark text-light border-0"
+                onChange={handleGenresChange}
+                style={{ width: "200px" }}
+              >
+                <option value="" disabled selected>Genres</option>
+                <option value="Horror">Horror</option>
+                <option value="Action">Action</option>
+                <option value="Comedy">Comedy</option>
+                <option value="Thriller">Thriller</option>
+              </select>
+            </li>
+
             <li className="nav-item">
               <a className="nav-link" href="/about">About</a>
             </li>
