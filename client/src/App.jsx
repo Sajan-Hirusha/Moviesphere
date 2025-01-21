@@ -6,7 +6,8 @@ import Admin from "./Screens/AdminPage/Admin.jsx";
 import AdminMovieSection from "./Components/AdminComponents/AdminMovieSection/AdminMovieSection.jsx";
 import AdminUserSection from "./Components/AdminComponents/AdminUserSection/AdminUserSection.jsx";
 import ContactUs from "./Components/ContactUs/ContactUs.jsx";
-
+import Register from "./Components/Register/Register.jsx"; // Import Register component
+import Login from "./Components/Login/Login.jsx"; // Import Login component
 function App() {
 
   return (
@@ -17,6 +18,8 @@ function App() {
               <Route element={<AdminMovieSection/>} path='/admin/movies'/>
               <Route element={<AdminUserSection/>} path='/admin/users'/>
               <Route element={<ContactUs/>} path='/contactus'/>
+              <Route element={<Register />} path='/register' /> {/* Register route */}
+              <Route element={<Login />} path='/login' />  {/* Login route */}
           </Routes>
       </BrowserRouter>
   )

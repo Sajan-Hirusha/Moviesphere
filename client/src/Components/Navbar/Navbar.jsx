@@ -60,7 +60,7 @@ const Navbar = () => {
               <a className="nav-link" href="/about">About</a>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="/login">Login</a>
+              <a className="nav-link" href="/Register">Login</a>
             </li>
           </ul>
           <form className="d-flex" onSubmit={handleSearch}>

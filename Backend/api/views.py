@@ -4,8 +4,57 @@ from rest_framework.response import Response
 from api.models import Movie,Genre,MovieGenre,Category,User,Contact
 from api.serializers import MovieSerializer,GenreSerializer,CategorySerializer,UserSerializer,ContactSerializer
 from rest_framework.decorators import action
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from .models import User
 from django.contrib.auth.hashers import make_password
+from django.contrib.auth import authenticate
+from rest_framework.authtoken.models import Token
+from api.models import User
+from api.serializers import UserSerializer
 
+
+
+
+class RegisterView(APIView):
+    def post(self, request):
+        try:
+            data = request.data
+            user = User(
+                fName=data['fName'],
+                lName=data['lName'],
+                email=data['email'],
+                phone_number=data['phone_number'],
+                password=make_password(data['password'])
+            )
+            user.save()
+            return Response({"message": "User registered successfully"}, status=status.HTTP_201_CREATED)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class LoginView(APIView):
+    def post(self, request):
+        email = request.data.get('email')
+        password = request.data.get('password')
+
+        if not email or not password:
+            return Response({"error": "Email and password are required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        user = authenticate(email=email, password=password)
+
+        if not user:
+            return Response({"error": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
+
+        # Generate token for the user if authentication is successful
+        token, created = Token.objects.get_or_create(user=user)
+
+        return Response(
+            {"message": "Login successful", "token": token.key},
+            status=status.HTTP_200_OK
+        )
+    
 class MoviePagination(PageNumberPagination):
     page_size = 10
 
