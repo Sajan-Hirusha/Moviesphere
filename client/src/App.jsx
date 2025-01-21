@@ -6,15 +6,22 @@ import Admin from "./Screens/AdminPage/Admin.jsx";
 import AdminMovieSection from "./Components/AdminComponents/AdminMovieSection/AdminMovieSection.jsx";
 import AdminUserSection from "./Components/AdminComponents/AdminUserSection/AdminUserSection.jsx";
 import ContactUs from "./Components/ContactUs/ContactUs.jsx";
+<<<<<<< Updated upstream
 import Register from "./Components/Register/Register.jsx"; // Import Register component
 import Login from "./Components/Login/Login.jsx";
 import Genres from "./Screens/Genres/Genres.jsx"; // Import Login component
+=======
+import Genres from './Screens/Genres/Genres.jsx';
+import Register from "./Components/Register/Register.jsx";
+
+>>>>>>> Stashed changes
 function App() {
 
   return (
       <BrowserRouter>
           <Routes>
               <Route element={<BaseHome/>} path='/'/> 
+              <Route element={<Register/>} path='/Register'/>
               <Route element={<Admin/>} path='/admin'/>
               <Route element={<Register/>} path='/Register'/>
               <Route element={<Login/>} path='/Register'/>
