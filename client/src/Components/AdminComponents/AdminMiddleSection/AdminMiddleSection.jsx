@@ -45,7 +45,7 @@ function AdminMiddleSection() {
         axios.get(`${urlPattern}/api/contacts?page=${currentPage}`)
             .then(response => {
                 const data = response.data;
-                setInquiries(data.results);
+                setInquiries(data);
                 setHasNextPage(data.next !== null);
                 setHasPrevPage(data.previous !== null);
             })

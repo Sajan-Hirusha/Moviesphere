@@ -59,7 +59,7 @@ function AdminUserSection() {
         axios.get(`${urlPattern}/api/users?page=${currentPage}`)
             .then(response => {
                 const data = response.data;
-                setUsers(data.results);
+                setUsers(data);
                 setHasNextPage(data.next !== null);
                 setHasPrevPage(data.previous !== null);
             })

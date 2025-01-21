@@ -1,8 +1,8 @@
 from rest_framework import viewsets, status
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
-from api.models import Movie,Genre,MovieGenre,Category,User,Contact
-from api.serializers import MovieSerializer,GenreSerializer,CategorySerializer,UserSerializer,ContactSerializer
+from api.models import Movie, Genre, MovieGenre, Category, User, Contact
+from api.serializers import MovieSerializer, GenreSerializer, CategorySerializer, UserSerializer, ContactSerializer
 from rest_framework.decorators import action
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -14,7 +14,6 @@ from rest_framework.authtoken.models import Token
 from api.models import User
 from api.serializers import UserSerializer
 from rest_framework.exceptions import NotFound
-
 
 
 class RegisterView(APIView):
@@ -54,15 +53,18 @@ class LoginView(APIView):
             {"message": "Login successful", "token": token.key},
             status=status.HTTP_200_OK
         )
-    
+
+
 class MoviePagination(PageNumberPagination):
     page_size = 10
+
 
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.exceptions import NotFound
 from rest_framework import status
 from rest_framework import viewsets
+
 
 class MovieViewSet(viewsets.ModelViewSet):
     queryset = Movie.objects.all()
@@ -90,7 +92,7 @@ class MovieViewSet(viewsets.ModelViewSet):
             {"success": True, "message": "Movie updated successfully!", "data": serializer.data},
             status=status.HTTP_200_OK
         )
-    
+
     @action(detail=False, methods=['get'], url_path='get_movies')
     def get_movies(self, request):
         movies = self.queryset
@@ -104,19 +106,19 @@ class MovieViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(movies, many=True)
         return Response(
             {"success": True, "data": serializer.data},
-           status=status.HTTP_200_OK
+            status=status.HTTP_200_OK
         )
-    
+
     @action(detail=False, methods=['get'], url_path='get_popular')
     def get_most_popular_movies(self, request):
         movies = self.queryset.filter(category="Most Popular")
-        
+
         page = self.paginate_queryset(movies)
-        
+
         if page is not None:
             serializer = self.get_serializer(page, many=True)
             return self.get_paginated_response(serializer.data)
-        
+
         # If no pagination, return all filtered movies
         serializer = self.get_serializer(movies, many=True)
         return Response(
@@ -125,18 +127,28 @@ class MovieViewSet(viewsets.ModelViewSet):
         )
 
 
+    @action(detail=False, methods=['get'], url_path='count')
+    def get_movie_count(self, request):
+        total_movies = Movie.objects.count()  # Get total count of movies
+        return Response(
+            {"success": True, "total_movies": total_movies},
+            status=status.HTTP_200_OK
+        )
+
+
 class GenrePagination(PageNumberPagination):
     page_size = 10
+
 
 class GenreViewSet(viewsets.ModelViewSet):
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
     pagination_class = GenrePagination
-    
+
     @action(detail=False, methods=['get'], url_path='get_genres')
     def get_genres(self, request):
 
-        genres = self.queryset 
+        genres = self.queryset
         page = self.paginate_queryset(genres)
 
         if page is not None:
@@ -147,7 +159,7 @@ class GenreViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(genres, many=True)
         return Response(
             {"success": True, "data": serializer.data},
-        status=status.HTTP_200_OK
+            status=status.HTTP_200_OK
         )
 
     @action(detail=False, methods=['get'], url_path='(?P<genre_id>[^/.]+)/grouped-by-genre')
@@ -164,7 +176,6 @@ class GenreViewSet(viewsets.ModelViewSet):
         serializer = MovieSerializer(movies, many=True, context={"request": request})
 
         return Response({"success": True, "data": serializer.data}, status=200)
-
 
     @action(detail=False, methods=['get'], url_path='search/(?P<identifier>.+)')
     def search_movie(self, request, identifier=None):
@@ -186,16 +197,17 @@ class GenreViewSet(viewsets.ModelViewSet):
             {"success": True, "total_movies": total_movies},
             status=status.HTTP_200_OK
         )
-    
+
     @action(detail=True, methods=['get'], url_path='get-movie-by-id')
     def get_movie_by_id(self, request, pk=None):
         try:
             movie = self.get_object()  # Fetch the movie by pk
         except Movie.DoesNotExist:
             raise NotFound(detail="Movie not found.")
-        
+
         serializer = self.get_serializer(movie)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
@@ -253,7 +265,6 @@ class UserViewSet(viewsets.ModelViewSet):
             {"success": True, "message": "User created successfully!", "data": serializer.data},
             status=status.HTTP_201_CREATED
         )
-
 
     def partial_update(self, request, *args, **kwargs):
         try:
@@ -316,7 +327,8 @@ class ContactViewSet(viewsets.ModelViewSet):
         self.perform_create(serializer)
 
         return Response(
-            {"success": True, "message": "Your contact inquiry has been submitted successfully!", "data": serializer.data},
+            {"success": True, "message": "Your contact inquiry has been submitted successfully!",
+             "data": serializer.data},
             status=status.HTTP_201_CREATED
         )
 

@@ -160,9 +160,10 @@ function AdminMovieSection() {
     //get category List
     useEffect(() => {
         fetchMovieCount();
-        axios.get(`${urlPattern}/api/categories?page=1`)
+        axios.get(`${urlPattern}/api/categories`)
             .then(response => {
-                setCategoryList(response.data.results);
+                setCategoryList(response.data);
+                console.log(response.data)
             })
             .catch(error => {
                 console.log(error.message);

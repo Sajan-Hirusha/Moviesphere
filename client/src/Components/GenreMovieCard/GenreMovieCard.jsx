@@ -9,7 +9,7 @@ const GenreMovieCard = ({ title, image, description }) => {
       <div className="genre-movie-info">
         <h5>{title}</h5>
         {/* <p>{description}</p> */}
-        <a href={`/movies/${title}`}><button class="btn"><i class="bi bi-play-circle"></i> Trailer</button></a>
+        <a href={`/movies/${title}`}><button className="btn"><i className="bi bi-play-circle"></i> Trailer</button></a>
       </div>
     </div>
   );
