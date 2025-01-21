@@ -13,7 +13,7 @@ from django.contrib.auth import authenticate
 from rest_framework.authtoken.models import Token
 from api.models import User
 from api.serializers import UserSerializer
-
+from rest_framework.exceptions import NotFound
 
 
 
@@ -58,6 +58,12 @@ class LoginView(APIView):
 class MoviePagination(PageNumberPagination):
     page_size = 10
 
+from rest_framework.decorators import action
+from rest_framework.response import Response
+from rest_framework.exceptions import NotFound
+from rest_framework import status
+from rest_framework import viewsets
+
 class MovieViewSet(viewsets.ModelViewSet):
     queryset = Movie.objects.all()
     serializer_class = MovieSerializer
@@ -74,7 +80,6 @@ class MovieViewSet(viewsets.ModelViewSet):
         )
 
     def partial_update(self, request, *args, **kwargs):
-
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
@@ -88,8 +93,7 @@ class MovieViewSet(viewsets.ModelViewSet):
     
     @action(detail=False, methods=['get'], url_path='get_movies')
     def get_movies(self, request):
-
-        movies = self.queryset 
+        movies = self.queryset
         page = self.paginate_queryset(movies)
 
         if page is not None:
@@ -182,6 +186,16 @@ class GenreViewSet(viewsets.ModelViewSet):
             {"success": True, "total_movies": total_movies},
             status=status.HTTP_200_OK
         )
+    
+    @action(detail=True, methods=['get'], url_path='get-movie-by-id')
+    def get_movie_by_id(self, request, pk=None):
+        try:
+            movie = self.get_object()  # Fetch the movie by pk
+        except Movie.DoesNotExist:
+            raise NotFound(detail="Movie not found.")
+        
+        serializer = self.get_serializer(movie)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()

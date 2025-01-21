@@ -1,0 +1,82 @@
+/* General styling */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.main-container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 20px auto;
+}
+
+/* Styling for the article */
+.article {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.top-section,
+.bottom-section {
+    margin-bottom: 20px;
+}
+
+.essay-part {
+    margin-bottom: 10px;
+    line-height: 1.6;
+    text-align: justify;
+}
+
+.middle-section {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.video-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 45%;
+    max-width: 800px; /* Increased width for more prominence */
+    margin: 0 auto 20px auto; /* Add margin below for spacing */
+}
+
+.video {
+    width: 100%;
+    height: auto;
+    border: 2px solid #ccc; /* A bit thicker border for more visibility */
+    border-radius: 8px;
+}
+
+/* Small article section */
+.small-article {
+    flex: 2;
+    text-align: justify;
+    font-size: 0.9rem;
+}
+
+/* Responsive Styling */
+@media (max-width: 768px) {
+    .middle-section {
+        flex-direction: column;
+    }
+
+    .video-container {
+        margin-right: 0;
+        margin-bottom: 10px;
+        max-width: 100%; /* Ensure it occupies full width on small screens */
+    }
+}

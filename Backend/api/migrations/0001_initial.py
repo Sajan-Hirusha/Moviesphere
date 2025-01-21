@@ -21,6 +21,7 @@ class Migration(migrations.Migration):
                 ('title', models.CharField(max_length=150)),
                 ('description', models.TextField()),
                 ('category', models.CharField(blank=True, max_length=50, null=True)),
+                   ('videoUrl',models.URLField(blank=True, null=True) ),
             ],
         ),
     ]

@@ -1,0 +1,65 @@
+/* MainFrame.css */
+
+.main-frame {
+  display: flex;
+  flex-direction: column; /* Stack the items vertically first */
+  align-items: center; /* Center the content horizontally */
+  margin: 20px;
+}
+
+.movie-item {
+  display: flex;
+  flex-direction: row; /* Arrange the images and video in a row */
+  justify-content: space-between; /* Space out the elements */
+  gap: 20px; /* Add some gap between the items */
+  width: 100%; /* Make sure the row takes up the full width */
+  max-width: 1200px; /* Optional: limit the width for larger screens */
+  margin-top: 20px;
+}
+
+.photo-frame,
+.video-frame {
+  flex: 1; /* Allow the photo and video frames to take up equal space */
+  max-width: 30%; /* Optional: limit the width of each frame */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.photo-frame {
+  width: 300px; /* Increased width for the photo container */
+  height: 400px; /* Increased height for the photo container */
+  overflow: hidden; /* Hide any part of the image that exceeds the box */
+  border: 1px solid #ddd; /* Optional: border around the photo box */
+  background-color: #f5f5f5; /* Optional: background color */
+}
+
+.photo {
+  max-width: 100%; /* Set the photo width to 100% of the container */
+  max-height: 100%; /* Set the photo height to 100% of the container */
+  object-fit: contain; /* Ensure the image scales proportionally and fits within the box */
+}
+
+.video-frame {
+  width: 300px; /* Increased width for the video container */
+  height: 400px; /* Increased height for the video container */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.video {
+  width: 100%; /* Make video fill the frame */
+  height: 100%; /* Make video fill the frame */
+}
+
+@media (max-width: 768px) {
+  .movie-item {
+    flex-direction: column; /* Stack the items vertically on small screens */
+  }
+  .photo-frame,
+  .video-frame {
+    max-width: 100%; /* Allow each frame to take up full width on small screens */
+    width: 100%; /* Ensure full width on smaller screens */
+  }
+}

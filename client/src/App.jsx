@@ -8,6 +8,7 @@ import AdminUserSection from "./Components/AdminComponents/AdminUserSection/Admi
 import ContactUs from "./Components/ContactUs/ContactUs.jsx";
 import Genres from './Screens/Genres/Genres.jsx';
 import Register from "./Components/Register/Register.jsx";
+import { Review } from './Screens/reviewpage/Review.jsx';
 
 function App() {
 
@@ -25,6 +26,7 @@ function App() {
               <Route element={<Genres/>} path='/genres/Action'/>
               <Route element={<Genres/>} path='/genres/Comedy'/>
               <Route element={<Genres/>} path='/genres/Thriller'/>
+              <Route element={<Review/>} path = '/Review'/>
           </Routes>
       </BrowserRouter>
   )
