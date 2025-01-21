@@ -1,17 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import './MainFrame.css';
 
-export const MainFrame = () => {
+export const MainFrame = ({ movieId }) => {
   const [movie, setMovie] = useState(null); // Store a single movie object
   const [error, setError] = useState(null); // Error state
 
   useEffect(() => {
     // Fetch data from Django API
-    fetch('http://127.0.0.1:8000/api/movies/2/get-movie-by-id/')
-      .then(response => response.json())
+    setError(null); // Reset error before fetching
+    fetch(`http://127.0.0.1:8000/api/movies/${movieId}/get-movie-by-id/`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
       .then(data => setMovie(data))
       .catch(err => setError('Failed to fetch movie data.'));
-  }, []);
+  }, [movieId]); // Re-fetch whenever movieId changes
 
   if (error) {
     return <div>{error}</div>; // Display error message if fetch fails
@@ -34,12 +40,10 @@ export const MainFrame = () => {
   const image2Url = getValidUrl(movie.image2);
   const trailerUrl = movie.movieTrailer;
 
-  // Log the video URL to the console
-  console.log('Trailer URL:', trailerUrl);
-
   return (
     <div className="main-frame">
       <div className="movie-item">
+        {/* Image 1 */}
         <div className="photo-frame">
           {image1Url ? (
             <img
@@ -52,23 +56,24 @@ export const MainFrame = () => {
           )}
         </div>
 
+        {/* Video Section */}
         <div className="video-frame">
-  {trailerUrl ? (
-    <iframe
-      width="560"
-      height="315"
-      src={`https://www.youtube.com/embed/${trailerUrl.split('/').pop()}?autoplay=1`}
-      title="Movie Trailer"
-      frameBorder="0"
-      allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-      allowFullScreen
-    ></iframe>
-  ) : (
-    <div>No Trailer Available</div>
-  )}
-</div>
+          {trailerUrl ? (
+            <iframe
+              width="560"
+              height="315"
+              src={`https://www.youtube.com/embed/${trailerUrl.split('/').pop()}?autoplay=1`}
+              title="Movie Trailer"
+              frameBorder="0"
+              allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            ></iframe>
+          ) : (
+            <div>No Trailer Available</div>
+          )}
+        </div>
 
-
+        {/* Image 2 */}
         <div className="photo-frame">
           {image2Url ? (
             <img
