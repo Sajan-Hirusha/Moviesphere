@@ -1,18 +1,18 @@
 .navbar .form-select {
     border: 1px solid #ffffff;
-  }
-  
-  .navbar .form-select:hover,
-  .navbar .form-select:focus {
+}
+
+.navbar .form-select:hover,
+.navbar .form-select:focus {
     background-color: #333333;
     color: #ffffff;
-  }
-  
-  .navbar .btn-outline-light:hover {
+}
+
+.navbar .btn-outline-light:hover {
     background-color: #ffffff;
     color: #000000;
-  }
-  
-  .nav-item{
+}
+
+.nav-item {
     margin: 3px;
-  }
+}

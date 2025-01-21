@@ -31,7 +31,7 @@ export const MovieArtical = ({ movieId }) => {
   const trailerUrl = movie?.movieTrailer;
 
   return (
-    <div className="main-container">
+    <div className="movieArticle main-container">
       {error && <div className="error-message">{error}</div>} {/* Display error message */}
       {!error && !movie && <div>Loading...</div>} {/* Display loading message */}
 

@@ -12,7 +12,7 @@ export const Review = () => {
 
   return (
 
-    <>
+    <div className="review-container">
       {/* Passing movieId as a prop */}
 
       <Navbar/>
@@ -22,6 +22,6 @@ export const Review = () => {
 
       <Movieselectionlist movieId={movieId} setMovieId={setMovieId} />
       <Footer/>
-    </>
+    </div>
   );
 };

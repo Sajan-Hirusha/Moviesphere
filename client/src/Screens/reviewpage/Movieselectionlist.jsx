@@ -60,7 +60,7 @@ export const Movieselectionlist = ({ movieId, setMovieId }) => {
   };
 
   return (
-    <div className="carousel">
+    <div className=" movieSelectionList carousel">
       <button
         className="carousel-btn prev-btn"
         onClick={handlePrev}
