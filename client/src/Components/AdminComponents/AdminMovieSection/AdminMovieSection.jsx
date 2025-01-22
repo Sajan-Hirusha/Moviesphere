@@ -211,6 +211,7 @@ function AdminMovieSection() {
             .then(response => {
                 const data = response.data;
                 setMovies(data.results);
+                console.log(data.results)
                 setHasNextPage(data.next !== null);
                 setHasPrevPage(data.previous !== null);
             })
@@ -452,17 +453,19 @@ function AdminMovieSection() {
                                     <div className="col-md-6">
                                         <label htmlFor="categoryList" className="form-label">Category</label>
                                         <select
-                                            className="form-select feildDisabled"
+                                            className="form-select fieldDisabled"
                                             id="categoryList"
                                             required
-                                            name="category"
-                                            value={inputs.category !== undefined ? inputs.category : movie?.category || "default"}
-                                            onChange={handleChange}
+                                            value={inputs.categoryId || "default"} // Ensure it defaults to "default"
+                                            name="categoryId" // Use "categoryId" as the name
+                                            onChange={handleChange} // Updates state with the selected value
                                         >
-                                            <option value="default">Select Category</option>
+                                            <option value="default" disabled>
+                                                Select Category
+                                            </option>
                                             {Array.isArray(categoryList) &&
-                                                categoryList.map((category, index) => (
-                                                    <option key={index} value={category.name}>
+                                                categoryList.map((category) => (
+                                                    <option key={category.id} value={category.id}>
                                                         {category.name}
                                                     </option>
                                                 ))}
@@ -488,7 +491,7 @@ function AdminMovieSection() {
                                     </div>
                                     {[1, 2].map(num => (
                                         <div className="col-md-4" key={`image${num}`}>
-                                            <label htmlFor={`image${num}`} className="form-label">Image {num}</label>
+                                        <label htmlFor={`image${num}`} className="form-label">Image {num}</label>
                                             <input
                                                 type="file"
                                                 className="form-control"
@@ -744,7 +747,7 @@ function AdminMovieSection() {
                                         </div>
                                     </div>
                                 </td>
-                                <td>{movie.category}</td>
+                                <td>{movie.categoryId}</td>
                                 <td>{movie.description}</td>
                                 <td>
                                     <button

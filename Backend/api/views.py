@@ -14,7 +14,7 @@ from rest_framework.authtoken.models import Token
 from api.models import User
 from api.serializers import UserSerializer
 from rest_framework.exceptions import NotFound
-
+from django.db.models import Prefetch
 
 class RegisterView(APIView):
     def post(self, request):
@@ -100,26 +100,61 @@ class MovieViewSet(viewsets.ModelViewSet):
 
         self.perform_update(serializer)
 
+        # Update genres (categoryId) in the MovieGenre table
+        genre_ids = request.data.get("categoryId")  # Assuming it's a comma-separated string or list
+        if genre_ids is not None:  # Check if categoryId is provided in the update
+            # Clear existing genres for this movie
+            MovieGenre.objects.filter(movie=instance).delete()
+
+            # Add new genres
+            if isinstance(genre_ids, str):
+                genre_ids = genre_ids.split(",")  # Convert comma-separated string to a list
+            for genre_id in genre_ids:
+                MovieGenre.objects.create(movie=instance, genre_id=genre_id.strip())
+
         return Response(
             {"success": True, "message": "Movie updated successfully!", "data": serializer.data},
             status=status.HTTP_200_OK
         )
 
+
+
+
     @action(detail=False, methods=['get'], url_path='get_movies')
     def get_movies(self, request):
-        movies = self.queryset
+        # Prefetch genres to optimize database queries
+        movies = self.queryset.prefetch_related(
+            Prefetch('genres', queryset=MovieGenre.objects.select_related('genre'))
+        )
         page = self.paginate_queryset(movies)
 
+        # Serialize the data
         if page is not None:
             serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
+            serialized_data = self._add_genre_names(serializer.data, page)
+            return self.get_paginated_response(serialized_data)
 
         # If no pagination, return all movies
         serializer = self.get_serializer(movies, many=True)
+        serialized_data = self._add_genre_names(serializer.data, movies)
         return Response(
-            {"success": True, "data": serializer.data},
+            {"success": True, "data": serialized_data},
             status=status.HTTP_200_OK
         )
+
+    def _add_genre_names(self, serialized_movies, movie_objects):
+        """
+        Add genre names to serialized movie data.
+        """
+        movie_map = {movie.id: movie for movie in movie_objects}
+        for movie_data in serialized_movies:
+            movie_id = movie_data["id"]
+            movie_instance = movie_map.get(movie_id)
+            if movie_instance:
+                genre_names = [mg.genre.name for mg in movie_instance.genres.all()]
+                movie_data["genres"] = genre_names
+        return serialized_movies
+
 
     @action(detail=False, methods=['get'], url_path='get_popular')
     def get_most_popular_movies(self, request):
