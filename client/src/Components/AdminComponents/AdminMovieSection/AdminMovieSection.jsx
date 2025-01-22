@@ -77,7 +77,7 @@ function AdminMovieSection() {
 
     const handleFormSubmit = (event, needValidation, url, method) => {
         event.preventDefault();
-        if (inputs.category === "default" || !inputs.category) {
+        if (inputs.category === "default" ) {
             alert("Please select a valid category!");
         } else {
             const form = document.querySelector(needValidation);
@@ -314,14 +314,26 @@ function AdminMovieSection() {
 
                                     <div className="col-md-6">
                                         <label htmlFor="categoryList" className="form-label">Category</label>
-                                        <select className="form-select feildDisabled" id="categoryList" required
-                                                value={inputs.category || ""} name="category" onChange={handleChange}>
-                                            <option value="default"> select Category</option>
-                                            {Array.isArray(categoryList) ? (categoryList.map((category, index) => (
-                                                <option key={index}
-                                                        value={category.name}>{category.name}</option>
-                                            ))) : ""}
+                                        <select
+                                            className="form-select fieldDisabled"
+                                            id="categoryList"
+                                            required
+                                            value={inputs.categoryId || "default"} // Ensure it defaults to "default"
+                                            name="categoryId" // Use "categoryId" as the name
+                                            onChange={handleChange} // Updates state with the selected value
+                                        >
+                                            <option value="default" disabled>
+                                                Select Category
+                                            </option>
+                                            {Array.isArray(categoryList) &&
+                                                categoryList.map((category) => (
+                                                    <option key={category.id} value={category.id}>
+                                                        {category.name}
+                                                    </option>
+                                                ))}
                                         </select>
+
+
                                         <div className="valid-feedback">
                                             Looks good!
                                         </div>

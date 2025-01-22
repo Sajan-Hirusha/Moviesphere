@@ -76,9 +76,21 @@ class MovieViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
 
+        movie_instance = serializer.instance
+        genre_ids = request.data.get("categoryId")
+        if genre_ids:
+            if isinstance(genre_ids, str):
+                genre_ids = genre_ids.split(",")
+            for genre_id in genre_ids:
+                MovieGenre.objects.create(movie=movie_instance, genre_id=genre_id.strip())
+
         return Response(
-            {"success": True, "message": "Movie Saved successfully!", "data": serializer.data},
-            status=status.HTTP_201_CREATED
+            {
+                "success": True,
+                "message": "Movie Saved successfully!",
+                "data": serializer.data,
+            },
+            status=status.HTTP_201_CREATED,
         )
 
     def partial_update(self, request, *args, **kwargs):
