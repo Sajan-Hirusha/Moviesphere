@@ -26,7 +26,7 @@ function App() {
               <Route element={<Genres />} path="/genres/:genre" />
               {/*<Route element={<Genres/>} path='/genres/Comedy'/>*/}
               {/*<Route element={<Genres/>} path='/genres/Thriller'/>*/}
-              <Route element={<Review/>} path = '/Review'/>
+              <Route element={<Review/>} path = '/review'/>
           </Routes>
       </BrowserRouter>
   )

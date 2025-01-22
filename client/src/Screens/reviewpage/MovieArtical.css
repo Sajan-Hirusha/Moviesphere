@@ -1,5 +1,5 @@
 /* General styling */
-.movieArticle{
+.main-container {
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
@@ -17,7 +17,7 @@
 }
 
 /* Styling for the article */
-.movieArticle .article {
+.main-container .article {
     display: flex;
     flex-direction: column;
     border: 1px solid #ccc;
@@ -28,24 +28,24 @@
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.movieArticle .top-section,
-.movieArticle .bottom-section {
+.main-container .top-section,
+.main-container .bottom-section {
     margin-bottom: 20px;
 }
 
-.movieArticle .essay-part {
+.main-container .essay-part {
     margin-bottom: 10px;
     line-height: 1.6;
     text-align: justify;
 }
 
-.movieArticle .middle-section {
+.main-container .middle-section {
     display: flex;
     align-items: center;
     margin-bottom: 20px;
 }
 
-.movieArticle .video-container {
+.main-container .video-container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -54,7 +54,7 @@
     margin: 0 auto 20px auto; /* Add margin below for spacing */
 }
 
-.movieArticle .video {
+.main-container .video {
     width: 100%;
     height: auto;
     border: 2px solid #ccc; /* A bit thicker border for more visibility */
@@ -62,7 +62,7 @@
 }
 
 /* Small article section */
-.movieArticle .small-article {
+.main-container .small-article {
     flex: 2;
     text-align: justify;
     font-size: 0.9rem;
@@ -70,11 +70,11 @@
 
 /* Responsive Styling */
 @media (max-width: 768px) {
-    .movieArticle .middle-section {
+    .main-container .middle-section {
         flex-direction: column;
     }
 
-    .movieArticle .video-container {
+    .main-container .video-container {
         margin-right: 0;
         margin-bottom: 10px;
         max-width: 100%; /* Ensure it occupies full width on small screens */

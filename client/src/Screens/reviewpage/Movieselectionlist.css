@@ -1,4 +1,4 @@
-.movieSelectionList {
+.movieList  {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -8,7 +8,7 @@
   width: 100%;
 }
 
-.movieSelectionList .carousel-btn {
+.movieList  .carousel-btn {
   background-color: transparent;
   border: none;
   font-size: 30px;
@@ -18,18 +18,18 @@
   z-index: 1;
 }
 
-.movieSelectionList .carousel-btn:disabled {
+.movieList  .carousel-btn:disabled {
   color: #ddd;
   cursor: not-allowed;
 }
 
-.movieSelectionList .carousel-track {
+.movieList  .carousel-track {
   display: flex;
   transition: transform 0.3s ease-in-out; /* Smooth transition for sliding */
   gap: 20px;
 }
 
-.movieSelectionList .image-card {
+.movieList .image-card {
   width: 200px;
   height: 350px;
   border-radius: 10px;
@@ -39,7 +39,7 @@
   position: relative;
 }
 
-.movieSelectionList .image-card img {
+.movieList  .image-card img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -50,7 +50,7 @@
   pointer-events: none;
 }
 
-.movieSelectionList .image-card h3 {
+.movieList  .image-card h3 {
   position: absolute;
   bottom: 60px;
   left: 10px;
@@ -60,7 +60,7 @@
   margin: 0;
 }
 
-.movieSelectionList .image-card p {
+.movieList  .image-card p {
   position: absolute;
   bottom: 10px;
   left: 10px;
@@ -71,17 +71,17 @@
   margin: 0;
 }
 
-.movieSelectionList .see-more {
+.movieList  .see-more {
   font-size: 14px;
   color: #f0f0f0;
   cursor: pointer
 }
 
-.movieSelectionList .see-more:hover {
+.movieList  .see-more:hover {
   text-decoration: underline;
 }
 
-.movieSelectionList .error {
+.movieList  .error {
   color: red;
   font-size: 14px;
   text-align: center;

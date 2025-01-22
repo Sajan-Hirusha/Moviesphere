@@ -124,31 +124,17 @@ const BaseHome = () => {
           </div>
           <div className="container py-5">
             <h2 className="mb-4">Featured Movies</h2>
-            {error ? <div>{error}</div> :
-              loading ? <div>loading</div> :
-                <div className="row">
-                  {allMovies.map((movie, index) => (
-                    <MovieCard
-                      key={index}
-                      title={movie.title}
-                      image={movie.image1}
-                      description={movie.description}
-                    />
-                  ))}
-                </div>}
-                <h2 className="mb-4">Most Popular</h2>
-            {error ? <div>{error}</div> :
-              loading ? <div>loading</div> :
-                <div className="row">
-                  {popular.map((movie, index) => (
-                    <MovieCard
-                      key={index}
-                      title={movie.title}
-                      image={movie.image1}
-                      description={movie.description}
-                    />
-                  ))}
-                </div>}
+            <div className="row">
+              {movies.map((movie, index) => (
+                <MovieCard
+                  key={index}
+                  title={movie.title}
+                  id={movie.id}
+                  image={movie.image1}
+                  description={movie.description}
+                />
+              ))}
+            </div>
           </div>
 
           {loading && <p>Loading movies...</p>}

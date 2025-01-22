@@ -1,6 +1,6 @@
 /* MainFrame.css */
 
-.main-frame {
+ .main-frame {
   display: flex;
   flex-direction: column; /* Stack the items vertically first */
   align-items: center; /* Center the content horizontally */
