@@ -22,10 +22,10 @@ function App() {
               <Route element={<AdminMovieSection/>} path='/admin/movies'/>
               <Route element={<AdminUserSection/>} path='/admin/users'/>
               <Route element={<ContactUs/>} path='/contactus'/>
-              <Route element={<Genres/>} path='/genres/Horror'/>
-              <Route element={<Genres/>} path='/genres/Action'/>
-              <Route element={<Genres/>} path='/genres/Comedy'/>
-              <Route element={<Genres/>} path='/genres/Thriller'/>
+              {/*<Route element={<Genres/>} path='/genres/Horror'/>*/}
+              <Route element={<Genres />} path="/genres/:genre" />
+              {/*<Route element={<Genres/>} path='/genres/Comedy'/>*/}
+              {/*<Route element={<Genres/>} path='/genres/Thriller'/>*/}
               <Route element={<Review/>} path = '/Review'/>
           </Routes>
       </BrowserRouter>

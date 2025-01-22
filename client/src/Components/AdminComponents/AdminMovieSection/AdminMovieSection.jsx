@@ -160,9 +160,9 @@ function AdminMovieSection() {
     //get category List
     useEffect(() => {
         fetchMovieCount();
-        axios.get(`${urlPattern}/api/categories`)
+        axios.get(`${urlPattern}/api/genres`)
             .then(response => {
-                setCategoryList(response.data);
+                setCategoryList(response.data.results);
                 console.log(response.data)
             })
             .catch(error => {
@@ -528,7 +528,7 @@ function AdminMovieSection() {
             <CategoryModel method="post" handleChange={handleChange}
                            handleCategoryFormSubmit={handleAddCategoryFormSubmit}
                            buttonClass="primary" categoryModalRef={categoryAddModalRef} modelTitle={"Add Category"}
-                           id="addCategoryModal" url="/api/categories/"
+                           id="addCategoryModal" url="/api/genres/"
                            formBody={
                                <div className="col-12">
                                    <label htmlFor="categoryName" className="form-label">Category Name</label>
@@ -549,7 +549,7 @@ function AdminMovieSection() {
             <CategoryModel method="delete" handleChange={handleChange}
                            handleCategoryFormSubmit={handleRemoveCategoryFormSubmit}
                            buttonClass="danger" categoryModalRef={categoryRemoveModalRef} modelTitle={"Remove Category"}
-                           id="removeCategoryModal" url={`/api/categories/delete-category/${encodeURIComponent(
+                           id="removeCategoryModal" url={`/api/genres/delete-genres/${encodeURIComponent(
                                inputs.category)}/`}
                            formBody={
                                <div className="col-12">

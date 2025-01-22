@@ -1,4 +1,4 @@
-from api.models import Movie,Genre,MovieGenre,Category,User,Contact
+from api.models import Movie,Genre,MovieGenre,User,Contact
 from rest_framework import serializers
 from .models import User
 
@@ -17,10 +17,6 @@ class MovieGenreSerializer(serializers.ModelSerializer):
         model = MovieGenre
         fields = '__all__'
 
-class CategorySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Category
-        fields = '__all__'
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:

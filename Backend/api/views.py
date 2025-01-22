@@ -1,8 +1,8 @@
 from rest_framework import viewsets, status
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
-from api.models import Movie, Genre, MovieGenre, Category, User, Contact
-from api.serializers import MovieSerializer, GenreSerializer, CategorySerializer, UserSerializer, ContactSerializer
+from api.models import Movie, Genre, MovieGenre, User, Contact
+from api.serializers import MovieSerializer, GenreSerializer, UserSerializer, ContactSerializer
 from rest_framework.decorators import action
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -134,7 +134,36 @@ class MovieViewSet(viewsets.ModelViewSet):
             {"success": True, "total_movies": total_movies},
             status=status.HTTP_200_OK
         )
+    @action(detail=False, methods=['get'], url_path='search/(?P<identifier>.+)')
+    def search_movie(self, request, identifier=None):
+        if identifier.isdigit():
+            queryset = self.queryset.filter(id=identifier)
+        else:
+            queryset = self.queryset.filter(title__iexact=identifier)
 
+        if not queryset.exists():
+            return Response({"error": "Movie not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response({"data": serializer.data}, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=['get'], url_path='count')
+    def get_movie_count(self, request):
+        total_movies = Movie.objects.count()  # Get total count of movies
+        return Response(
+            {"success": True, "total_movies": total_movies},
+            status=status.HTTP_200_OK
+        )
+
+    @action(detail=True, methods=['get'], url_path='get-movie-by-id')
+    def get_movie_by_id(self, request, pk=None):
+        try:
+            movie = self.get_object()  # Fetch the movie by pk
+        except Movie.DoesNotExist:
+            raise NotFound(detail="Movie not found.")
+
+        serializer = self.get_serializer(movie)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 class GenrePagination(PageNumberPagination):
     page_size = 10
@@ -177,72 +206,36 @@ class GenreViewSet(viewsets.ModelViewSet):
 
         return Response({"success": True, "data": serializer.data}, status=200)
 
-    @action(detail=False, methods=['get'], url_path='search/(?P<identifier>.+)')
-    def search_movie(self, request, identifier=None):
-        if identifier.isdigit():
-            queryset = self.queryset.filter(id=identifier)
-        else:
-            queryset = self.queryset.filter(title__iexact=identifier)
-
-        if not queryset.exists():
-            return Response({"error": "Movie not found"}, status=status.HTTP_404_NOT_FOUND)
-
-        serializer = self.get_serializer(queryset, many=True)
-        return Response({"data": serializer.data}, status=status.HTTP_200_OK)
-
-    @action(detail=False, methods=['get'], url_path='count')
-    def get_movie_count(self, request):
-        total_movies = Movie.objects.count()  # Get total count of movies
-        return Response(
-            {"success": True, "total_movies": total_movies},
-            status=status.HTTP_200_OK
-        )
-
-    @action(detail=True, methods=['get'], url_path='get-movie-by-id')
-    def get_movie_by_id(self, request, pk=None):
-        try:
-            movie = self.get_object()  # Fetch the movie by pk
-        except Movie.DoesNotExist:
-            raise NotFound(detail="Movie not found.")
-
-        serializer = self.get_serializer(movie)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-class CategoryViewSet(viewsets.ModelViewSet):
-    queryset = Category.objects.all()
-    serializer_class = CategorySerializer
-
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
 
         return Response(
-            {"success": True, "message": "Category created successfully!", "data": serializer.data},
+            {"success": True, "message": "Genre created successfully!", "data": serializer.data},
             status=status.HTTP_201_CREATED
         )
 
-    @action(detail=False, methods=['delete'], url_path='delete-category/(?P<name>[^/]+)')
+    @action(detail=False, methods=['delete'], url_path='delete-genres/(?P<name>[^/]+)')
     def delete_by_name(self, request, name=None):
 
         if not name:
             return Response(
-                {"success": False, "message": "Category name is required."},
+                {"success": False, "message": "genres name is required."},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
         try:
 
-            category = Category.objects.get(name=name)
-            category.delete()
+            genres = Genre.objects.get(name=name)
+            genres.delete()
             return Response(
-                {"success": True, "message": f"Category '{name}' deleted successfully."},
+                {"success": True, "message": f"genres '{name}' deleted successfully."},
                 status=status.HTTP_200_OK
             )
-        except Category.DoesNotExist:
+        except Genre.DoesNotExist:
             return Response(
-                {"success": False, "message": f"Category '{name}' does not exist."},
+                {"success": False, "message": f"genres '{name}' does not exist."},
                 status=status.HTTP_404_NOT_FOUND
             )
 

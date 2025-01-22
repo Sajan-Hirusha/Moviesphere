@@ -1,6 +1,6 @@
 from rest_framework.routers import DefaultRouter
 from .views import (
-    MovieViewSet, GenreViewSet, CategoryViewSet, UserViewSet, ContactViewSet, RegisterView
+    MovieViewSet, GenreViewSet, UserViewSet, ContactViewSet, RegisterView
 )
 from django.urls import path, include
 from . import views
@@ -9,7 +9,6 @@ from .views import RegisterView
 # Initialize the router
 router = DefaultRouter()
 router.register(r'movies', MovieViewSet, basename='movie')
-router.register(r'categories', CategoryViewSet, basename='category')
 router.register(r'users', UserViewSet, basename='user')
 router.register(r'contacts', ContactViewSet, basename='contact')
 router.register(r'genres', GenreViewSet, basename='genre')

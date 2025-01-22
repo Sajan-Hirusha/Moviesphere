@@ -18,8 +18,8 @@ function Genres() {
   const { genre } = useParams();
 
   const g = [
-    { id: 1, name: "Action" },
-    { id: 2, name: "Science Fiction" },
+    { id: 2, name: "Action" },
+    { id: 1, name: "Science Fiction" },
     { id: 3, name: "Drama" },
     { id: 4, name: "Horror" },
     { id: 5, name: "Thriller" },
@@ -36,12 +36,16 @@ function Genres() {
           `${urlPattern1}/api/genres/get_genres/`
         );
         setGenres(genreResponse.data.results);
+        // console.log(genreResponse.data.results)
         const moviesByGenre = {};
         for (let i of g) {
+          console.log(i.name)
+          console.log(genre)
           if (genre == i.name) {
             const movieResponse = await axios.get(
               `${urlPattern1}/api/genres/${i.id}/grouped-by-genre/`
             );
+            console.log("11111111111111" )
             moviesByGenre[i.id] = movieResponse.data.data;
           }
         }
@@ -56,7 +60,6 @@ function Genres() {
     };
     fetchGenresAndMovies();
   }, []);
-
   console.log(movies);
   console.log(genres);
   // useEffect(() => {
