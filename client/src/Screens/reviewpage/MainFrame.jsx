@@ -11,12 +11,12 @@ export const MainFrame = ({ movieId }) => {
     fetch(`http://127.0.0.1:8000/api/movies/${movieId}/get-movie-by-id/`)
       .then(response => {
         if (!response.ok) {
-          throw new Error('Network response was not ok');
+          throw new Error('Network response was not ok ');
         }
         return response.json();
       })
-      .then(data => setMovie(data))
-      .catch(err => setError('Failed to fetch movie data.'));
+      .then(data => setMovie(data)).catch(err => setError(`Failed to fetch movie data. ${id}`));
+
   }, [movieId]); // Re-fetch whenever movieId changes
 
   if (error) {

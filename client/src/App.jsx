@@ -18,7 +18,7 @@ function App() {
               <Route element={<AdminMovieSection/>} path='/admin/movies'/>
               <Route element={<AdminUserSection/>} path='/admin/users'/>
               <Route element={<ContactUs/>} path='/contactus'/>
-              <Route element={<Review/>} path = '/Review'/>
+              <Route element={<Review/>} path = '/review'/>
           </Routes>
       </BrowserRouter>
   )

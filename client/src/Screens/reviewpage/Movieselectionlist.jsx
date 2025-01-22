@@ -54,13 +54,13 @@ export const Movieselectionlist = ({ movieId, setMovieId }) => {
   };
 
   const toggleDescription = (event, id) => {
-    event.preventDefault(); // Prevent default browser behavior
+ 
     setShowFullDescriptionId(showFullDescriptionId === id ? null : id);
     setMovieId(id); // Update the selected movie ID
   };
 
   return (
-    <div className="carousel">
+    <div className="movieList carousel">
       <button
         className="carousel-btn prev-btn"
         onClick={handlePrev}

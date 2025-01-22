@@ -71,6 +71,7 @@ const BaseHome = () => {
                 <MovieCard
                   key={index}
                   title={movie.title}
+                  id={movie.id}
                   image={movie.image1}
                   description={movie.description}
                 />

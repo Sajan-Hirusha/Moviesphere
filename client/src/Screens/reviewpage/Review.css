@@ -1,24 +1,15 @@
 /* General Body Styling */
-* {
+.movieReview{
     background: linear-gradient(135deg, #000000, #4f4f4f); /* Gradient from black to a brighter dark gray */
     color: #e5e5e5; /* Light text */
 }
 
-body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Arial', sans-serif;
-     background-color: #282828;  /* Dark background for the body */
-    color: #e5e5e5; /* Light text */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    min-height: 100vh;
+.movieReview {
+    
 }
 
 /* MainFrame Styling */
-.main-frame {
+.movieReview .main-frame {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -31,8 +22,8 @@ body {
 }
 
 /* Photo and Video Frame Styling */
-.photo-frame,
-.video-frame {
+.movieReview .photo-frame,
+.movieReview .video-frame {
     flex: 1;
     margin: 10px;
     border-radius: 10px;
@@ -40,14 +31,14 @@ body {
 }
 
 /* Apply Light Black Gradient */
-.main-container,
-.photo-frame,
-.video-frame {
+.movieReview .main-container,
+.movieReview .photo-frame,
+.movieReview .video-frame {
     background: linear-gradient(to right, #2c2c2c, #444444); /* Light black gradient */
 }
 
-.photo-frame img,
-.video-frame video {
+.movieReview .photo-frame img,
+.movieReview .video-frame video {
     width: 100%;
     height: auto;
     object-fit: cover;
@@ -55,14 +46,14 @@ body {
 }
 
 /* Hover Effect */
-.photo-frame:hover,
-.video-frame:hover {
+.movieReview .photo-frame:hover,
+.movieReview .video-frame:hover {
     transform: scale(1.05);
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
 }
 
 /* MovieArticle Styling */
-.main-container {
+.movieReview .main-container {
     width: 90%;
     max-width: 1200px;
     margin: 20px auto;
@@ -73,14 +64,14 @@ body {
     background-color: #eaeaea; /* Subtle background color for article container */
 }
 
-.video-container {
+.movieReview .video-container {
     display: flex;
     justify-content: center;
     align-items: center;
     margin-bottom: 20px;
 }
 
-.video-container video {
+.movieReview .video-container video {
     width: 100%;
     height: auto;
     border: 2px solid #ddd;
@@ -88,13 +79,13 @@ body {
 }
 
 /* Article Styling */
-.articles-container {
+.movieReview .articles-container {
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
 
-.article {
+.movieReview .article {
     padding: 20px;
     border: 1px solid #444;
     border-radius: 12px;
@@ -103,25 +94,25 @@ body {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-.article-title {
+.movieReview .article-title {
     font-size: 1.6rem;
     font-weight: bold;
     color: #222;
     margin-bottom: 10px;
 }
 
-h3, .article-title {
+.movieReview h3, .movieReview .article-title {
     color: #ffcc00; /* Yellow accents */
 }
 
-.article-content {
+.movieReview .article-content {
     font-size: 1rem;
     line-height: 1.6;
     color: #555;
 }
 
 /* Card Styling */
-.image-card {
+.movieReview .image-card {
     flex: 0 0 calc(20% - 8px);
     box-sizing: border-box;
     padding: 5px;
@@ -132,39 +123,39 @@ h3, .article-title {
     overflow: hidden; /* Ensure images inside cards don't overflow */
 }
 
-.image-card img {
+.movieReview .image-card img {
     width: 100%;
     height: auto;
     border-radius: 8px;
 }
 
-.image-card h3 {
+.movieReview .movieReview .image-card h3 {
     font-size: 1rem;
     margin-top: 10px;
     color: #333;
 }
 
-.image-card p {
+.movieReview .image-card p {
     font-size: 0.8rem;
     color: #666;
     margin-top: 4px;
 }
 
 /* Hover Effect */
-.image-card:hover {
+.movieReview .image-card:hover {
     transform: scale(1.05);
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
 }
 
 /* Responsive Design for Cards */
 @media (max-width: 768px) {
-    .image-card {
+    .movieReview .image-card {
         flex: 0 0 calc(50% - 10px); /* 2 cards per row */
     }
 }
 
 @media (max-width: 480px) {
-    .image-card {
+    .movieReview .image-card {
         flex: 0 0 calc(100% - 10px); /* 1 card per row */
     }
 }
