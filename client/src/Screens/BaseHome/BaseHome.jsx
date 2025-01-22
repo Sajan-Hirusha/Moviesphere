@@ -25,6 +25,7 @@ const BaseHome = () => {
       try {
         setLoading(true);
         const response = await axios.get(`${urlPattern}/api/movies/get_movies/`);
+        console.log(response.data.results)
         setAllMovies(response.data.results);
         setLoading(false);
       } catch (err) {
@@ -93,11 +94,15 @@ const BaseHome = () => {
     const fetchGenresAndMovies = async () => {
       try {
         const genreResponse = await axios.get(`${urlPattern}/api/genres/get_genres/`);
+        console.log(genreResponse.data.results)
         setGenres(genreResponse.data.results);
+        // console.log(genre.id)
         const moviesByGenre = {};
         for (let genre of genreResponse.data.results) {
+          console.log(genre.id)
           const movieResponse = await axios.get(`${urlPattern}/api/genres/${genre.id}/grouped-by-genre/`);
           moviesByGenre[genre.id] = movieResponse.data.data;
+          console.log( movieResponse.data.data)
         }
         setMovies(moviesByGenre);
         setLoading(false);
@@ -109,10 +114,8 @@ const BaseHome = () => {
     };
     fetchGenresAndMovies();
   }, []);
-  console.log(genres);
-  console.log(allMovies);
-  console.log(movies);
 
+  console.log(movies)
   return (
     <>
       <div className="bg-black text-light">
@@ -125,15 +128,18 @@ const BaseHome = () => {
           <div className="container py-5">
             <h2 className="mb-4">Featured Movies</h2>
             <div className="row">
-              {movies.map((movie, index) => (
-                <MovieCard
-                  key={index}
-                  title={movie.title}
-                  id={movie.id}
-                  image={movie.image1}
-                  description={movie.description}
-                />
+              {Object.keys(movies).map((key) => (
+                  movies[key].map((movie, index) => (
+                      <MovieCard
+                          key={index}
+                          title={movie.title}
+                          id={movie.id}
+                          image={movie.image1}
+                          description={movie.description}
+                      />
+                  ))
               ))}
+
             </div>
           </div>
 
