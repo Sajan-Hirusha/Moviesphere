@@ -231,6 +231,11 @@ function AdminMovieSection() {
         }
     };
 
+    function getCategoryName(categoryId) {
+        const category = categoryList.find((cat) => cat.id == categoryId);
+        return category ? category.name : 'Unknown Category';
+    }
+
     return (
         <div className="adminMovieSection">
             {loading && <CircleSpinner/>}
@@ -627,11 +632,7 @@ function AdminMovieSection() {
                                             <img src={enlargedImage[1]}
                                                  className="d-block w-100 img-fluid rounded-3 shadow-lg" alt="Image 2"/>
                                         </div>
-                                        {/* Image 3 */}
-                                        <div className="carousel-item">
-                                            <img src={enlargedImage[2]}
-                                                 className="d-block w-100 img-fluid rounded-3 shadow-lg" alt="Image 3"/>
-                                        </div>
+
                                     </div>
                                     {/* Previous and Next Arrows */}
                                     <button className="carousel-control-prev" type="button"
@@ -703,7 +704,7 @@ function AdminMovieSection() {
                                         </div>
                                     </div>
                                 </td>
-                                <td>{movie.category}</td>
+                                <td>{getCategoryName(movie.categoryId)}</td>
                                 <td>{movie.description}</td>
                                 <td>
                                     <button
@@ -747,7 +748,7 @@ function AdminMovieSection() {
                                         </div>
                                     </div>
                                 </td>
-                                <td>{movie.categoryId}</td>
+                                <td>{getCategoryName(movie.categoryId)}</td>
                                 <td>{movie.description}</td>
                                 <td>
                                     <button

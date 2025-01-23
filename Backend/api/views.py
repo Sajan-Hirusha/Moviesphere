@@ -100,15 +100,13 @@ class MovieViewSet(viewsets.ModelViewSet):
 
         self.perform_update(serializer)
 
-        # Update genres (categoryId) in the MovieGenre table
-        genre_ids = request.data.get("categoryId")  # Assuming it's a comma-separated string or list
-        if genre_ids is not None:  # Check if categoryId is provided in the update
-            # Clear existing genres for this movie
+        genre_ids = request.data.get("categoryId")
+        if genre_ids is not None:
             MovieGenre.objects.filter(movie=instance).delete()
 
-            # Add new genres
+
             if isinstance(genre_ids, str):
-                genre_ids = genre_ids.split(",")  # Convert comma-separated string to a list
+                genre_ids = genre_ids.split(",")
             for genre_id in genre_ids:
                 MovieGenre.objects.create(movie=instance, genre_id=genre_id.strip())
 
@@ -122,19 +120,18 @@ class MovieViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['get'], url_path='get_movies')
     def get_movies(self, request):
-        # Prefetch genres to optimize database queries
+
         movies = self.queryset.prefetch_related(
             Prefetch('genres', queryset=MovieGenre.objects.select_related('genre'))
         )
         page = self.paginate_queryset(movies)
 
-        # Serialize the data
         if page is not None:
             serializer = self.get_serializer(page, many=True)
             serialized_data = self._add_genre_names(serializer.data, page)
             return self.get_paginated_response(serialized_data)
 
-        # If no pagination, return all movies
+
         serializer = self.get_serializer(movies, many=True)
         serialized_data = self._add_genre_names(serializer.data, movies)
         return Response(
@@ -143,9 +140,7 @@ class MovieViewSet(viewsets.ModelViewSet):
         )
 
     def _add_genre_names(self, serialized_movies, movie_objects):
-        """
-        Add genre names to serialized movie data.
-        """
+
         movie_map = {movie.id: movie for movie in movie_objects}
         for movie_data in serialized_movies:
             movie_id = movie_data["id"]
@@ -166,7 +161,6 @@ class MovieViewSet(viewsets.ModelViewSet):
             serializer = self.get_serializer(page, many=True)
             return self.get_paginated_response(serializer.data)
 
-        # If no pagination, return all filtered movies
         serializer = self.get_serializer(movies, many=True)
         return Response(
             {"success": True, "data": serializer.data},
