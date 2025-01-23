@@ -36,9 +36,54 @@ class MovieViewSet(viewsets.ModelViewSet):
             {"success": True, "message": "Movie updated successfully!", "data": serializer.data},
             status=status.HTTP_200_OK
         )
+<<<<<<< Updated upstream
     
     @action(detail=False, methods=['get'], url_path='get_movies')
     def get_movies(self, request):
+=======
+
+
+
+    @action(detail=False, methods=['get'], url_path='get_movies')
+    def get_movies(self, request):
+        movies = self.queryset.prefetch_related(
+            Prefetch(
+                'genres',
+                queryset=MovieGenre.objects.select_related('genre')
+            )
+        )
+        page = self.paginate_queryset(movies)
+
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            serialized_data = self._add_genre_names(serializer.data, page)
+            return self.get_paginated_response(serialized_data)
+
+        serializer = self.get_serializer(movies, many=True)
+        serialized_data = self._add_genre_names(serializer.data, movies)
+        return Response(
+            {"success": True, "data": serialized_data},
+            status=status.HTTP_200_OK
+        )
+
+    def _add_genre_names(self, serialized_movies, movie_objects):
+        movie_map = {movie.id: movie for movie in movie_objects}
+        for movie_data in serialized_movies:
+            movie_id = movie_data["id"]
+            movie_instance = movie_map.get(movie_id)
+            if movie_instance:
+                genre_names = [mg.genre.name for mg in movie_instance.genres.all()]
+                movie_data["genres"] = genre_names
+            else:
+                movie_data["genres"] = []  # Ensure genres is always present
+        return serialized_movies
+
+
+
+    @action(detail=False, methods=['get'], url_path='get_popular')
+    def get_most_popular_movies(self, request):
+        movies = self.queryset.filter(category="Most Popular")
+>>>>>>> Stashed changes
 
         movies = self.queryset 
         page = self.paginate_queryset(movies)
@@ -47,7 +92,10 @@ class MovieViewSet(viewsets.ModelViewSet):
             serializer = self.get_serializer(page, many=True)
             return self.get_paginated_response(serializer.data)
 
+<<<<<<< Updated upstream
         # If no pagination, return all movies
+=======
+>>>>>>> Stashed changes
         serializer = self.get_serializer(movies, many=True)
         return Response(
             {"success": True, "data": serializer.data},

@@ -731,7 +731,14 @@ function AdminMovieSection() {
                                         </div>
                                     </div>
                                 </td>
+<<<<<<< Updated upstream
                                 <td>{movie.category}</td>
+=======
+                                <td>
+                                    {categoryList.results?.find(category => category.id === movie.categoryId)?.name || 'Unknown'}
+                                </td>
+
+>>>>>>> Stashed changes
                                 <td>{movie.description}</td>
                                 <td>
                                     <button
@@ -756,7 +763,7 @@ function AdminMovieSection() {
                         ))
                     ) : (
                         <tr>
-                            <td colSpan="5">No movies found.</td>
+                        <td colSpan="5">No movies found.</td>
                         </tr>
                     )
                 )}
