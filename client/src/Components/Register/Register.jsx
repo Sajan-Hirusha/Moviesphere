@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import registerBg from "/src/assets/Images/registerbg1.jpg"; // Import background image
 import { useNavigate } from "react-router-dom";
-
+import ContactUsNav from "../ContactUs/ContactUsNav.jsx";
+import Footer from "../Footer/Footer.jsx";
+import './Register.css'
 const Register = () => {
   const [formData, setFormData] = useState({
     fName: "",
@@ -61,7 +62,7 @@ const Register = () => {
   // };
   const handleRegister = async (event) => {
     event.preventDefault();
-    
+
     try {
       const response = await fetch("http://127.0.0.1:8000/api/register/", {
         method: "POST",
@@ -76,7 +77,7 @@ const Register = () => {
           password: formData.password,
         }),
       });
-  
+
       if (response.ok) {
         const data = await response.json();
         alert("Registration successful!");
@@ -92,127 +93,130 @@ const Register = () => {
       alert("An error occurred. Please try again later.");
     }
   };
-  
-  
-  
+
+
+
   return (
-    <div
-      className="d-flex justify-content-center align-items-center"
-      style={{
-        minHeight: "100vh",
-        backgroundImage: `url(${registerBg})`, // Background image
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-      }}
-    >
       <div
-        className="card shadow"
-        style={{
-          width: "400px",
-          backgroundColor: "rgba(0, 0, 0, 0.6)", // Semi-transparent dark background
-          borderRadius: "8px",
-          color: "white", // Text color for better visibility
-        }}
+          className="register"
+          style={{
+            minHeight: "100vh",
+          }}
       >
-        <div className="card-body">
-          <h3 className="card-title text-center mb-4">Register</h3>
-          <form onSubmit={handleRegister}>
-            <div className="mb-3">
-              <label htmlFor="firstname" className="form-label">
-                Firstname
-              </label>
-              <input
-                type="text"
-                className="form-control"
-                id="firstname"
-                name="fName"
-                placeholder="Enter your firstname"
-                value={formData.fName}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className="mb-3">
-              <label htmlFor="lastname" className="form-label">
-                Lastname
-              </label>
-              <input
-                type="text"
-                className="form-control"
-                id="lastname"
-                name="lName"
-                placeholder="Enter your lastname"
-                value={formData.lName}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className="mb-3">
-              <label htmlFor="email" className="form-label">
-                Email
-              </label>
-              <input
-                type="email"
-                className="form-control"
-                id="email"
-                name="email"
-                placeholder="Enter your email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className="mb-3">
-              <label htmlFor="phone" className="form-label">
-                Phone Number
-              </label>
-              <input
-                type="tel"
-                className="form-control"
-                id="phone"
-                name="phone_number"
-                placeholder="Enter your phone number"
-                value={formData.phone_number}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className="mb-3">
-              <label htmlFor="password" className="form-label">
-                Password
-              </label>
-              <input
-                type="password"
-                className="form-control"
-                id="password"
-                name="password"
-                placeholder="Enter your password"
-                value={formData.password}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <button
-              type="submit"
-              className="btn w-100"
-              style={{
-                backgroundColor: "#4CAF50", // Green button color
-                color: "white",
-              }}
-            >
-              Register
-            </button>
-          </form>
-          <p className="text-center mt-3">
-            Already have an account?{" "}
-            <a href="/login" style={{ color: "#4CAF50" }}>
-              Login
-            </a>
-          </p>
+        <ContactUsNav/>
+        <div
+            className="card shadow mx-auto my-5 p-3"
+            style={{
+              width: "600px",
+              backgroundColor: "rgba(57,56,56,0.81)",
+              borderRadius: "8px",
+              color: "white",
+            }}
+        >
+          <div className="card-body">
+            <h3 className="card-title text-center mb-4">Register</h3>
+            <form onSubmit={handleRegister}>
+              <div className="row">
+                <div className="col-md-6 mb-3">
+                  <label htmlFor="firstname" className="form-label text-white">
+                    Firstname
+                  </label>
+                  <input
+                      type="text"
+                      className="form-control"
+                      id="firstname"
+                      name="fName"
+                      placeholder="Enter your firstname"
+                      value={formData.fName}
+                      onChange={handleChange}
+                      required
+                  />
+                </div>
+                <div className="col-md-6 mb-3">
+                  <label htmlFor="lastname" className="form-label text-white">
+                    Lastname
+                  </label>
+                  <input
+                      type="text"
+                      className="form-control"
+                      id="lastname"
+                      name="lName"
+                      placeholder="Enter your lastname"
+                      value={formData.lName}
+                      onChange={handleChange}
+                      required
+                  />
+                </div>
+              </div>
+              <div className="row">
+                <div className="col-md-6 mb-3">
+                  <label htmlFor="email" className="form-label text-white">
+                    Email
+                  </label>
+                  <input
+                      type="email"
+                      className="form-control"
+                      id="email"
+                      name="email"
+                      placeholder="Enter your email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      required
+                  />
+                </div>
+                <div className="col-md-6 mb-3">
+                  <label htmlFor="phone" className="form-label text-white">
+                    Phone Number
+                  </label>
+                  <input
+                      type="tel"
+                      className="form-control"
+                      id="phone"
+                      name="phone_number"
+                      placeholder="Enter your phone number"
+                      value={formData.phone_number}
+                      onChange={handleChange}
+                      required
+                  />
+                </div>
+              </div>
+              <div className="mb-3">
+                <label htmlFor="password" className="form-label text-white">
+                  Password
+                </label>
+                <input
+                    type="password"
+                    className="form-control"
+                    id="password"
+                    name="password"
+                    placeholder="Enter your password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    required
+                />
+              </div>
+              <button
+                  type="submit"
+                  className="btn w-100"
+                  style={{
+                    backgroundColor: "#4CAF50", // Green button color
+                    color: "white",
+                  }}
+              >
+                Register
+              </button>
+            </form>
+            <p className="text-center mt-3">
+              Already have an account?{" "}
+              <a href="/login" style={{color: "#4CAF50"}}>
+                Login
+              </a>
+            </p>
+          </div>
         </div>
+
+        <Footer/>
       </div>
-    </div>
   );
 };
 

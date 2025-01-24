@@ -61,9 +61,9 @@ const Navbar = () => {
             </li>
             <li className="nav-item ms-3">
               <select
-                className="form-select bg-dark text-light border-0"
-                onChange={handleCategoryChange}
-                style={{ width: "200px" }}
+                  className="form-select bg-dark text-light border-0"
+                  onChange={handleCategoryChange}
+                  style={{width: "200px"}}
               >
                 <option value="" disabled selected>
                   Movies
@@ -77,9 +77,9 @@ const Navbar = () => {
 
             <li className="nav-item ms-3">
               <select
-                className="form-select bg-dark text-light border-0"
-                onChange={handleGenresChange}
-                style={{ width: "200px" }}
+                  className="form-select bg-dark text-light border-0"
+                  onChange={handleGenresChange}
+                  style={{width: "200px"}}
               >
                 <option value="" disabled selected>
                   Genres
@@ -99,25 +99,26 @@ const Navbar = () => {
 
             <li className="nav-item ms-3 text-white">
               <a className="nav-link text-white" href="/contactus">
-               Contact Us
+                Contact Us
               </a>
             </li>
-            <li className="nav-item ms-3 text-white">
-              <a className="nav-link text-white" href="/Register">Login</a>
-            </li>
+
           </ul>
           <form className="d-flex" onSubmit={handleSearch}>
             <input
-              className="form-control me-2"
-              type="search"
-              name="searchQuery"
-              placeholder="Search movies..."
-              aria-label="Search"
+                className="form-control me-2"
+                type="search"
+                name="searchQuery"
+                placeholder="Search movies..."
+                aria-label="Search"
             />
             <button className="btn btn-outline-light" type="submit">
               Search
             </button>
           </form>
+
+            <a className="nav-link text-white mx-5" href="/login">Login</a>
+
         </div>
       </div>
     </nav>

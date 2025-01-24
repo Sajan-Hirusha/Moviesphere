@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import axios from "axios";
 import loginBg from "/src/assets/Images/loginbg1.jpg";
 import { useNavigate } from "react-router-dom";
+import ContactUsNav from "../ContactUs/ContactUsNav.jsx";
+import Footer from "../Footer/Footer.jsx";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -18,7 +20,7 @@ const Login = () => {
         password,
       });
       console.log("Login successful:", response.data);
-      navigate("/userpanel");
+      navigate("/");
     } catch (error) {
       if (error.response) {
         console.error("Login error:", error.response.data);
@@ -32,7 +34,7 @@ const Login = () => {
 
   return (
     <div
-      className="d-flex justify-content-center align-items-center"
+      className="login"
       style={{
         minHeight: "100vh",
         backgroundImage: `url(${loginBg})`,
@@ -41,8 +43,9 @@ const Login = () => {
         backgroundRepeat: "no-repeat",
       }}
     >
+      <ContactUsNav/>
       <div
-        className="card shadow"
+        className="card shadow my-5 mx-auto "
         style={{
           width: "400px",
           backgroundColor: "rgba(0, 0, 0, 0.6)",
@@ -105,6 +108,7 @@ const Login = () => {
           </p>
         </div>
       </div>
+      <Footer/>
     </div>
   );
 };

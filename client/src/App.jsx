@@ -20,14 +20,11 @@ function App() {
               <Route element={<Register/>} path='/Register'/>
               <Route element={<Login/>} path='/Login'/>
               <Route element={<Admin/>} path='/admin'/>
-              <Route element={<Register/>} path='/Register'/>
+              <Route element={<Login/>} path='/login'/>
               <Route element={<AdminMovieSection/>} path='/admin/movies'/>
               <Route element={<AdminUserSection/>} path='/admin/users'/>
               <Route element={<ContactUs/>} path='/contactus'/>
-              {/*<Route element={<Genres/>} path='/genres/Horror'/>*/}
               <Route element={<Genres />} path="/genres/:genre" />
-              {/*<Route element={<Genres/>} path='/genres/Comedy'/>*/}
-              {/*<Route element={<Genres/>} path='/genres/Thriller'/>*/}
               <Route element={<Review/>} path = '/review'/>
           </Routes>
       </BrowserRouter>
