@@ -3,6 +3,7 @@ import Footer from "../Footer/Footer.jsx";
 import axios from "axios";
 import CircleSpinner from "../CircleSpinner/CircleSpinner.jsx";
 import {urlPattern1} from "../../../env.jsx";
+import Navbar from "../Navbar/Navbar.jsx";
 
 const ContactUs = () => {
     const urlPattern = urlPattern1
@@ -68,9 +69,10 @@ const ContactUs = () => {
 
 
     return (
-        <div className="bg-dark text-light min-vh-100 ">
+        <div className="bg-black text-light min-vh-100 ">
             {loading && <CircleSpinner/>}
-            <div className="container mb-5">
+            <Navbar/>
+            <div className="container my-5">
                 <div className="row justify-content-center">
                     <div className="col-12 col-md-8 col-lg-6">
                         <h1 className="text-center mb-4" style={{color: '#f5c518'}}>
