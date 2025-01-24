@@ -1,5 +1,5 @@
-import React from "react";
 import GenreMovieCard from "../GenreMovieCard/GenreMovieCard";
+import './MultiCardCarousel.css'
 
 const MultiCardCarousel = ({ genres, movies }) => {
     const scrollLeft = (index) => {
@@ -8,20 +8,20 @@ const MultiCardCarousel = ({ genres, movies }) => {
           scroller.scrollBy({ left: -300, behavior: "smooth" });
         }
       };
-    
+
       const scrollRight = (index) => {
         const scroller = document.getElementById(`scroller-${index}`);
         if (scroller) {
           scroller.scrollBy({ left: 300, behavior: "smooth" });
         }
       };
-    
+
       return (
         <div>
           {genres.map((genre, index) =>
             movies[genre.id] && movies[genre.id].length > 0 ? (
               <div className="container py-5" key={index}>
-                <h2>{genre.name}</h2>
+                <h2 className="mb-5">{genre.name}</h2>
                 <div className="scroll-container position-relative">
                   {/* Previous Button */}
                   <button
@@ -35,10 +35,10 @@ const MultiCardCarousel = ({ genres, movies }) => {
                     ></span>
                     <span className="visually-hidden">Previous</span>
                   </button>
-    
+
                   {/* Horizontal Scroller */}
                   <div
-                    className="horizontal-scroller d-flex overflow-auto"
+                    className="horizontal-scroller d-flex overflow-auto px-5"
                     id={`scroller-${index}`}
                     style={{ scrollBehavior: "smooth" }}
                   >
@@ -56,7 +56,7 @@ const MultiCardCarousel = ({ genres, movies }) => {
                       </div>
                     ))}
                   </div>
-    
+
                   {/* Next Button */}
                   <button
                     className="carousel-control-next custom-control-next"
@@ -76,6 +76,6 @@ const MultiCardCarousel = ({ genres, movies }) => {
         </div>
       );
     };
-    
+
 
 export default MultiCardCarousel;

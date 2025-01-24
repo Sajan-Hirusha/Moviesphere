@@ -1,59 +1,41 @@
 .scroll-container {
-    position: relative;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  
-  .horizontal-scroller {
-    display: flex;
-    gap: 15px; /* Space between cards */
-    overflow-x: auto;
-    scrollbar-width: thin;
-    padding: 10px 0; /* Ensure scroller padding avoids overlap */
-  }
-  
-  .genre-card-wrapper {
-    flex-shrink: 0;
-    width: 300px; /* Adjust card width */
-  }
-  
-  .carousel-control-prev,
-  .carousel-control-next {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 10;
-    background: rgba(0, 0, 0, 0.5);
-    border: none;
-    padding: 10px;
-    cursor: pointer;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .custom-control-prev {
-    left: -60px; /* Adjust to place buttons outside the cards */
-  }
-  
-  .custom-control-next {
-    right: -60px; /* Adjust to place buttons outside the cards */
-  }
-  
-  .carousel-control-prev-icon,
-  .carousel-control-next-icon {
-    width: 15px;
-    height: 15px;
-    background-color: white;
-    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Cpath fill='currentColor' d='M4 0L0 4l4 4V5h4V3H4V0z'/%3E%3C/svg%3E");
-    mask-repeat: no-repeat;
-  }
-  
-  .carousel-control-next-icon {
-    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Cpath fill='currentColor' d='M4 0l4 4-4 4V5H0V3h4V0z'/%3E%3C/svg%3E");
-  }
-  
+  position: relative;
+}
+
+.custom-control-prev,
+.custom-control-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  background-color: rgba(0, 0, 0, 0.5);
+  border: none;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  color: white;
+  cursor: pointer;
+}
+
+.custom-control-prev {
+  left: 0;
+}
+
+.custom-control-next {
+  right: 0;
+}
+
+.horizontal-scroller {
+  display: flex;
+  overflow-x: auto;
+  gap: 16px;
+  padding: 0 50px;
+  scroll-behavior: smooth;
+}
+
+.genre-card-wrapper {
+  flex-shrink: 0;
+}

@@ -97,12 +97,12 @@ const Navbar = () => {
               </select>
             </li>
 
-            <li className="nav-item ms-3">
+            <li className="nav-item ms-3 text-white">
               <a className="nav-link text-white" href="/contactus">
                Contact Us
               </a>
             </li>
-            <li className="nav-item ms-3">
+            <li className="nav-item ms-3 text-white">
               <a className="nav-link text-white" href="/Register">Login</a>
             </li>
           </ul>
