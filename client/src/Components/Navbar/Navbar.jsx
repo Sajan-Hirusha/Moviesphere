@@ -1,4 +1,3 @@
-import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Navbar.css";
 import logo from "../../assets/Images/siteLogo.png";
@@ -60,7 +59,7 @@ const Navbar = () => {
                 Home
               </a>
             </li>
-            <li className="nav-item">
+            <li className="nav-item ms-3">
               <select
                 className="form-select bg-dark text-light border-0"
                 onChange={handleCategoryChange}
@@ -76,7 +75,7 @@ const Navbar = () => {
               </select>
             </li>
 
-            <li className="nav-item">
+            <li className="nav-item ms-3">
               <select
                 className="form-select bg-dark text-light border-0"
                 onChange={handleGenresChange}
@@ -98,13 +97,13 @@ const Navbar = () => {
               </select>
             </li>
 
-            <li className="nav-item">
-              <a className="nav-link" href="/contactus">
+            <li className="nav-item ms-3">
+              <a className="nav-link text-white" href="/contactus">
                Contact Us
               </a>
             </li>
-            <li className="nav-item">
-              <a className="nav-link" href="/Register">Login</a>
+            <li className="nav-item ms-3">
+              <a className="nav-link text-white" href="/Register">Login</a>
             </li>
           </ul>
           <form className="d-flex" onSubmit={handleSearch}>
