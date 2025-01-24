@@ -9,6 +9,7 @@ import ContactUs from "./Components/ContactUs/ContactUs.jsx";
 import Genres from './Screens/Genres/Genres.jsx';
 import Register from "./Components/Register/Register.jsx";
 import { Review } from './Screens/reviewpage/Review.jsx';
+import Login from "./Components/Login/Login.jsx";
 
 function App() {
 
@@ -17,6 +18,7 @@ function App() {
           <Routes>
               <Route element={<BaseHome/>} path='/'/> 
               <Route element={<Register/>} path='/Register'/>
+              <Route element={<Login/>} path='/Login'/>
               <Route element={<Admin/>} path='/admin'/>
               <Route element={<Register/>} path='/Register'/>
               <Route element={<AdminMovieSection/>} path='/admin/movies'/>

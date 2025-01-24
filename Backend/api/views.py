@@ -14,7 +14,14 @@ from rest_framework.authtoken.models import Token
 from api.models import User
 from api.serializers import UserSerializer
 from rest_framework.exceptions import NotFound
+from django.contrib.auth.models import User  # Replace with your custom user model if applicable
 from django.db.models import Prefetch
+from django.contrib.auth.hashers import check_password
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from .models import User  # Replace with your actual user model
+
 
 class RegisterView(APIView):
     def post(self, request):
@@ -38,21 +45,31 @@ class LoginView(APIView):
         email = request.data.get('email')
         password = request.data.get('password')
 
-        if not email or not password:
-            return Response({"error": "Email and password are required."}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            # Find the user by email
+            user = User.objects.filter(email=email).first()
 
-        user = authenticate(email=email, password=password)
+            if user:
+                # Compare the entered password with the stored hash
+                if check_password(password, user.password):
+                    return Response({
+                        "message": "Login successful",
+                        "user_id": user.id,
+                        "email": user.email,
+                    }, status=status.HTTP_200_OK)
+                else:
+                    return Response({
+                        "error": "Invalid email or password."
+                    }, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response({
+                    "error": "User not found."
+                }, status=status.HTTP_400_BAD_REQUEST)
 
-        if not user:
-            return Response({"error": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
-
-        # Generate token for the user if authentication is successful
-        token, created = Token.objects.get_or_create(user=user)
-
-        return Response(
-            {"message": "Login successful", "token": token.key},
-            status=status.HTTP_200_OK
-        )
+        except Exception as e:
+            return Response({
+                "error": "An unexpected error occurred: " + str(e)
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class MoviePagination(PageNumberPagination):

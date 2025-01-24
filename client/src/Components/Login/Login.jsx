@@ -1,39 +1,34 @@
 import React, { useState } from "react";
 import axios from "axios";
-import loginBg from "/src/assets/Images/loginbg1.jpg"; // Update with your actual path
+import loginBg from "/src/assets/Images/loginbg1.jpg";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = async () => {
+  const handleLogin = async (e) => {
+    e.preventDefault();
     try {
-        const response = await axios.post('http://127.0.0.1:8000/api/login/', {
-            email: email,
-            password: password
-        });
-
-        console.log('Login successful:', response.data);
-        // Do something with the response (store token, redirect, etc.)
+      console.log({ email, password }); // Log the payload
+      const response = await axios.post("http://127.0.0.1:8000/api/login/", {
+        email,
+        password,
+      });
+      console.log("Login successful:", response.data);
+      navigate("/userpanel");
     } catch (error) {
-        if (error.response) {
-            // Server responded with a status other than 2xx
-            console.error('Error response:', error.response.data);
-            alert('Login failed: ' + error.response.data.error);
-        } else if (error.request) {
-            // No response was received from the server
-            console.error('No response received:', error.request);
-            alert('Server not responding. Please try again later.');
-        } else {
-            // Something else went wrong
-            console.error('Error:', error.message);
-            alert('An unexpected error occurred.');
-        }
+      if (error.response) {
+        console.error("Login error:", error.response.data);
+        setErrorMessage(error.response.data.error || "Login failed.");
+      } else {
+        setErrorMessage("An unexpected error occurred.");
+      }
     }
-};
-
+  };
+  
 
   return (
     <div
@@ -58,6 +53,11 @@ const Login = () => {
         <div className="card-body">
           <h3 className="card-title text-center mb-4">Login</h3>
           <form onSubmit={handleLogin}>
+            {errorMessage && (
+              <div className="alert alert-danger" role="alert">
+                {errorMessage}
+              </div>
+            )}
             <div className="mb-3">
               <label htmlFor="email" className="form-label">
                 Email
