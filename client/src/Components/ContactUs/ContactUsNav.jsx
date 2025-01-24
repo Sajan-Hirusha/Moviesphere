@@ -45,7 +45,7 @@ const ContactUsNav = () => {
 
                     <ul className="navbar-nav ms-auto ">
                         <li className="nav-item mx-5">
-                            <a className="nav-link text-white" href="/Register">
+                            <a className="nav-link text-white" href="/login">
                                 Login
                             </a>
                         </li>

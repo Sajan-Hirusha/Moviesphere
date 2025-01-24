@@ -4,7 +4,7 @@ import {useNavigate} from "react-router-dom";
 
 function Footer() {
 
-    const navigate = useNavigate(); 
+    const navigate = useNavigate();
 
     const handleCategoryChange = (category) => {
         navigate(`/genres/${category}`);
