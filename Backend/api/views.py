@@ -52,6 +52,7 @@ class LoginView(APIView):
             if user:
                 # Compare the entered password with the stored hash
                 if check_password(password, user.password):
+                    
                     return Response({
                         "message": "Login successful",
                         "user_id": user.id,

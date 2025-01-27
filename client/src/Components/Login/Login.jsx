@@ -11,7 +11,11 @@ const Login = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
+
+
   const handleLogin = async (e) => {
+
+    
     e.preventDefault();
     try {
       console.log({ email, password }); // Log the payload
@@ -20,6 +24,15 @@ const Login = () => {
         password,
       });
       console.log("Login successful:", response.data);
+   // Store user data in sessionStorage
+   sessionStorage.setItem("userId", response.data.user_id);
+   sessionStorage.setItem("userEmail", response.data.email);
+      // Log sessionStorage to verify if data is stored correctly
+      console.log("SessionStorage data:", {
+        userId: sessionStorage.getItem("userId"),
+        userEmail: sessionStorage.getItem("userEmail"),
+      });
+
       navigate("/");
     } catch (error) {
       if (error.response) {
