@@ -92,9 +92,9 @@ function Footer() {
 
                             <div className="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
                                 <h6 className="text-uppercase fw-bold mb-4">Useful links</h6>
-                                <p><a href="/login" className="text-reset text-white">Login</a></p>
-                                <p><a href="/contactus" className="text-reset text-white">Contact Us</a></p>
                                 <p><a href="/" className="text-reset text-white">Home</a></p>
+                                <p><a href="/contactus" className="text-reset text-white">Contact Us</a></p>
+                                <p><a href="!#" className="text-reset text-white">Location</a></p>
                                 <p><a href="#!" className="text-reset text-white">Social Medias</a></p>
                             </div>
 

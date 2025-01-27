@@ -7,6 +7,7 @@ import { urlPattern1 } from "../../../env.jsx";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import GridMovieCard from "../../Components/MovieCardGrid/GridMovieCard.jsx";
+import './genres.css'
 
 function Genres() {
   const [movies, setMovies] = useState([]);
@@ -28,23 +29,21 @@ function Genres() {
     { id: 9, name: "Comedy" },
     { id: 10, name: "Fantasy" },
   ];
+
   useEffect(() => {
     const fetchGenresAndMovies = async () => {
       try {
         const genreResponse = await axios.get(
-          `${urlPattern1}/api/genres/get_genres/`
+            `${urlPattern1}/api/genres/get_genres/`
         );
         setGenres(genreResponse.data.results);
-        // console.log(genreResponse.data.results)
+
         const moviesByGenre = {};
         for (let i of g) {
-          console.log(i.name)
-          console.log(genre)
-          if (genre == i.name) {
+          if (genre === i.name) {
             const movieResponse = await axios.get(
-              `${urlPattern1}/api/genres/${i.id}/grouped-by-genre/`
+                `${urlPattern1}/api/genres/${i.id}/grouped-by-genre/`
             );
-            console.log("11111111111111" )
             moviesByGenre[i.id] = movieResponse.data.data;
           }
         }
@@ -58,53 +57,21 @@ function Genres() {
       }
     };
     fetchGenresAndMovies();
-  }, []);
-  console.log(movies);
-  console.log(genres);
-  // useEffect(() => {
-  //   const fetchAllMovies = async () => {
-  //     try {
-  //       setLoading(true);
-  //       const response = await axios.get(`${urlPattern1}/api/movies/get_movies/`);
-  //       setAllMovies(response.data.results);
-  //       setLoading(false);
-  //     } catch (err) {
-  //       console.error("Error fetching movies:111111111111111", err);
-  //       console.log("")
-  //       setError("Failed to load movies.");
-  //       setLoading(false);
-  //     }
-  //   };
+  }, [genre]);
 
-  //   fetchAllMovies();
-  // }, []);
-  console.log(genre);
   return (
-    <>
-      <div className="bg-black text-light">
+      <div className="genres bg-black text-light d-flex flex-column">
         <Navbar />
-        <div className="content">
-          {/* <div>
-      {loading && <p>Loading movies...</p>}
-      {error ? <div>{error}</div> :
-              loading ? <div>loading</div> :
-                <div className="row">
-                  {movies.map((movie, index) => (
-                    <MovieCard
-                      key={index}
-                      title={movie.title}
-                      image={movie.image1}
-                      description={movie.description}
-                    />
-                  ))}
-                </div>}
-    </div> */}
-
-          <GridMovieCard movies={movies} genres={genres} />
+        <div className="content flex-grow-1">
+          {loading && <p>Loading movies...</p>}
+          {error ? (
+              <div>{error}</div>
+          ) : (
+              <GridMovieCard movies={movies} genres={genres} />
+          )}
         </div>
+        <Footer />
       </div>
-      <Footer />
-    </>
   );
 }
 
