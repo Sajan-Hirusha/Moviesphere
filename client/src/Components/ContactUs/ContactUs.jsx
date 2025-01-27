@@ -1,16 +1,27 @@
-import { useState} from 'react';
+import {useEffect, useState} from 'react';
 import Footer from "../Footer/Footer.jsx";
 import axios from "axios";
 import CircleSpinner from "../CircleSpinner/CircleSpinner.jsx";
 import {urlPattern1} from "../../../env.jsx";
 import ContactUsNav from "./ContactUsNav.jsx";
+import {useNavigate} from "react-router-dom";
 
 const ContactUs = () => {
     const urlPattern = urlPattern1
     const [inputs, setInputs] = useState({});
     const [loading, setLoading] = useState(false);
     const [validated, setValidated] = useState(false);
+    const navigate = useNavigate();
+    const [email, setEmail] = useState("");
 
+    useEffect(() => {
+        const userId = sessionStorage.getItem("userId");
+       setEmail(sessionStorage.getItem("userEmail"));
+        if (!userId) {
+            alert("Please login.");
+            navigate("/login");
+        }
+    }, [navigate]);
 
     const handleSubmit = (e,url,method) => {
         e.preventDefault();
@@ -112,8 +123,10 @@ const ContactUs = () => {
                                     id="formEmail"
                                     placeholder="Enter your email"
                                     name="email"
+                                    value={email}
                                     onChange={handleChange}
                                     required
+                                    readOnly={true}
                                 />
                                 <div className="invalid-feedback">
                                     Please enter a valid email.

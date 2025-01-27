@@ -1,8 +1,23 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../Navbar/Navbar.css";
 import logo from "../../assets/Images/siteLogo.png";
+import {useNavigate} from "react-router-dom";
+import {useEffect, useState} from "react";
 
 const ContactUsNav = () => {
+    const navigate = useNavigate();
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    useEffect(() => {
+        const userId = sessionStorage.getItem("userId");
+        setIsLoggedIn(!!userId);
+    }, []);
+
+    const handleLogout = () => {
+        sessionStorage.clear();
+        setIsLoggedIn(false);
+        navigate("/");
+    };
     return (
         <nav className="navbar navbar-expand-lg navbar-dark bg-transparent">
             <div className="container-fluid">
@@ -43,13 +58,21 @@ const ContactUsNav = () => {
                         </li>
                     </ul>
 
-                    <ul className="navbar-nav ms-auto ">
-                        <li className="nav-item mx-5">
-                            <a className="nav-link text-white" href="/login">
+                    <ul className="navbar-nav ms-auto">
+                        {isLoggedIn ? (
+                            <button
+                                className="btn btn-danger mx-5"
+                                onClick={handleLogout}
+                            >
+                                Logout
+                            </button>
+                        ) : (
+                            <a className="btn btn-success mx-5" href="/login">
                                 Login
                             </a>
-                        </li>
+                        )}
                     </ul>
+
                 </div>
             </div>
         </nav>

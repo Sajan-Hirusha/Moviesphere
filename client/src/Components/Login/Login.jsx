@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import loginBg from "/src/assets/Images/loginbg1.jpg";
 import { useNavigate } from "react-router-dom";
@@ -11,11 +11,7 @@ const Login = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
-
-
   const handleLogin = async (e) => {
-
-    
     e.preventDefault();
     try {
       console.log({ email, password }); // Log the payload
