@@ -17,12 +17,12 @@ export const Review = () => {
       setMovieId(Number(location.state.movieid)); // Convert movieid to a number
     }
   }, [location.state]);
-
+    console.log(movieId)
   return (
     <div className="movieReview">
       <Navbar />
       <MainFrame movieId={movieId} />
-      <MovieArtical movieId={movieId} />
+      <MovieArtical movieId={movieId } />
       <Movieselectionlist movieId={movieId} setMovieId={setMovieId} />
       <Footer />
     </div>

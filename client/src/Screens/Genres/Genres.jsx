@@ -2,7 +2,6 @@
 import axios from "axios";
 import Navbar from "../../Components/Navbar/Navbar.jsx";
 import Footer from "../../Components/Footer/Footer.jsx";
-import MultiCardCarousel from "../../Components/MultiCardSlider/MultiCardCarousel.jsx";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { urlPattern1 } from "../../../env.jsx";
 import { useParams } from "react-router-dom";
@@ -20,7 +19,7 @@ function Genres() {
   const g = [
     { id: 1, name: "Action" },
     { id: 2, name: "Science Fiction" },
-    { id: 3, name: "Drama" },
+    { id: 3, name: "Most Popular" },
     { id: 4, name: "Drama" },
     { id: 5, name: "Thriller" },
     { id: 6, name: "Romance" },

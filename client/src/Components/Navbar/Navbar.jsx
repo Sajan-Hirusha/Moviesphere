@@ -6,13 +6,6 @@ import { useNavigate } from "react-router-dom";
 const Navbar = () => {
   const navigate = useNavigate(); // Initialize useNavigate
 
-  const handleCategoryChange = (event) => {
-    const selectedCategory = event.target.value;
-    console.log("Navigate to:", selectedCategory);
-    if (selectedCategory) {
-      navigate(`/category/${selectedCategory}`); // Navigate to category page
-    }
-  };
 
   const handleGenresChange = (event) => {
     const selectedGenre = event.target.value;
@@ -62,7 +55,7 @@ const Navbar = () => {
             <li className="nav-item ms-3">
               <select
                   className="form-select bg-dark text-light border-0"
-                  onChange={handleCategoryChange}
+                  onChange={handleGenresChange}
                   style={{width: "200px"}}
               >
                 <option value="" disabled selected>

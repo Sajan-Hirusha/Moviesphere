@@ -1,6 +1,14 @@
 import React from "react";
+import {useNavigate} from "react-router-dom";
 
 const MovieSlider = ({ movies }) => {
+    const navigate = useNavigate();
+
+    const handleViewDetails = (id) => {
+        console.log(id);
+        navigate("/review", { state: { movieid: id } }); // Pass movieId via state
+    };
+
   return (
     <div id="movieSlider" className="carousel slide" data-bs-ride="carousel">
       <div className="carousel-inner">
@@ -27,9 +35,9 @@ const MovieSlider = ({ movies }) => {
                 <div className="card-body text-center">
                   <h5 className="card-title">{movie.title}</h5>
                   <p className="card-text">{movie.description}</p>
-                  <a href={`/movies/${movie.title}`} className="btn btn-primary">
+                  <button className="btn btn-primary" onClick={()=>handleViewDetails(movie.id)}>
                     View Details
-                  </a>
+                  </button>
                 </div>
               </div>
             </div>

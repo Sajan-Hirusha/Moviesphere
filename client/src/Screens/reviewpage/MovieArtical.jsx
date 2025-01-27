@@ -1,23 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import './MovieArtical.css';
 
 export const MovieArtical = ({ movieId }) => {
   const [movie, setMovie] = useState(null); // Store the movie data
   const [error, setError] = useState(null); // Error state
 
+  console.log(movieId)
   useEffect(() => {
-    // Fetch movie data from Django API
+    // Fetch data from Django API
     setError(null); // Reset error before fetching
     fetch(`http://127.0.0.1:8000/api/movies/${movieId}/get-movie-by-id/`)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Failed to fetch movie data.');
-        }
-        return response.json();
-      })
-      .then((data) => setMovie(data))
-      .catch((err) => setError(err.message));
-  }, [movieId]); // Re-fetch data when movieId changes
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok ');
+          }
+          return response.json();
+        })
+        .then(data => setMovie(data)).catch(err => setError(`Failed to fetch movie data. ${id}`));
+
+  }, [movieId]); // Re-fetch whenever movieId changes
+
 
   // Extract and decode image URLs if necessary
   const getValidUrl = (url) => {

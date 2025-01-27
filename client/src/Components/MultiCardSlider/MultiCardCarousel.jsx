@@ -17,7 +17,7 @@ const MultiCardCarousel = ({ genres, movies }) => {
       };
 
       return (
-        <div>
+        <div className="multiCard">
           {genres.map((genre, index) =>
             movies[genre.id] && movies[genre.id].length > 0 ? (
               <div className="container py-5" key={index}>
