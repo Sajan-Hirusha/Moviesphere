@@ -48,6 +48,7 @@ class User(models.Model):
     email = models.EmailField(max_length=150, unique=True, null=False, blank=False)
     phone_number = models.CharField(max_length=15, null=False, blank=False)
     password = models.CharField(max_length=128, null=False, blank=False)
+    role = models.CharField(max_length=128, null=False, blank=False , default='user')
 
     def save(self, *args, **kwargs):
         if not self.password.startswith('pbkdf2_'):

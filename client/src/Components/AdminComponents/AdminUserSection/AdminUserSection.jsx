@@ -7,6 +7,7 @@ import {useEffect, useRef, useState} from "react";
 import axios from "axios";
 import {urlPattern1} from "../../../../env.jsx";
 import CircleSpinner from "../../CircleSpinner/CircleSpinner.jsx";
+import {useNavigate} from "react-router-dom";
 
 function AdminUserSection() {
     const urlPattern = urlPattern1
@@ -21,6 +22,22 @@ function AdminUserSection() {
     const [inputs, setInputs] = useState({});
     const [loading, setLoading] = useState(false);
     const [userCount, setUserCount] = useState(0);
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const userId = sessionStorage.getItem("userId");
+        const userType = sessionStorage.getItem("userType");
+        if (!userId) {
+            navigate("/login");
+
+        }else if(userId){
+            console.log(userType)
+            if(userType === "user"){
+                navigate("/");
+            }
+        }
+    }, [navigate]);
 
     const handleChange = (e) => {
         const name = e.target.name;

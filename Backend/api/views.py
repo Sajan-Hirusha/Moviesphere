@@ -1,26 +1,13 @@
-from rest_framework import viewsets, status
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.response import Response
-from api.models import Movie, Genre, MovieGenre, User, Contact
-from api.serializers import MovieSerializer, GenreSerializer, UserSerializer, ContactSerializer
-from rest_framework.decorators import action
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from .models import User
+from api.models import Movie, Genre, MovieGenre, Contact
+from api.serializers import MovieSerializer, GenreSerializer, ContactSerializer
 from django.contrib.auth.hashers import make_password
-from django.contrib.auth import authenticate
-from rest_framework.authtoken.models import Token
-from api.models import User
 from api.serializers import UserSerializer
-from rest_framework.exceptions import NotFound
-from django.contrib.auth.models import User  # Replace with your custom user model if applicable
+from django.contrib.auth.models import User
 from django.db.models import Prefetch
 from django.contrib.auth.hashers import check_password
 from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from .models import User  # Replace with your actual user model
+from .models import User
 
 
 class RegisterView(APIView):
@@ -57,6 +44,7 @@ class LoginView(APIView):
                         "message": "Login successful",
                         "user_id": user.id,
                         "email": user.email,
+                        "role":user.role
                     }, status=status.HTTP_200_OK)
                 else:
                     return Response({

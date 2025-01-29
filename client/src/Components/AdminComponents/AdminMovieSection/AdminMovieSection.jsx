@@ -10,6 +10,7 @@ import axios from "axios";
 import CircleSpinner from "../../CircleSpinner/CircleSpinner.jsx";
 import CategoryModel from "./CategoryModel/CategoryModel.jsx";
 import {urlPattern1} from '../../../../env.jsx'
+import {useNavigate} from "react-router-dom";
 
 function AdminMovieSection() {
     const urlPattern = urlPattern1
@@ -37,6 +38,22 @@ function AdminMovieSection() {
             modalTitle.textContent = `${recipient}`;
         }
     };
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const userId = sessionStorage.getItem("userId");
+        const userType = sessionStorage.getItem("userType");
+        if (!userId) {
+            navigate("/login");
+
+        }else if(userId){
+            console.log(userType)
+            if(userType === "user"){
+                navigate("/");
+            }
+        }
+    }, [navigate]);
 
     const handleShowEditModal = (modalRef, recipient, id) => {
         const selectedMovie = movies.find((movie) => movie.id === id);

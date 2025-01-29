@@ -33,7 +33,7 @@ function AdminNavBar() {
                         </ul>
                     </div>
                     <div className="d-flex align-items-center">
-                        <Link className="mx-4 text-white">Logout</Link>
+                        <Link className="mx-4 text-white" to="/logout">Logout</Link>
                         <Link className="navbar-brand mt-2 mt-lg-0" to="/admin">
                             <img
                                 src={logo}

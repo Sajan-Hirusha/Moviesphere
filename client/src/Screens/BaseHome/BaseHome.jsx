@@ -146,7 +146,7 @@ const BaseHome = () => {
           {loading && <p>Loading movies...</p>}
           {error && <p>{error}</p>}
 
-          <MultiCardCarousel movies={movies} genres={genres} />
+          <MultiCardCarousel movies={movies} genres={genres}  />
 
         </div>
       </div>

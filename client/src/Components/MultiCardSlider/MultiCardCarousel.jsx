@@ -51,7 +51,7 @@ const MultiCardCarousel = ({ genres, movies }) => {
                         <GenreMovieCard
                           title={movie.title}
                           image={movie.image1}
-                          description={movie.description}
+                          movieTrailer={movie.movieTrailer}
                         />
                       </div>
                     ))}
