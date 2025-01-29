@@ -52,7 +52,10 @@ const ContactUs = () => {
         for (const key in inputs) {
             formData.append(key, inputs[key]);
         }
-
+        
+        if (email) {
+            formData.append("email", email);
+        }
         try {
             for (let pair of formData.entries()) {
                 console.log(pair[0] + ': ' + pair[1]);
@@ -124,7 +127,6 @@ const ContactUs = () => {
                                     placeholder="Enter your email"
                                     name="email"
                                     value={email}
-                                    onChange={handleChange}
                                     required
                                     readOnly={true}
                                 />
