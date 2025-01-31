@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import './Movieselectionlist.css';
 import adminMovieCountBG from '../../assets/Images/adminMovieCountBG.jpg';
 
@@ -6,13 +6,18 @@ export const Movieselectionlist = ({ movieId, setMovieId }) => {
   const [movies, setMovies] = useState([]);
   const [error, setError] = useState(null);
   const [showFullDescriptionId, setShowFullDescriptionId] = useState(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const visibleCards = 5;
   const range = 5;
 
-  const allMovieIds = Array.from({ length: 1000 }, (_, index) => index + 1);
-  const movieIds = [
-    ...allMovieIds.filter((id) => id >= movieId - range && id < movieId),
-    ...allMovieIds.filter((id) => id > movieId && id <= movieId + range),
-  ];
+  // Memoize movieIds to prevent unnecessary re-renders
+  const movieIds = useMemo(() => {
+    const allMovieIds = Array.from({ length: 1000 }, (_, index) => index + 1);
+    return [
+      ...allMovieIds.filter((id) => id >= movieId - range && id < movieId),
+      ...allMovieIds.filter((id) => id > movieId && id <= movieId + range),
+    ];
+  }, [movieId]);
 
   useEffect(() => {
     setError(null);
@@ -38,23 +43,19 @@ export const Movieselectionlist = ({ movieId, setMovieId }) => {
     return url;
   };
 
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const visibleCards = 5;
-
   const handleNext = () => {
-    if (currentIndex + visibleCards < movies.length) {
-      setCurrentIndex(currentIndex + visibleCards);
+    if (currentIndex +1 < movies.length) {
+      setCurrentIndex(currentIndex + 1);
     }
   };
 
   const handlePrev = () => {
-    if (currentIndex - visibleCards >= 0) {
-      setCurrentIndex(currentIndex - visibleCards);
+    if (currentIndex > 0) {
+      setCurrentIndex(currentIndex - 1);
     }
   };
 
   const toggleDescription = (event, id) => {
- 
     setShowFullDescriptionId(showFullDescriptionId === id ? null : id);
     setMovieId(id); // Update the selected movie ID
   };
@@ -83,7 +84,7 @@ export const Movieselectionlist = ({ movieId, setMovieId }) => {
               <p>
                 {showFullDescriptionId === movie.id
                   ? movie.description
-                  : `${movie.description.slice(0, 100)}...`}
+                  : `${movie.description.slice(0, 10)}...`}
                 <button
                   className="see-more-btn"
                   onClick={(event) => toggleDescription(event, movie.id)}

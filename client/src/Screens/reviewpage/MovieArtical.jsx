@@ -6,34 +6,39 @@ export const MovieArtical = ({ movieId }) => {
   const [error, setError] = useState(null); // Error state
 
   useEffect(() => {
-    // Fetch movie data from Django API
+    if (!movieId) {
+      setError('Invalid movie ID');
+      return;
+    }
     setError(null); // Reset error before fetching
     fetch(`http://127.0.0.1:8000/api/movies/${movieId}/get-movie-by-id/`)
       .then((response) => {
         if (!response.ok) {
-          throw new Error('Failed to fetch movie data.');
+          throw new Error(`Failed to fetch movie data: ${response.statusText}`);
         }
         return response.json();
       })
       .then((data) => setMovie(data))
-      .catch((err) => setError(err.message));
-  }, [movieId]); // Re-fetch data when movieId changes
+      .catch((err) => {
+        console.error("Error fetching movie data:", err);
+        setError("Failed to fetch movie data.");
+      });
+  }, [movieId]); 
 
-  // Extract and decode image URLs if necessary
   const getValidUrl = (url) => {
     if (url && url.startsWith('http://127.0.0.1:8000/media/https%3A')) {
       const decodedUrl = decodeURIComponent(url.replace('http://127.0.0.1:8000/media/', ''));
-      return decodedUrl; // Return the decoded external URL
+      return decodedUrl; 
     }
-    return url; // Return the original URL if no decoding is needed
+    return url; 
   };
 
   const trailerUrl = movie?.movieTrailer;
 
   return (
     <div className="main-container">
-      {error && <div className="error-message">{error}</div>} {/* Display error message */}
-      {!error && !movie && <div>Loading...</div>} {/* Display loading message */}
+      {error && <div className="error-message">{error}</div>} 
+      {!error && !movie && <div>Loading...</div>} 
 
       {movie && (
         <>
