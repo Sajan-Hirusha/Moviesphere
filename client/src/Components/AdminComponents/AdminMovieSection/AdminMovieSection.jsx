@@ -58,7 +58,7 @@ function AdminMovieSection() {
     const handleShowEditModal = (modalRef, recipient, id) => {
         const selectedMovie = movies.find((movie) => movie.id === id);
         setMovie(selectedMovie);
-        console.log(movie.title)
+        console.log(selectedMovie)
         const modalElement = modalRef.current;
         if (modalElement) {
             const modalTitle = modalElement.querySelector('.modal-title');
@@ -341,9 +341,9 @@ function AdminMovieSection() {
                                             className="form-select fieldDisabled"
                                             id="categoryList"
                                             required
-                                            value={inputs.categoryId || "default"} // Ensure it defaults to "default"
-                                            name="categoryId" // Use "categoryId" as the name
-                                            onChange={handleChange} // Updates state with the selected value
+                                            value={inputs.categoryId || "default"}
+                                            name="categoryId"
+                                            onChange={handleChange}
                                         >
                                             <option value="default" disabled>
                                                 Select Category
@@ -538,6 +538,7 @@ function AdminMovieSection() {
                                             onChange={handleChange}
                                             required
                                             name="movieTrailer"
+                                            value={inputs.movieTrailer !== undefined ? inputs.movieTrailer : movie?.movieTrailer || ""}
                                         />
                                         <div className="invalid-feedback">Please enter a valid movie Trailer Link.</div>
                                     </div>

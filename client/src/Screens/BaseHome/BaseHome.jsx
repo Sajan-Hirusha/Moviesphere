@@ -1,4 +1,3 @@
-import React from "react";
 import axios from "axios";
 import Navbar from "../../Components/Navbar/Navbar.jsx"
 import HeroSection from "../../Components/HeroSection/HeroSection.jsx";

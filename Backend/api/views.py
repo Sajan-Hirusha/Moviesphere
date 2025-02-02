@@ -8,6 +8,11 @@ from django.db.models import Prefetch
 from django.contrib.auth.hashers import check_password
 from rest_framework.views import APIView
 from .models import User
+from rest_framework.decorators import action
+from rest_framework.response import Response
+from rest_framework.exceptions import NotFound
+from rest_framework import status
+from rest_framework import viewsets
 
 
 class RegisterView(APIView):
@@ -63,14 +68,6 @@ class LoginView(APIView):
 
 class MoviePagination(PageNumberPagination):
     page_size = 10
-
-
-from rest_framework.decorators import action
-from rest_framework.response import Response
-from rest_framework.exceptions import NotFound
-from rest_framework import status
-from rest_framework import viewsets
-
 
 class MovieViewSet(viewsets.ModelViewSet):
     queryset = Movie.objects.all()
@@ -194,13 +191,6 @@ class MovieViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(queryset, many=True)
         return Response({"data": serializer.data}, status=status.HTTP_200_OK)
 
-    @action(detail=False, methods=['get'], url_path='count')
-    def get_movie_count(self, request):
-        total_movies = Movie.objects.count()  # Get total count of movies
-        return Response(
-            {"success": True, "total_movies": total_movies},
-            status=status.HTTP_200_OK
-        )
 
     @action(detail=True, methods=['get'], url_path='get-movie-by-id')
     def get_movie_by_id(self, request, pk=None):
