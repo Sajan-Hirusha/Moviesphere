@@ -1,62 +1,62 @@
 .adminUserSection .table {
-    margin: 40px auto;
-    width: 91%;
+  margin: 40px auto;
+  width: 91%;
 }
 
 .adminUserSection table th {
-    font-weight: bold;
+  font-weight: bold;
 }
-.adminUserSection  .searchUser{
-    width: 20%;
-    margin-left: 60px;
+.adminUserSection .searchUser {
+  width: 20%;
+  margin-left: 60px;
 }
-.adminUserSection  .searchUser .form-outline{
-    border: black solid 1px;
+.adminUserSection .searchUser .form-outline {
+  border: black solid 1px;
 }
-.adminUserSection  .searchUser .form-outline label{
-    background-color: white;
-    color: gray!important;
+.adminUserSection .searchUser .form-outline label {
+  background-color: white;
+  color: gray !important;
 }
-.adminUserSection  .searchUser button{
-    background-color: black;
+.adminUserSection .searchUser button {
+  background-color: black;
 }
 
 .adminUserSection .userSection {
-    background-color: rgba(230, 229, 229, 0.38);
-    margin-bottom: 70px;
-    padding: 20px 10px 20px 40px;
+  background-color: rgba(230, 229, 229, 0.38);
+  margin-bottom: 70px;
+  padding: 20px 10px 20px 40px;
 }
 
-.adminUserSection .left{
-    border-radius: 10px;
-    height: 220px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
+.adminUserSection .left {
+  border-radius: 10px;
+  height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .adminUserSection .left .totalUser {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.17), rgba(0, 0, 0, 0)), url('../../../assets/Images/adminUserCountBG.jpg');
-    margin: auto;
+  background-image:
+    linear-gradient(rgba(0, 0, 0, 0.17), rgba(0, 0, 0, 0)),
+    url("../../../assets/Images/adminUserCountBG.jpg");
+  margin: auto;
 }
 
 .adminUserSection .left .bgImage {
-    width: 100%;
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
-    display: flex;
-    align-items: center;
-    justify-content: start;
-    color: white;
-    border-radius: 10px;
-    font-weight: bold;
-    font-size: 28px;
-    padding-left: 30px;
+  width: 100%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  color: white;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 28px;
+  padding-left: 30px;
 }
 
-.adminUserSection .totalUser{
-    height: 180px;
+.adminUserSection .totalUser {
+  height: 180px;
 }
-
