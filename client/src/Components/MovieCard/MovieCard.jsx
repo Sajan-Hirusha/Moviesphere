@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import './MovieCard.css'
+import "./MovieCard.css";
 
 const MovieCard = ({ id, title, image, description }) => {
   const navigate = useNavigate();
@@ -11,22 +11,29 @@ const MovieCard = ({ id, title, image, description }) => {
 
   // Function to truncate the description
   const truncateDescription = (text, maxLength) => {
-    return text.length > maxLength ? text.substring(0, maxLength) + "..." : text;
+    return text.length > maxLength
+      ? text.substring(0, maxLength) + "..."
+      : text;
   };
 
   return (
-      <div className="col-md-4 mb-4">
-        <div className="card fixed-height-card">
-          <img src={image} className="card-img-top" alt={title} />
-          <div className="card-body">
-            <h5 className="card-title">{title} - {id}</h5>
-            <p className="card-text">{truncateDescription(description, 100)}</p>
-            <button className="bg-primary btn btn-link p-0 text-white p-2" onClick={handleViewDetails}>
-              See More
-            </button>
-          </div>
+    <div className="col-md-4 mb-4">
+      <div className="card fixed-height-card">
+        <img src={image} className="card-img-top" alt={title} />
+        <div className="card-body">
+          <h5 className="card-title">
+            {title} - {id}
+          </h5>
+          <p className="card-text">{truncateDescription(description, 100)}</p>
+          <button
+            className="bg-primary btn btn-link p-0 text-white p-2"
+            onClick={handleViewDetails}
+          >
+            See More
+          </button>
         </div>
       </div>
+    </div>
   );
 };
 

@@ -1,4 +1,3 @@
-import React from "react";
 import GenreMovieCard from "../GenreMovieCard/GenreMovieCard";
 
 const GridMovieCard = ({ genres, movies }) => {
@@ -24,7 +23,7 @@ const GridMovieCard = ({ genres, movies }) => {
               ))}
             </div>
           </div>
-        ) : null
+        ) : null,
       )}
     </div>
   );

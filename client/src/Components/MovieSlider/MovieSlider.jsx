@@ -1,13 +1,13 @@
 import React from "react";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const MovieSlider = ({ movies }) => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    const handleViewDetails = (id) => {
-        console.log(id);
-        navigate("/review", { state: { movieid: id } }); // Pass movieId via state
-    };
+  const handleViewDetails = (id) => {
+    console.log(id);
+    navigate("/review", { state: { movieid: id } }); // Pass movieId via state
+  };
 
   return (
     <div id="movieSlider" className="carousel slide" data-bs-ride="carousel">
@@ -30,12 +30,19 @@ const MovieSlider = ({ movies }) => {
                   src={movie.image1}
                   className="card-img-top"
                   alt={movie.title}
-                  style={{ maxHeight: "400px", minHeight: "400px", objectFit: "cover" }}
+                  style={{
+                    maxHeight: "400px",
+                    minHeight: "400px",
+                    objectFit: "cover",
+                  }}
                 />
                 <div className="card-body text-center">
                   <h5 className="card-title">{movie.title}</h5>
                   <p className="card-text">{movie.description}</p>
-                  <button className="btn btn-primary" onClick={()=>handleViewDetails(movie.id)}>
+                  <button
+                    className="btn btn-primary"
+                    onClick={() => handleViewDetails(movie.id)}
+                  >
                     View Details
                   </button>
                 </div>
