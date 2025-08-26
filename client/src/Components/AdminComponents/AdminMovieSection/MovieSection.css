@@ -1,129 +1,128 @@
 .adminMovieSection .table {
-    margin: 40px auto;
-    width: 91%;
+  margin: 40px auto;
+  width: 91%;
 }
 
 .adminMovieSection table th {
-    font-weight: bold;
+  font-weight: bold;
 }
-.adminMovieSection  .searchMovie{
-    width: 20%;
-    margin-left: 60px;
+.adminMovieSection .searchMovie {
+  width: 20%;
+  margin-left: 60px;
 }
-.adminMovieSection  .searchMovie .form-outline{
-    border: black solid 1px;
+.adminMovieSection .searchMovie .form-outline {
+  border: black solid 1px;
 }
-.adminMovieSection  .searchMovie .form-outline label{
-    background-color: white;
-    color: gray!important;
+.adminMovieSection .searchMovie .form-outline label {
+  background-color: white;
+  color: gray !important;
 }
-.adminMovieSection  .searchMovie button{
-    background-color: black;
+.adminMovieSection .searchMovie button {
+  background-color: black;
 }
-
-
-
 
 .adminMovieSection .movieSection {
-    background-color: rgba(230, 229, 229, 0.38);
-    margin-bottom: 70px;
-    padding: 20px 10px 20px 40px;
+  background-color: rgba(230, 229, 229, 0.38);
+  margin-bottom: 70px;
+  padding: 20px 10px 20px 40px;
 }
 
-.adminMovieSection .left, .adminMovieSection .right {
-    border-radius: 10px;
-    height: 220px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
+.adminMovieSection .left,
+.adminMovieSection .right {
+  border-radius: 10px;
+  height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .adminMovieSection .left .totalMovie {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.17), rgba(0, 0, 0, 0)), url('../../../assets/Images/adminMovieCountBG.jpg');
+  background-image:
+    linear-gradient(rgba(0, 0, 0, 0.17), rgba(0, 0, 0, 0)),
+    url("../../../assets/Images/adminMovieCountBG.jpg");
 }
 
 .adminMovieSection .left .bgImage {
-    width: 100%;
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
-    display: flex;
-    align-items: center;
-    justify-content: start;
-    color: white;
-    border-radius: 10px;
-    font-weight: bold;
-    font-size: 28px;
-    padding-left: 30px;
+  width: 100%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  color: white;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 28px;
+  padding-left: 30px;
 }
 
 .adminMovieSection .right {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .adminMovieSection .movieAddButton {
-    width: 73%;
-    height: 80px;
-    margin: auto;
-    border-radius: 10px;
-    font-weight: bold;
-    background-color: white;
+  width: 73%;
+  height: 80px;
+  margin: auto;
+  border-radius: 10px;
+  font-weight: bold;
+  background-color: white;
 }
 .adminMovieSection .categoryButtons {
-    width: 73%;
-    height: 45px;
-    margin: auto;
-    border-radius: 10px;
-    font-weight: bold;
-    background-color: white;
+  width: 73%;
+  height: 45px;
+  margin: auto;
+  border-radius: 10px;
+  font-weight: bold;
+  background-color: white;
 }
-.adminMovieSection .signButtons{
-    width: 25px;
-    height: 25px;
+.adminMovieSection .signButtons {
+  width: 25px;
+  height: 25px;
 }
-.adminMovieSection .totalMovie{
-    height: 180px;
+.adminMovieSection .totalMovie {
+  height: 180px;
 }
 
 .adminMovieSection .imageEnlargeModal .modal-content {
-    background-color: #f8f9fa;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .adminMovieSection .imageEnlargeModal .modal-header {
-    border-bottom: 1px solid #dee2e6;
-    padding-bottom: 8px;
+  border-bottom: 1px solid #dee2e6;
+  padding-bottom: 8px;
 }
 
 .adminMovieSection .imageEnlargeModal .modal-title {
-    font-family: 'Arial', sans-serif;
-    font-weight: 600;
-    font-size: 1.25rem;
-    color: #343a40;
+  font-family: "Arial", sans-serif;
+  font-weight: 600;
+  font-size: 1.25rem;
+  color: #343a40;
 }
 
 .adminMovieSection .imageEnlargeModal .modal-body {
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    max-height: 400px;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  max-height: 400px;
 }
 
 .adminMovieSection .imageEnlargeModal .img-fluid {
-    max-height: 400px;
-    width: auto;
-    object-fit: contain;
-    border-radius: 8px;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+  max-height: 400px;
+  width: auto;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
 }
 
 .adminMovieSection .imageEnlargeModal .modal-footer {
-    justify-content: center;
-    padding-top: 10px;
+  justify-content: center;
+  padding-top: 10px;
 }
-.adminMovieSection  .enlargeImage:hover{
-    cursor: pointer !important;
+.adminMovieSection .enlargeImage:hover {
+  cursor: pointer !important;
 }
