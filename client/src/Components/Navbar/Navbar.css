@@ -1,26 +1,26 @@
 .navbar-logo {
-    width: 130px;
-    height: 40px;
+  width: 130px;
+  height: 40px;
 }
 
 .navbar-nav.mx-auto {
-    display: flex;
-    justify-content: center;
-    gap: 30px;
+  display: flex;
+  justify-content: center;
+  gap: 30px;
 }
 
 .navbar-nav.ms-auto {
-    display: flex;
-    justify-content: flex-end;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .nav-link {
-    font-size: 16px;
-    font-weight: 500;
-    color: #ffffff;
-    transition: color 0.3s ease;
+  font-size: 16px;
+  font-weight: 500;
+  color: #ffffff;
+  transition: color 0.3s ease;
 }
 
 .nav-link:hover {
-    color: #f1c40f;
+  color: #f1c40f;
 }
